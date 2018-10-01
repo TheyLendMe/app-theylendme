@@ -27,7 +27,7 @@ abstract class Obj{
 
   void request();
 
-  ///Devolver--> no me deja poner return D:
+  ///Devolver--> no me deja poner return D: valdra solo con request???
   void bringBack();
 
   void claim();
@@ -36,6 +36,7 @@ abstract class Obj{
 
   void delObject({User user});
 
+  void objHistory();
 ///Getters and setters methods
 
   String get name => _name;
@@ -97,6 +98,11 @@ class UserObject extends Obj{
     // TODO: implement delObject
   }
 
+  @override
+  void objHistory() {
+    // TODO: implement objHistory
+  }
+
 
  
 
@@ -143,6 +149,11 @@ class GroupObject extends Obj{
   @override
   void delObject({User user} ) {
     // TODO: implement delObject
+  }
+
+  @override
+  void objHistory() {
+    // TODO: implement objHistory
   }
 
 

@@ -31,6 +31,15 @@ abstract class Entity{
 
   void delObject();
 
+  void getObjects();
+
+  void getRequest();
+
+  ///TODO valdra solo con getRequest
+  void getBringBack();
+
+  void get();
+
 
 
 }
@@ -48,6 +57,26 @@ class User extends Entity{
   @override
   void delObject() {
     // TODO: implement delObject
+  }
+
+  @override
+  void getObjects() {
+    // TODO: implement getObjects
+  }
+
+  @override
+  void get() {
+    // TODO: implement get
+  }
+
+  @override
+  void getBringBack() {
+    // TODO: implement getBringBack
+  }
+
+  @override
+  void getRequest() {
+    // TODO: implement getRequest
   }
 
 
@@ -68,6 +97,26 @@ class Group extends Entity{
     // TODO: implement delObject
   }
 
+  
+  @override
+  void getObjects() {
+    // TODO: implement getObjects
+  }
+
+  @override
+  void get() {
+    // TODO: implement get
+  }
+
+  @override
+  void getBringBack() {
+    // TODO: implement getBringBack
+  }
+
+  @override
+  void getRequest() {
+    // TODO: implement getRequest
+  }
 
 
   void addUser(){
@@ -77,6 +126,16 @@ class Group extends Entity{
   void delUser({User u}){
   
   }
+
+  void addAdmin({User u}){
+  }
+
+
+///Method to obtain all the user of the group
+  void getUser(){
+
+  }
+
 
   
 
