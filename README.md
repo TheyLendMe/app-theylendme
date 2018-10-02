@@ -12,3 +12,7 @@ para no subir archivos innecesarios (y que pesan lo suyo), antes de hacer `$ git
 $ flutter clean
 ```
 este comando elimina el directorio `build/`
+
+## último screenshot
+
+![](flutter_app/screenshots/home1.jpg)
