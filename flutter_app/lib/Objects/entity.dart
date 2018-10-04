@@ -35,12 +35,7 @@ abstract class Entity{
 
   void getRequest();
 
-  ///TODO valdra solo con getRequest
-  void getBringBack();
-
-  void get();
-
-
+  void updateInfo();
 
 }
 
@@ -69,14 +64,15 @@ class User extends Entity{
     // TODO: implement get
   }
 
-  @override
-  void getBringBack() {
-    // TODO: implement getBringBack
-  }
 
   @override
   void getRequest() {
     // TODO: implement getRequest
+  }
+
+  @override
+  void updateInfo() {
+    // TODO: implement updateInfo
   }
 
 
@@ -108,10 +104,6 @@ class Group extends Entity{
     // TODO: implement get
   }
 
-  @override
-  void getBringBack() {
-    // TODO: implement getBringBack
-  }
 
   @override
   void getRequest() {
@@ -134,6 +126,11 @@ class Group extends Entity{
 ///Method to obtain all the user of the group
   void getUser(){
 
+  }
+
+  @override
+  void updateInfo() {
+    // TODO: implement updateInfo
   }
 
 

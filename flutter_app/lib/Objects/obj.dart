@@ -25,9 +25,9 @@ abstract class Obj{
 ///Abstract Methods 
   void lend(Entity e);
 
-  void request();
+  void requestObj();
 
-  ///Devolver--> no me deja poner return D: valdra solo con request???
+  ///Devolver--> no me deja poner return D: valdra solo con requestObj???
   void bringBack();
 
   void claim();
@@ -37,6 +37,8 @@ abstract class Obj{
   void delObject({User user});
 
   void objHistory();
+
+  void getInventory();
 ///Getters and setters methods
 
   String get name => _name;
@@ -74,14 +76,11 @@ class UserObject extends Obj{
   }
 
   @override
-  void request() {
-    // TODO: implement request
+  void requestObj() {
+    // TODO: implement requestObj
   }
 
-  @override
-  void bringBack() {
-    // TODO: implement bringBack
-  }
+
 
   @override
   void claim() {
@@ -101,6 +100,16 @@ class UserObject extends Obj{
   @override
   void objHistory() {
     // TODO: implement objHistory
+  }
+
+  @override
+  void getInventory() {
+    // TODO: implement getInventory
+  }
+
+  @override
+  void bringBack() {
+    // TODO: implement bringBack
   }
 
 
@@ -126,13 +135,8 @@ class GroupObject extends Obj{
   }
 
   @override
-  void request() {
-    // TODO: implement request
-  }
-
-  @override
-  void bringBack() {
-    // TODO: implement bringBack
+  void requestObj() {
+    // TODO: implement requestObj
   }
 
   @override
@@ -154,6 +158,16 @@ class GroupObject extends Obj{
   @override
   void objHistory() {
     // TODO: implement objHistory
+  }
+
+  @override
+  void getInventory() {
+    // TODO: implement getInventory
+  }
+
+  @override
+  void bringBack() {
+    // TODO: implement bringBack
   }
 
 
