@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Dudas:
-// - siempre "return MaterialApp"?
-
 void main() => runApp(TheApp());
 
 class TheApp extends StatelessWidget {
@@ -31,10 +28,9 @@ class _TheHomePageState extends State<TheHome> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
+    return Scaffold(
+      body: DefaultTabController(
         length: 2,
-
         child: Scaffold(
           appBar: AppBar(
             bottom: TabBar(
@@ -52,54 +48,105 @@ class _TheHomePageState extends State<TheHome> {
             ],
           ),
         ),
+      ),
+      drawer: TheDrawer(),
+    );
+  }
+}
 
+// MENÚ LATERAL
+class TheDrawer extends StatefulWidget {
+  @override
+  _TheDrawerState createState() => _TheDrawerState();
+}
+
+// Contenido del MENÚ LATERAL
+class _TheDrawerState extends State<TheDrawer> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            child: Text('Drawer Header'),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+          ),
+          ListTile(
+            title: Text('Item 1'),
+            onTap: () { Navigator.pop(context); },
+          ),
+          ListTile(
+            title: Text('Item 2'),
+            onTap: () { Navigator.pop(context); },
+          ),
+        ],
       ),
     );
   }
 }
 
+// Pestaña OBJETOS
 class TheGridView extends StatefulWidget {
     @override
     _TheGridViewState createState() => _TheGridViewState();
 }
 
+// CONTENIDO de la pestaña OBJETOS
 class _TheGridViewState extends State<TheGridView> {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      home: Scaffold(
-        body: GridView.count( //GridView de ejemplo:
-          crossAxisCount: 2,
-          children: List.generate(100, (index) {
-            return Center(
-              child: Text( 'Item $index', style: Theme.of(context).textTheme.headline, ),
-            );
-          }),
-        ),
+    return Scaffold(
+      body: GridView.count( //GridView de ejemplo:
+        crossAxisCount: 2,
+        children: List.generate(100, (index) {
+          return Center(
+            child: Text( 'Item $index', style: Theme.of(context).textTheme.headline, ),
+          );
+        }),
       ),
     );
   }
 }
 
+// Pestaña GRUPOS
 class TheListView extends StatefulWidget {
     @override
     _TheListViewState createState() => _TheListViewState();
 }
 
+// CONTENIDO de la pestaña GRUPOS
 class _TheListViewState extends State<TheListView> {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: ListView.builder( //ListView de ejemplo:
           itemBuilder: (BuildContext context, int index) =>
               EntryItem(groups[index]),
           itemCount: groups.length,
         ),
-      ),
     );
+  }
+}
+
+// Displays one Entry.
+class EntryItem extends StatelessWidget {
+  const EntryItem(this.entry);
+
+  final Entry entry;
+
+  Widget _buildTiles(Entry root) {
+    return ListTile(title: Text(root.title));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(entry);
   }
 }
 
@@ -117,19 +164,3 @@ final List<Entry> groups = <Entry>[
   Entry('Organización ORGANIZ'),
   Entry('Clase CLAS1'),
 ];
-
-// Displays one Entry.
-class EntryItem extends StatelessWidget {
-  const EntryItem(this.entry);
-
-  final Entry entry;
-
-  Widget _buildTiles(Entry root) {
-    return ListTile(title: Text(root.title));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildTiles(entry);
-  }
-}
