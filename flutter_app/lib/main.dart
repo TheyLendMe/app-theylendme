@@ -37,11 +37,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
-    var req =  new Request("http://10.0.2.2")
-      .dataBuilder(
-        idClaim: "1",
-      ).doRequest();
-    
+    User u = new User("myid", "Hugo");
+   // u.addObject("Esto es una prueba", 12);
+    u.getObjects();
   }
 
   @override

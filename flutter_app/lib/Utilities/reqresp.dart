@@ -21,8 +21,15 @@ class Request{
 
   Future<Response> doRequest() async{
     request.bodyFields = _data;
-    var response = await client.send(request);
-    return new Response(response);
+    ///TODO implementar un manejador de errores si deja de haber conexion
+    try{
+      var response = await client.send(request);
+      return new Response(response);
+    }catch(e){
+      print("Internet connection error");
+      return null;
+    }
+    
 
 
   }
@@ -51,17 +58,54 @@ class Request{
 
 
 class Response{
-  final http.StreamedResponse response;
+  final http.StreamedResponse _response;
+  RequestError _err = null;
+  
+  List<String,dynamic> _data;
 
 
-  Response(this.response){
-    response.stream.bytesToString().then((s){
+  Response(this._response){
+    
+
+    ///The error will only have an state if there is a server error
+    _err = _response.statusCode != 200 ? new ServerError("Ha habido un error con el servidor", 1) : null;
+
+    _response.stream.bytesToString().then((s){
       print(s);
+
+    
+      
+      ///TODO checkear mas tarde si hay un error
+      ///
     });
+    
+
 
   }
 
-  bool hashError(){return response.statusCode != 200;}
+  bool hashError(){return _err== null;}
   
+
+}
+
+abstract class RequestError{
+
+  final String errMsg;
+  final int idErr;
+
+  RequestError(this.errMsg,this.idErr){}
+
+
+}
+
+class StatusError extends RequestError{
+  ///TODO define status error
+  StatusError(String errMsg, int idErr) : super(errMsg, idErr);
+
+}
+
+class ServerError extends RequestError{
+  ServerError(String errMsg, int idErr) : super(errMsg, idErr);
+
 
 }

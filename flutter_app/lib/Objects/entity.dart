@@ -1,7 +1,10 @@
+import 'package:flutter_app/Utilities/reqresp.dart';
+
 abstract class Entity{
   final String _idEntity;
   final EntityType _type;
   String _name,_desc,_img;
+
   
 
 
@@ -27,7 +30,7 @@ abstract class Entity{
   
 
   ///Add an object to a group or to a user.
-  void addObject();
+  void addObject(String name, int amount);
 
   void delObject();
 
@@ -45,8 +48,12 @@ class User extends Entity{
   User(String idEntity, String name) : super(EntityType.USER, idEntity, name);
 
   @override
-  void addObject() {
-    // TODO: implement addObject
+  void addObject(String name, int amount) {
+     new Request("http://54.188.52.254/Funciones/createObject.php").dataBuilder(
+        idUser: _idEntity,
+        name: name 
+    ).doRequest();
+    
   }
 
   @override
@@ -56,14 +63,10 @@ class User extends Entity{
 
   @override
   void getObjects() {
-    // TODO: implement getObjects
+      new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
+        idUser: _idEntity,
+    ).doRequest();
   }
-
-  @override
-  void get() {
-    // TODO: implement get
-  }
-
 
   @override
   void getRequest() {
@@ -84,7 +87,7 @@ class Group extends Entity{
   Group(EntityType type, String idEntity, String name) : super(EntityType.GROUP, idEntity, name);
 
   @override
-  void addObject() {
+  void addObject(String name, int amount) {
     // TODO: implement addObject
   }
 

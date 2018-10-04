@@ -34,7 +34,12 @@ abstract class Obj{
 
   void setObjectInfo({String name, String desc});
 
-  void delObject({User user});
+  void delObject({User user}){
+    ///Funciones/deleteObject.php
+    new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
+        idUser: _idEntity,
+    ).doRequest();
+  }
 
   void objHistory();
 
