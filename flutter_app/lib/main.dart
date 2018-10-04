@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 
 // Dudas:
 // - siempre "return MaterialApp"?
-// - "tabs: [Tab(), Tab()]" o "tabs: [new Tab(), new Tab()]"?
 
-void main() => runApp(new TheApp());
+void main() => runApp(TheApp());
 
 class TheApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: 'app de préstamos',
-      theme: new ThemeData( primarySwatch: Colors.blue, ),
-      home: new TheHome(title: 'Home'),
+      theme: ThemeData( primarySwatch: Colors.blue, ),
+      home: TheHome(title: 'Home'),
     );
   }
 }
@@ -25,7 +24,7 @@ class TheHome extends StatefulWidget {
   final String title;
 
   @override
-    _TheHomePageState createState() => new _TheHomePageState();
+    _TheHomePageState createState() => _TheHomePageState();
 }
 
 class _TheHomePageState extends State<TheHome> {
@@ -49,7 +48,7 @@ class _TheHomePageState extends State<TheHome> {
           body: TabBarView(
             children: [
               TheGridView(),
-              TheGridView(),
+              TheListView(),
             ],
           ),
         ),
@@ -61,7 +60,7 @@ class _TheHomePageState extends State<TheHome> {
 
 class TheGridView extends StatefulWidget {
     @override
-    _TheGridViewState createState() => new _TheGridViewState();
+    _TheGridViewState createState() => _TheGridViewState();
 }
 
 class _TheGridViewState extends State<TheGridView> {
@@ -80,5 +79,57 @@ class _TheGridViewState extends State<TheGridView> {
         ),
       ),
     );
+  }
+}
+
+class TheListView extends StatefulWidget {
+    @override
+    _TheListViewState createState() => _TheListViewState();
+}
+
+class _TheListViewState extends State<TheListView> {
+  @override
+  Widget build(BuildContext context) {
+
+    return MaterialApp(
+      home: Scaffold(
+        body: ListView.builder( //ListView de ejemplo:
+          itemBuilder: (BuildContext context, int index) =>
+              EntryItem(groups[index]),
+          itemCount: groups.length,
+        ),
+      ),
+    );
+  }
+}
+
+class Entry {
+  Entry(this.title, [this.children = const <Entry>[]]);
+
+  final String title;
+  final List<Entry> children;
+}
+
+final List<Entry> groups = <Entry>[
+  Entry('Asociación ASOC'),
+  Entry('Grupo GRP'),
+  Entry('Equipo C.D.EQUIPO'),
+  Entry('Organización ORGANIZ'),
+  Entry('Clase CLAS1'),
+];
+
+// Displays one Entry.
+class EntryItem extends StatelessWidget {
+  const EntryItem(this.entry);
+
+  final Entry entry;
+
+  Widget _buildTiles(Entry root) {
+    return ListTile(title: Text(root.title));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(entry);
   }
 }
