@@ -36,18 +36,18 @@ class Request{
 
 
 ///This will be the builder that
-  Request dataBuilder({String idUser,String idGroup, String idObject, 
-  String name, String desc, String idLoan, String idRequest, String idClaim, int amount,
+  Request dataBuilder({String idUser,int idGroup, int idObject, 
+  String name, String desc, int idLoan, int idRequest, int idClaim, int amount,
   String oUser, //add more fields if they are necessary
   }){
     if(idUser != null) _data['idUser'] = idUser;
-    if(idGroup != null)_data['idGroup'] = idGroup;
-    if(idGroup != null)_data['idObject'] = idObject;
+    if(idGroup != null)_data['idGroup'] = idGroup.toString();
+    if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
     if(desc != null)_data['desc'] = desc;
-    if(idLoan != null) _data['idLoan'] = idLoan;
-    if(idRequest != null) _data['idRequest'] = idRequest;
-    if(idClaim != null) _data['idClaim'] = idClaim;
+    if(idLoan != null) _data['idLoan'] = idLoan.toString();
+    if(idRequest != null) _data['idRequest'] = idRequest.toString();
+    if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
@@ -61,7 +61,7 @@ class Response{
   final http.StreamedResponse _response;
   RequestError _err = null;
   
-  List<String,dynamic> _data;
+  dynamic _data;
 
 
   Response(this._response){

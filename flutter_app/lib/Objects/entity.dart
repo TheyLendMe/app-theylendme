@@ -1,4 +1,5 @@
 import 'package:flutter_app/Utilities/reqresp.dart';
+import 'package:flutter_app/Singletons/UserSingleton.dart';
 
 abstract class Entity{
   final String _idEntity;
@@ -16,7 +17,7 @@ abstract class Entity{
   ///Getters and settes
   String get idEntity => _idEntity;
   String get name => _name;
-  String get desc => desc;
+  String get desc => _desc;
 
   EntityType get type => _type;
 
@@ -32,7 +33,7 @@ abstract class Entity{
   ///Add an object to a group or to a user.
   void addObject(String name, int amount);
 
-  void delObject();
+
 
   void getObjects();
 
@@ -45,26 +46,24 @@ abstract class Entity{
 
 
 class User extends Entity{
-  User(String idEntity, String name) : super(EntityType.USER, idEntity, name);
+
+  String userEmail;
+  User(String idEntity, String name, {this.userEmail}) : super(EntityType.USER, idEntity, name);
 
   @override
   void addObject(String name, int amount) {
      new Request("http://54.188.52.254/Funciones/createObject.php").dataBuilder(
-        idUser: _idEntity,
+        idUser: UserSingleton.singleton.user.idEntity,
         name: name 
     ).doRequest();
     
   }
 
-  @override
-  void delObject() {
-    // TODO: implement delObject
-  }
 
   @override
   void getObjects() {
       new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
-        idUser: _idEntity,
+        idUser: UserSingleton.singleton.user.idEntity,
     ).doRequest();
   }
 
@@ -79,6 +78,8 @@ class User extends Entity{
   }
 
 
+  get email => email;
+
 
 
 }
@@ -90,23 +91,6 @@ class Group extends Entity{
   void addObject(String name, int amount) {
     // TODO: implement addObject
   }
-
-  @override
-  void delObject() {
-    // TODO: implement delObject
-  }
-
-  
-  @override
-  void getObjects() {
-    // TODO: implement getObjects
-  }
-
-  @override
-  void get() {
-    // TODO: implement get
-  }
-
 
   @override
   void getRequest() {
@@ -127,7 +111,7 @@ class Group extends Entity{
 
 
 ///Method to obtain all the user of the group
-  void getUser(){
+  void getUsers(){
 
   }
 
@@ -136,9 +120,10 @@ class Group extends Entity{
     // TODO: implement updateInfo
   }
 
-
-  
-
+  @override
+  void getObjects() {
+    // TODO: implement getObjects
+  }
 }
 
 

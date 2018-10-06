@@ -1,9 +1,11 @@
 
 import 'entity.dart';
+import 'package:flutter_app/Singletons/UserSingleton.dart';
+import 'package:flutter_app/Utilities/reqresp.dart';
 
 abstract class Obj{
   final ObjType _type;
-  final String _idObject;
+  final int _idObject;
   final Entity owner;
 
   ///TODO pensar mejor el tema de las imagenes. Deberia de ser una lista???
@@ -34,12 +36,7 @@ abstract class Obj{
 
   void setObjectInfo({String name, String desc});
 
-  void delObject({User user}){
-    ///Funciones/deleteObject.php
-    new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
-        idUser: _idEntity,
-    ).doRequest();
-  }
+  void delObject();
 
   void objHistory();
 
@@ -50,7 +47,7 @@ abstract class Obj{
   String get desc => _desc;
   String get image => _image;
 
-  String get idObject => _idObject;
+  int get idObject => _idObject;
   ObjType get type => _type;
   
 
@@ -69,7 +66,7 @@ class UserObject extends Obj{
 
 
   ///Constructor
-  UserObject(String idObject, Entity owner, String name, String desc) : super(ObjType.USER_OBJECT, idObject, owner, name, desc){
+  UserObject(int idObject, Entity owner, String name, String desc) : super(ObjType.USER_OBJECT, idObject, owner, name, desc){
 
 
 
@@ -98,8 +95,11 @@ class UserObject extends Obj{
   }
 
   @override
-  void delObject({User user}) {
-    // TODO: implement delObject
+  void delObject() {
+    new Request("http://54.188.52.254/Funciones/deleteObject.php").dataBuilder(
+        idUser: UserSingleton.singleton.user.idEntity,
+        idObject : _idObject
+    ).doRequest();
   }
 
   @override
@@ -130,7 +130,7 @@ class GroupObject extends Obj{
 
 
   ///Constructor
-  GroupObject(String idObject, Entity owner, String name, String desc) : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc){
+  GroupObject(int idObject, Entity owner, String name, String desc) : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc){
   }
 
 
@@ -156,7 +156,7 @@ class GroupObject extends Obj{
 
   
   @override
-  void delObject({User user} ) {
+  void delObject() {
     // TODO: implement delObject
   }
 

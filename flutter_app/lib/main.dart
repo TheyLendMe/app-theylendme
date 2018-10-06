@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'Objects/entity.dart';
-import 'Objects/obj.dart';
-import 'Utilities/reqresp.dart';
+import 'package:flutter_app/Objects/entity.dart';
+import 'package:flutter_app/Objects/obj.dart';
+import 'package:flutter_app/Utilities/reqresp.dart';
+import 'package:flutter_app/Singletons/UserSingleton.dart';
+import 'package:flutter_app/Utilities/auth.dart';
 
 void main() => runApp(new MyApp());
 
@@ -37,9 +39,12 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
-    User u = new User("myid", "Hugo");
-   // u.addObject("Esto es una prueba", 12);
-    u.getObjects();
+  //   User u = new User("myid", "Hugo");
+  //  // u.addObject("Esto es una prueba", 12);
+  //   u.getObjects();
+    Auth.googleAuth();
+    Obj o = new UserObject(10, UserSingleton.singleton.user, "Silla", "es una silla");
+    o.delObject();
   }
 
   @override
