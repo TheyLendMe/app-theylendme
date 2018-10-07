@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/the_home.dart';
+import 'package:TheyLendMe/the_home.dart';
 
 void main() => runApp(TheApp());
 
@@ -10,7 +10,7 @@ class TheApp extends StatelessWidget {
     return MaterialApp(
       title: 'app de préstamos',
       theme: ThemeData( primarySwatch: Colors.blue, ),
-      home: TheHome(title: 'Home'),
+      home: TheHome(title: 'TheyLendMe'),
     );
   }
 }
