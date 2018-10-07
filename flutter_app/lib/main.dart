@@ -38,13 +38,22 @@ class _MyHomePageState extends State<MyHomePage> {
   // MyHomePage, ya que es un widget "stateful" (puede cambiar dinámicamente)
   int _counter = 0;
 
-  void _incrementCounter() {
+  void _incrementCounter() async {
   //   User u = new User("myid", "Hugo");
   //  // u.addObject("Esto es una prueba", 12);
   //   u.getObjects();
     Auth.googleAuth();
-    Obj o = new UserObject(10, UserSingleton.singleton.user, "Silla", "es una silla");
-    o.delObject();
+    UserSingleton.singleton.user.getObjects().then((l){
+
+      List<Obj> n = l;
+
+      n.forEach((element){
+        print(element.name);
+      });
+      
+
+
+    });
   }
 
   @override

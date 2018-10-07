@@ -1,8 +1,9 @@
 import 'package:flutter_app/Utilities/reqresp.dart';
+import 'package:flutter_app/Objects/obj.dart';
 import 'package:flutter_app/Singletons/UserSingleton.dart';
 
 abstract class Entity{
-  final String _idEntity;
+  final dynamic _idEntity;
   final EntityType _type;
   String _name,_desc,_img;
 
@@ -15,7 +16,7 @@ abstract class Entity{
 
 
   ///Getters and settes
-  String get idEntity => _idEntity;
+  get idEntity => _idEntity;
   String get name => _name;
   String get desc => _desc;
 
@@ -35,7 +36,7 @@ abstract class Entity{
 
 
 
-  void getObjects();
+  Future<List<Obj>> getObjects();
 
   void getRequest();
 
@@ -61,10 +62,11 @@ class User extends Entity{
 
 
   @override
-  void getObjects() {
-      new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+  Future<List<Obj>> getObjects() async{
+    Response res = await new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
+        idUser: this.idEntity,
     ).doRequest();
+    return res.objectsBuilder(this);
   }
 
   @override
@@ -121,8 +123,12 @@ class Group extends Entity{
   }
 
   @override
-  void getObjects() {
-    // TODO: implement getObjects
+  Future<List<Obj>> getObjects() async{
+    ///TODO change link 
+    Response res = await new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
+        idGroup: this.idEntity,
+    ).doRequest();
+    return res.objectsBuilder(this);
   }
 }
 

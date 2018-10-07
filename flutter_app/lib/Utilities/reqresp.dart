@@ -1,5 +1,7 @@
 
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/Objects/obj.dart';
+import 'package:flutter_app/Objects/entity.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -23,8 +25,9 @@ class Request{
     request.bodyFields = _data;
     ///TODO implementar un manejador de errores si deja de haber conexion
     try{
-      var response = await client.send(request);
-      return new Response(response);
+      http.StreamedResponse response = await client.send(request);
+      return await Response.responseBuilder(response);
+
     }catch(e){
       print("Internet connection error");
       return null;
@@ -58,33 +61,56 @@ class Request{
 
 
 class Response{
-  final http.StreamedResponse _response;
-  RequestError _err = null;
-  
-  dynamic _data;
 
-
-  Response(this._response){
-    
-
-    ///The error will only have an state if there is a server error
-    _err = _response.statusCode != 200 ? new ServerError("Ha habido un error con el servidor", 1) : null;
-
-    _response.stream.bytesToString().then((s){
-      print(s);
-
-    
-      
-      ///TODO checkear mas tarde si hay un error
-      ///
-    });
-    
-
-
+  ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
+  ///returns a Future!
+  static Future<Response> responseBuilder(http.StreamedResponse response) async{
+    RequestError err = response.statusCode != 200 ? new ServerError("Ha habido un error con el servidor", 1) : null;
+    String resString = await response.stream.bytesToString();
+    print(resString);
+    return new Response(resString,err);
   }
+
+  final RequestError _err;
+  dynamic _data;
+  
+  Response(data,this._err){
+    this._data = jsonDecode(data);
+  }
+
+
 
   bool hashError(){return _err== null;}
   
+  dynamic get data => _data;
+
+
+
+  List<Obj> objectsBuilder(Entity entity){
+     ///Necesita saber si es lista o mapa, el usuario ()
+
+    //print(_data["responseType"]);
+
+    List<dynamic> l = _data['data'];
+    
+    List<Obj> objs = new List();
+    l.forEach((element){
+      objs.add(objectBuilder(entity, data: element as Map<String,dynamic>));
+    });
+    return objs;
+
+  } 
+
+  Obj objectBuilder(Entity entity, {Map<String,dynamic> data}){
+    data = data == null ?   _data as Map : data; 
+    return entity.type  == EntityType.USER ? 
+      new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
+      new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
+  }
+
+
+
+
 
 }
 
@@ -92,6 +118,7 @@ abstract class RequestError{
 
   final String errMsg;
   final int idErr;
+  
 
   RequestError(this.errMsg,this.idErr){}
 

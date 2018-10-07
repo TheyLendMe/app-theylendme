@@ -16,7 +16,7 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name, String desc, {String image =""}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image =""}){
     this._name = name;
     this._desc = desc;
     this._image = image;
@@ -66,7 +66,7 @@ class UserObject extends Obj{
 
 
   ///Constructor
-  UserObject(int idObject, Entity owner, String name, String desc) : super(ObjType.USER_OBJECT, idObject, owner, name, desc){
+  UserObject(int idObject, Entity owner, String name, {String desc}) : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc){
 
 
 
@@ -130,7 +130,7 @@ class GroupObject extends Obj{
 
 
   ///Constructor
-  GroupObject(int idObject, Entity owner, String name, String desc) : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc){
+  GroupObject(int idObject, Entity owner, String name, {String desc}) : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc){
   }
 
 
