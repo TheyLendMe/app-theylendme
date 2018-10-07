@@ -22,11 +22,11 @@ class TheHome extends StatefulWidget {
   final String title;
 
   final drawerItems = [
-    new DrawerItem("Home", Icons.rss_feed),
-    new DrawerItem("Mis Objetos", Icons.rss_feed),
-    new DrawerItem("Mis Préstamos", Icons.local_pizza),
-    new DrawerItem("Mis Grupos", Icons.info),
-    new DrawerItem("Ajustes", Icons.info)
+    new DrawerItem("Home", Icons.home),
+    new DrawerItem("Mis Objetos", Icons.folder_open),
+    new DrawerItem("Mis Préstamos", Icons.import_export),
+    new DrawerItem("Mis Grupos", Icons.people),
+    new DrawerItem("Ajustes", Icons.settings)
   ];
 
   @override
@@ -86,27 +86,41 @@ class _TheHomePageState extends State<TheHome> {
                 Tab(icon: Text('GRUPOS')),
               ],
             ),
-            title: new Text(widget.drawerItems[_selectedDrawerIndex].title),
+            //title: new Text(widget.drawerItems[_selectedDrawerIndex].title),
+            title: new Container(
+                child: Row(
+                    children: <Widget>[
+                      new Icon(widget.drawerItems[_selectedDrawerIndex].icon),
+                      //TODO: padding entre Icon y Text
+                      new Text(widget.drawerItems[_selectedDrawerIndex].title),
+                    ],
+                  )
+              )
           ),
-          //drawer: TheDrawer(), //TODO: mover esto a the_drawer.dart
-          drawer: new Drawer(
-            child: new Column(
-              children: <Widget>[
-                new UserAccountsDrawerHeader(
-                    accountName: new Text("MiNombre"), accountEmail: null),
-                new Column(children: drawerOptions)
-              ],
-            ),
-          ),
-          //body: _getDrawerItemWidget(_selectedDrawerIndex),
           body: TabBarView(
             children: [
               TheObjectsTab(),
               TheGroupsTab(),
             ],
           ),
+          //drawer: TheDrawer(), // hay que poner el drawer aquí
+                                 // para que al abrirlo no ocupe toda la pantalla
+          //FIXME: si uso TheDrawer() en vez de new Drawer(),
+          //       no guarda el _selectedDrawerIndex
+          //       (está cogiendo el contexto adecuado?)
+          //       Posible solución: reload parent state desde the_drawer.dart
+          drawer: new Drawer(
+            child: new Column(
+              children: <Widget>[
+                new UserAccountsDrawerHeader(
+                    accountName: new Text("John Doe"), accountEmail: null),
+                new Column(children: drawerOptions)
+              ],
+            ),
+          ),
         )
-      )
+      ),
+      // si ponemos el drawer aquí (como estaba antes), ocupa toda la pantalla
     );
   }
 }
