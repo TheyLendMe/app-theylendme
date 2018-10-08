@@ -80,10 +80,11 @@ class UserObject extends Obj{
 
   ///If the user does not set any amount, it will ask just for one object
   @override
-  void requestObj({int amount = 1, var context}) {
+  void requestObj({int amount = 1, String msg, var context}) {
     new Request("http://54.188.52.254/Funciones/requestObject.php").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
-        idObject : _idObject
+        idObject : _idObject,
+        msg : msg
     ).doRequest(context : context);
   }
 
