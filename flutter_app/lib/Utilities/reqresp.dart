@@ -21,7 +21,7 @@ class Request{
   }
 
 
-  Future<Response> doRequest() async{
+  Future<Response> doRequest({var context}) async{
     request.bodyFields = _data;
     ///TODO implementar un manejador de errores si deja de haber conexion
     ///Si el 
@@ -76,7 +76,7 @@ class Response{
   Response(data){
     this._data = jsonDecode(data);
 
-    if(data["error"] != "false"){ throw new ServerException(data["errorMsg"], data["errorCode"]);}
+    if(_data['error'] != false){ throw new ServerException(_data["errorMsg"], _data["errorCode"]);}
     
   }
 
