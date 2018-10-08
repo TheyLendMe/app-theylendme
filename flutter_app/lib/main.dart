@@ -43,17 +43,26 @@ class _MyHomePageState extends State<MyHomePage> {
   //  // u.addObject("Esto es una prueba", 12);
   //   u.getObjects();
     Auth.googleAuth();
-    UserSingleton.singleton.user.getObjects().then((l){
 
-      List<Obj> n = l;
+    new UserObject(4, new User("mysecondid", "nombre"), "Arpom").requestObj();
 
-      n.forEach((element){
-        print(element.name);
-      });
+  
+
+
+
+
+
+    // UserSingleton.singleton.user.getObjects().then((l){
+
+    //   List<Obj> n = l;
+
+    //   n.forEach((element){
+    //     print(element.name);
+    //   });
       
 
 
-    });
+    // });
   }
 
   @override

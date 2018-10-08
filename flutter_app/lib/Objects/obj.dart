@@ -77,9 +77,14 @@ class UserObject extends Obj{
     // TODO: implement lend
   }
 
+
+  ///If the user does not set any amount, it will ask just for one object
   @override
-  void requestObj() {
-    // TODO: implement requestObj
+  void requestObj({int amount = 1}) {
+    new Request("http://54.188.52.254/Funciones/requestObject.php").dataBuilder(
+        idUser: UserSingleton.singleton.user.idEntity,
+        idObject : _idObject
+    ).doRequest();
   }
 
 

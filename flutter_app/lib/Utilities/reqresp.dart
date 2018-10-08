@@ -24,10 +24,10 @@ class Request{
   Future<Response> doRequest() async{
     request.bodyFields = _data;
     ///TODO implementar un manejador de errores si deja de haber conexion
+    ///Si el 
     try{
       http.StreamedResponse response = await client.send(request);
       return await Response.responseBuilder(response);
-
     }catch(e){
       print("Internet connection error");
       return null;
@@ -65,34 +65,25 @@ class Response{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
   static Future<Response> responseBuilder(http.StreamedResponse response) async{
-    RequestError err = response.statusCode != 200 ? new ServerError("Ha habido un error con el servidor", 1) : null;
+    ///In case of server error like 404 not found... this 
+    if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
     String resString = await response.stream.bytesToString();
     print(resString);
-    return new Response(resString,err);
+    return new Response(resString);
   }
-
-  final RequestError _err;
   dynamic _data;
   
-  Response(data,this._err){
+  Response(data){
     this._data = jsonDecode(data);
+
+    if(data["error"] != "false"){ throw new ServerException(data["errorMsg"], data["errorCode"]);}
+    
   }
 
-
-
-  bool hashError(){return _err== null;}
-  
   dynamic get data => _data;
 
-
-
   List<Obj> objectsBuilder(Entity entity){
-     ///Necesita saber si es lista o mapa, el usuario ()
-
-    //print(_data["responseType"]);
-
-    List<dynamic> l = _data['data'];
-    
+    List<dynamic> l = _data['responseData'];   
     List<Obj> objs = new List();
     l.forEach((element){
       objs.add(objectBuilder(entity, data: element as Map<String,dynamic>));
@@ -100,39 +91,26 @@ class Response{
     return objs;
 
   } 
-
   Obj objectBuilder(Entity entity, {Map<String,dynamic> data}){
     data = data == null ?   _data as Map : data; 
     return entity.type  == EntityType.USER ? 
       new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
       new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
   }
-
-
-
-
-
 }
 
-abstract class RequestError{
+/// TODO Implement a exception mangager
 
+class RequestException implements Exception{
   final String errMsg;
   final int idErr;
-  
-
-  RequestError(this.errMsg,this.idErr){}
-
-
+  RequestException(this.errMsg,this.idErr);
 }
 
-class StatusError extends RequestError{
+class StatusException extends RequestException{
   ///TODO define status error
-  StatusError(String errMsg, int idErr) : super(errMsg, idErr);
-
+  StatusException(String errMsg, int idErr) : super(errMsg, idErr);
 }
-
-class ServerError extends RequestError{
-  ServerError(String errMsg, int idErr) : super(errMsg, idErr);
-
-
+class ServerException extends RequestException{
+  ServerException(String errMsg, int idErr) : super(errMsg, idErr);
 }
