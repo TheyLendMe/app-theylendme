@@ -103,21 +103,21 @@ class _TheHomePageState extends State<TheHome> {
               TheGroupsTab(),
             ],
           ),
-          //drawer: TheDrawer(), // hay que poner el drawer aquí
+          drawer: TheDrawer(), // hay que poner el drawer aquí
                                  // para que al abrirlo no ocupe toda la pantalla
           //FIXME: si uso TheDrawer() en vez de new Drawer(),
           //       no guarda el _selectedDrawerIndex
           //       (está cogiendo el contexto adecuado?)
           //       Posible solución: reload parent state desde the_drawer.dart
-          drawer: new Drawer(
-            child: new Column(
-              children: <Widget>[
-                new UserAccountsDrawerHeader(
-                    accountName: new Text("John Doe"), accountEmail: null),
-                new Column(children: drawerOptions)
-              ],
-            ),
-          ),
+          // drawer: new Drawer(
+          //   child: new Column(
+          //     children: <Widget>[
+          //       new UserAccountsDrawerHeader(
+          //           accountName: new Text("John Doe"), accountEmail: null),
+          //       new Column(children: drawerOptions)
+          //     ],
+          //   ),
+          // ),
         )
       ),
       // si ponemos el drawer aquí (como estaba antes), ocupa toda la pantalla

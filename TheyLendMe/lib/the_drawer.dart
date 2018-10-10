@@ -11,6 +11,19 @@ class DrawerItem {
   DrawerItem(this.title, this.icon);
 }
 
+class DrawerListTile extends ListTile {
+  // ## WIP ##
+  //( https://www.dartlang.org/guides/language/language-tour#using-constructors )
+  DrawerItem d;
+
+  DrawerListTile(DrawerItem d) {
+    leading: new Icon(d.icon);
+    title: new Text(d.title);
+    //selected: i == _selectedDrawerIndex;
+    //onTap: () => _onSelectItem(i);
+  }
+}
+
 // MENÚ LATERAL
 class TheDrawer extends StatefulWidget {
   final drawerItems = [
@@ -60,14 +73,7 @@ class _TheDrawerState extends State<TheDrawer> {
     List<Widget> drawerOptions = [];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];
-      drawerOptions.add(
-        new ListTile(
-          leading: new Icon(d.icon),
-          title: new Text(d.title),
-          selected: i == _selectedDrawerIndex,
-          onTap: () => _onSelectItem(i),
-        )
-      );
+      drawerOptions.add( new DrawerListTile(d) );
     }
 
     return Drawer(
