@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:TheyLendMe/tabs/the_objects_tab.dart';
 import 'package:TheyLendMe/tabs/the_groups_tab.dart';
-import 'package:TheyLendMe/fragments/the_home.dart';
-import 'package:TheyLendMe/fragments/my_objects.dart';
-import 'package:TheyLendMe/fragments/my_loans.dart';
-import 'package:TheyLendMe/fragments/my_groups.dart';
-import 'package:TheyLendMe/fragments/settings.dart';
+import 'package:TheyLendMe/pages/the_home.dart';
+import 'package:TheyLendMe/pages/my_objects.dart';
+import 'package:TheyLendMe/pages/my_loans.dart';
+import 'package:TheyLendMe/pages/my_groups.dart';
+import 'package:TheyLendMe/pages/settings.dart';
 
 // Para MENÚ LATERAL
 class DrawerItem {
@@ -41,15 +41,15 @@ class _TheHomePageState extends State<TheHome> {
   _getDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
-        return TheHomeFragment();
+        return TheHomePage();
       case 1:
-        return MyObjectsFragment();
+        return MyObjectsPage();
       case 2:
-        return MyLoansFragment();
+        return MyLoansPage();
       case 3:
-        return MyGroupsFragment();
+        return MyGroupsPage();
       case 4:
-        return SettingsFragment();
+        return SettingsPage();
 
       default:
         return new Text("Error");

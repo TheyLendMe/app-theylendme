@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MyObjectsFragment extends StatelessWidget {
+class MyGroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Center(
-      child: new Text("Mis Objetos"),
+      child: new Text("Mis Grupos"),
     );
   }
 

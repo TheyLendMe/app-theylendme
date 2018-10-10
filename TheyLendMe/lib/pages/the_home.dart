@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TheHomeFragment extends StatelessWidget {
+class TheHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
