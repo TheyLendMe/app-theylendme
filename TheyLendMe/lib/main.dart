@@ -22,11 +22,7 @@ class TheApp extends StatelessWidget {
         "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
         "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
         "/SettingsPage": (BuildContext context) => new SettingsPage(),
-      }
-      //and a Navigator is a widget that manages routes
-
-      // (a live example: https://youtu.be/RLyw-_MLLTo)
-
+      } // (a live example: https://youtu.be/RLyw-_MLLTo)
     );
   }
 }

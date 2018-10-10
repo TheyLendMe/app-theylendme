@@ -25,11 +25,11 @@ class TheHome extends StatefulWidget {
 
   // Contenido del MENÚ LATERAL
   final drawerItems = [
-    new DrawerItem("Home", Icons.home,"/"),
-    new DrawerItem("Mis Objetos", Icons.folder_open,"/MyObjectsPage"),
-    new DrawerItem("Mis Préstamos", Icons.import_export,"/MyLoansPage"),
-    new DrawerItem("Mis Grupos", Icons.people,"/MyGroupsPage"),
-    new DrawerItem("Ajustes", Icons.settings,"/SettingsPage")
+    new DrawerItem("Home",         Icons.home,         "/"),
+    new DrawerItem("Mis Objetos",  Icons.folder_open,  "/MyObjectsPage"),
+    new DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
+    new DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
+    new DrawerItem("Ajustes",      Icons.settings,     "/SettingsPage")
   ];
 
   @override
@@ -38,30 +38,17 @@ class TheHome extends StatefulWidget {
 
 class _TheHomePageState extends State<TheHome> {
 
-  //Para MENÚ LATERAL
+  //Para MENÚ LATERAL (guarda la opción seleccionada)
   int _selectedDrawerIndex = 0;
-  _getDrawerItemWidget(int pos) {
-    switch (pos) {
-      case 0:
-        return TheHomePage();
-      case 1:
-        return MyObjectsPage();
-      case 2:
-        return MyLoansPage();
-      case 3:
-        return MyGroupsPage();
-      case 4:
-        return SettingsPage();
-
-      default:
-        return new Text("Error");
-    }
+  _getDrawerItemWidget(int pos) { //TODO: is this necessary?
+    return pos;
   }
 
-  //Para MENÚ LATERAL (guarda la opción seleccionada)
+  //Para MENÚ LATERAL (acción al seleccionar)
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
-    Navigator.of(context).pushNamed(widget.drawerItems[index].route); // close the drawer
+    Navigator.of(context).pushNamed(widget.drawerItems[index].route);
+    // A Navigator is a widget that manages routes
   }
 
   @override
