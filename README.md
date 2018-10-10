@@ -3,4 +3,4 @@ directorio para la app
 
 ## último screenshot
 
-![](TheyLendMe/screenshots/home2.gif)
+![](TheyLendMe/screenshots/home3.gif)
