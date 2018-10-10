@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:TheyLendMe/the_drawer.dart';
 import 'package:TheyLendMe/tabs/the_objects_tab.dart';
 import 'package:TheyLendMe/tabs/the_groups_tab.dart';
 import 'package:TheyLendMe/fragments/the_home.dart';
@@ -9,6 +8,7 @@ import 'package:TheyLendMe/fragments/my_loans.dart';
 import 'package:TheyLendMe/fragments/my_groups.dart';
 import 'package:TheyLendMe/fragments/settings.dart';
 
+// Para MENÚ LATERAL
 class DrawerItem {
   String title;
   IconData icon;
@@ -21,6 +21,7 @@ class TheHome extends StatefulWidget {
 
   final String title;
 
+  // Contenido del MENÚ LATERAL
   final drawerItems = [
     new DrawerItem("Home", Icons.home),
     new DrawerItem("Mis Objetos", Icons.folder_open),
@@ -34,8 +35,9 @@ class TheHome extends StatefulWidget {
 }
 
 class _TheHomePageState extends State<TheHome> {
-  int _selectedDrawerIndex = 0;
 
+  //Para MENÚ LATERAL
+  int _selectedDrawerIndex = 0;
   _getDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
@@ -53,7 +55,8 @@ class _TheHomePageState extends State<TheHome> {
         return new Text("Error");
     }
   }
-  
+
+  //Para MENÚ LATERAL (guarda la opción seleccionada)
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
     Navigator.of(context).pop(); // close the drawer
@@ -62,6 +65,7 @@ class _TheHomePageState extends State<TheHome> {
   @override
   Widget build(BuildContext context) {
 
+    //Para MENÚ LATERAL
     List<Widget> drawerOptions = [];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];
@@ -86,7 +90,6 @@ class _TheHomePageState extends State<TheHome> {
                 Tab(icon: Text('GRUPOS')),
               ],
             ),
-            //title: new Text(widget.drawerItems[_selectedDrawerIndex].title),
             title: new Container(
                 child: Row(
                     children: <Widget>[
@@ -103,21 +106,17 @@ class _TheHomePageState extends State<TheHome> {
               TheGroupsTab(),
             ],
           ),
-          drawer: TheDrawer(), // hay que poner el drawer aquí
-                                 // para que al abrirlo no ocupe toda la pantalla
-          //FIXME: si uso TheDrawer() en vez de new Drawer(),
-          //       no guarda el _selectedDrawerIndex
-          //       (está cogiendo el contexto adecuado?)
-          //       Posible solución: reload parent state desde the_drawer.dart
-          // drawer: new Drawer(
-          //   child: new Column(
-          //     children: <Widget>[
-          //       new UserAccountsDrawerHeader(
-          //           accountName: new Text("John Doe"), accountEmail: null),
-          //       new Column(children: drawerOptions)
-          //     ],
-          //   ),
-          // ),
+
+          // MENÚ LATERAL:
+          drawer: new Drawer(  // hay que poner el drawer aquí
+            child: new Column( // para que al abrirlo no ocupe toda la pantalla
+              children: <Widget>[
+                new UserAccountsDrawerHeader(
+                    accountName: new Text("John Doe"), accountEmail: null),
+                new Column(children: drawerOptions)
+              ],
+            ),
+          ),
         )
       ),
       // si ponemos el drawer aquí (como estaba antes), ocupa toda la pantalla
