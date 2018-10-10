@@ -10,9 +10,11 @@ import 'package:TheyLendMe/pages/settings.dart';
 
 // Para MENÚ LATERAL
 class DrawerItem {
+  DrawerItem(this.title, this.icon, this.route);
+
   String title;
   IconData icon;
-  DrawerItem(this.title, this.icon);
+  String route;
 }
 
 class TheHome extends StatefulWidget {
@@ -23,11 +25,11 @@ class TheHome extends StatefulWidget {
 
   // Contenido del MENÚ LATERAL
   final drawerItems = [
-    new DrawerItem("Home", Icons.home),
-    new DrawerItem("Mis Objetos", Icons.folder_open),
-    new DrawerItem("Mis Préstamos", Icons.import_export),
-    new DrawerItem("Mis Grupos", Icons.people),
-    new DrawerItem("Ajustes", Icons.settings)
+    new DrawerItem("Home", Icons.home,"/"),
+    new DrawerItem("Mis Objetos", Icons.folder_open,"/MyObjectsPage"),
+    new DrawerItem("Mis Préstamos", Icons.import_export,"/MyLoansPage"),
+    new DrawerItem("Mis Grupos", Icons.people,"/MyGroupsPage"),
+    new DrawerItem("Ajustes", Icons.settings,"/SettingsPage")
   ];
 
   @override
@@ -59,7 +61,7 @@ class _TheHomePageState extends State<TheHome> {
   //Para MENÚ LATERAL (guarda la opción seleccionada)
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
-    Navigator.of(context).pop(); // close the drawer
+    Navigator.of(context).pushNamed(widget.drawerItems[index].route); // close the drawer
   }
 
   @override
