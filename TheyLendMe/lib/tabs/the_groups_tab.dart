@@ -13,41 +13,50 @@ class _TheGroupsTabState extends State<TheGroupsTab> {
 
     return Scaffold(
         body: ListView.builder( //ListView de ejemplo:
-          itemBuilder: (BuildContext context, int index) =>
-              EntryItem(groups[index]),
-          itemCount: groups.length,
-        ),
+          itemBuilder: (BuildContext context, int index) => GroupItem(groups[index]),
+          itemCount: groups.length
+        )
     );
   }
 }
 
-// Displays one Entry.
-class EntryItem extends StatelessWidget {
-  const EntryItem(this.entry);
+// Displays one Group.
+class GroupItem extends StatelessWidget {
 
-  final Entry entry;
+  //(watching https://youtu.be/iflV0D0d1zQ)
 
-  Widget _buildTiles(Entry root) {
-    return ListTile(title: Text(root.title));
-  }
+  const GroupItem(this.group); //ASK: const, final..?
+  final Group group; //ASK: this.group || this._group?
 
   @override
   Widget build(BuildContext context) {
-    return _buildTiles(entry);
+    return new ListTile(
+      leading: new CircleAvatar(
+          child: new Text(group.title[0]), //just the initial letter in a circle
+          backgroundColor: Colors.yellow
+        ),
+      title: Text(group.title),
+      subtitle: new Text(group.subtitle)
+    );
   }
 }
 
-class Entry {
-  Entry(this.title, [this.children = const <Entry>[]]);
+class Group {
+  Group(
+    this.title,
+    this.subtitle,
+    //[this.children = const <Group>[]]
+  );
 
   final String title;
-  final List<Entry> children;
+  final String subtitle;
+  //final List<Group> children; //TODO: expandable list maybe?
 }
 
-final List<Entry> groups = <Entry>[
-  Entry('Asociación ASOC'),
-  Entry('Grupo GRP'),
-  Entry('Equipo C.D.EQUIPO'),
-  Entry('Organización ORGANIZ'),
-  Entry('Clase CLAS1'),
+final List<Group> groups = <Group>[
+  Group('Asociación ASOC','una asociación'),
+  Group('Grupo GRP','un grupo'),
+  Group('Equipo C.D.EQUIPO','un equipo'),
+  Group('Organización ORGANIZ','una organización'),
+  Group('Clase CLAS1','una clase'),
 ];
