@@ -40,8 +40,9 @@ class Request{
 
 ///This will be the builder that
   Request dataBuilder({String idUser,int idGroup, int idObject, 
-  String name, String desc, int idLoan, int idRequest, int idClaim, int amount,
-  String oUser, String msg //add more fields if they are necessary
+  String name, String desc,String info, String email,String nickName, String tfno,
+  int idLoan, int idRequest, int idClaim, int amount,
+  String oUser, String msg, String imagen, String claimMsg//add more fields if they are necessary
   }){
     if(idUser != null) _data['idUser'] = idUser;
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
@@ -55,6 +56,12 @@ class Request{
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
+    if(nickName != null) _data ['nickname'] = nickName;
+    if(email != null) _data['email'] = email;
+    if(info != null) _data['info'] = info;
+    if(tfno != null) _data['tfno'] = tfno;
+    if(imagen != null) _data['imagen'] = imagen;
+    if(claimMsg != null) _data['claimMsg'] = claimMsg;
     return this;
   }
 }

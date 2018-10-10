@@ -7,6 +7,12 @@ abstract class Obj{
   final ObjType _type;
   final int _idObject;
   final Entity owner;
+  
+
+
+
+
+
 
   ///TODO pensar mejor el tema de las imagenes. Deberia de ser una lista???
   String _name, _desc, _image;
@@ -16,7 +22,7 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image =""}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",}){
     this._name = name;
     this._desc = desc;
     this._image = image;
@@ -25,14 +31,14 @@ abstract class Obj{
 
 
 ///Abstract Methods 
-  void lend(Entity e);
+  void lend(int idRequest);
 
   void requestObj();
 
   ///Devolver--> no me deja poner return D: valdra solo con requestObj???
-  void bringBack();
+  void returnObj(int idLoan);
 
-  void claim();
+  void claim(int idLoan);
 
   void setObjectInfo({String name, String desc});
 
@@ -41,6 +47,8 @@ abstract class Obj{
   void objHistory();
 
   void getInventory();
+
+  void updateObject();
 ///Getters and setters methods
 
   String get name => _name;
@@ -73,8 +81,11 @@ class UserObject extends Obj{
   }
 
   @override
-  void lend(Entity e) {
-    // TODO: implement lend
+  void lend(int idRequest) {
+    new Request("http://54.188.52.254/Funciones/lendObject.php").dataBuilder(
+        idUser: UserSingleton.singleton.user.idEntity,
+        idRequest: idRequest
+    ).doRequest();
   }
 
 
@@ -91,8 +102,12 @@ class UserObject extends Obj{
 
 
   @override
-  void claim() {
-    // TODO: implement claim
+  void claim(int idLoan, {String claimMsg}) {
+    new Request("http://54.188.52.254/Funciones/claimObject.php").dataBuilder(
+        idUser: UserSingleton.singleton.user.idEntity,
+        idLoan: idLoan,
+        claimMsg: claimMsg
+    ).doRequest();
   }
 
   @override
@@ -119,15 +134,26 @@ class UserObject extends Obj{
   }
 
   @override
-  void bringBack() {
-    // TODO: implement bringBack
+  void returnObj(int idLoan) {
+    new Request("http://54.188.52.254/Funciones/returnLendedObject.php").dataBuilder(
+      idUser: UserSingleton.singleton.user.idEntity,
+      idLoan: idLoan
+    ).doRequest();
   }
 
 
- 
 
-
-
+///TODO Falta por probar
+  @override
+  void updateObject({String name,String imagen,int amount}) {
+    new Request("http://54.188.52.254/Funciones/updateObject.php").dataBuilder(
+        idUser: UserSingleton.singleton.user.idEntity,
+        idObject : _idObject,
+        name: name,
+        imagen: imagen,
+        amount: amount,
+    ).doRequest();
+  }
 }
 
 
@@ -141,7 +167,7 @@ class GroupObject extends Obj{
 
 
   @override
-  void lend(Entity e) {
+  void lend(int idRequest) {
     // TODO: implement lend
   }
 
@@ -151,7 +177,7 @@ class GroupObject extends Obj{
   }
 
   @override
-  void claim() {
+  void claim(int idLoan) {
     // TODO: implement claim
   }
 
@@ -177,8 +203,13 @@ class GroupObject extends Obj{
   }
 
   @override
-  void bringBack() {
-    // TODO: implement bringBack
+  void returnObj(int idLoan) {
+    // TODO: implement returnObj
+  }
+
+  @override
+  void updateObject() {
+    // TODO: implement updateObject
   }
 
 
@@ -194,4 +225,10 @@ class GroupObject extends Obj{
 
   enum ObjType {
     USER_OBJECT, GROUP_OBJECT
+  }
+
+  enum ObjetState{
+    
+    DEFAULT, LENDED, REQUESTED, LENT, BORROWED, CLAIMED, 
+
   }

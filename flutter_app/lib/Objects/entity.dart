@@ -77,9 +77,18 @@ class User extends Entity{
     // TODO: implement getRequest
   }
 
+
+
+///TODO falta probar
   @override
-  void updateInfo() {
-    // TODO: implement updateInfo
+  void updateInfo({String nickName, String info,String email, String tfno}) async {
+     Response res = await new Request("http://54.188.52.254/Funciones/updateUser.php").dataBuilder(
+        idUser: this.idEntity,
+        nickName: nickName,
+        info: info,
+        email: email,
+        tfno: tfno
+    ).doRequest();
   }
 
 
