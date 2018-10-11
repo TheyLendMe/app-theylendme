@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class MyGroupsFragment extends StatelessWidget {
+class MyGroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

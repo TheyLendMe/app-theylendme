@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:TheyLendMe/tabs/the_objects_tab.dart';
 import 'package:TheyLendMe/tabs/the_groups_tab.dart';
-import 'package:TheyLendMe/fragments/the_home.dart';
-import 'package:TheyLendMe/fragments/my_objects.dart';
-import 'package:TheyLendMe/fragments/my_loans.dart';
-import 'package:TheyLendMe/fragments/my_groups.dart';
-import 'package:TheyLendMe/fragments/settings.dart';
+import 'package:TheyLendMe/pages/the_home.dart';
+import 'package:TheyLendMe/pages/my_objects.dart';
+import 'package:TheyLendMe/pages/my_loans.dart';
+import 'package:TheyLendMe/pages/my_groups.dart';
+import 'package:TheyLendMe/pages/settings.dart';
 
 // Para MENÚ LATERAL
 class DrawerItem {
+  DrawerItem(this.title, this.icon, this.route);
+
   String title;
   IconData icon;
-  DrawerItem(this.title, this.icon);
+  String route;
 }
 
 class TheHome extends StatefulWidget {
@@ -23,43 +25,30 @@ class TheHome extends StatefulWidget {
 
   // Contenido del MENÚ LATERAL
   final drawerItems = [
-    new DrawerItem("Home", Icons.home),
-    new DrawerItem("Mis Objetos", Icons.folder_open),
-    new DrawerItem("Mis Préstamos", Icons.import_export),
-    new DrawerItem("Mis Grupos", Icons.people),
-    new DrawerItem("Ajustes", Icons.settings)
+    new DrawerItem("Home",         Icons.home,         "/"),
+    new DrawerItem("Mis Objetos",  Icons.folder_open,  "/MyObjectsPage"),
+    new DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
+    new DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
+    new DrawerItem("Ajustes",      Icons.settings,     "/SettingsPage")
   ];
 
   @override
-    _TheHomePageState createState() => _TheHomePageState();
+  _TheHomePageState createState() => _TheHomePageState();
 }
 
 class _TheHomePageState extends State<TheHome> {
 
-  //Para MENÚ LATERAL
-  int _selectedDrawerIndex = 0;
-  _getDrawerItemWidget(int pos) {
-    switch (pos) {
-      case 0:
-        return TheHomeFragment();
-      case 1:
-        return MyObjectsFragment();
-      case 2:
-        return MyLoansFragment();
-      case 3:
-        return MyGroupsFragment();
-      case 4:
-        return SettingsFragment();
-
-      default:
-        return new Text("Error");
-    }
+  //Para MENÚ LATERAL (guarda la opción seleccionada)
+  int _selectedDrawerIndex = 0; // '_' = privado
+  _getDrawerItemWidget(int pos) { //TODO: is this necessary?
+    return pos;
   }
 
-  //Para MENÚ LATERAL (guarda la opción seleccionada)
+  //Para MENÚ LATERAL (acción al seleccionar)
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
-    Navigator.of(context).pop(); // close the drawer
+    Navigator.of(context).pushNamed(widget.drawerItems[index].route);
+    // A Navigator is a widget that manages routes
   }
 
   @override
