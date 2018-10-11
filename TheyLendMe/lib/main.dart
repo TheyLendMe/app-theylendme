@@ -4,6 +4,8 @@ import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/settings.dart';
+import 'package:TheyLendMe/pages/object_page.dart';
+import 'package:TheyLendMe/pages/user_page.dart';
 
 void main() => runApp(TheApp());
 
@@ -22,6 +24,9 @@ class TheApp extends StatelessWidget {
         "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
         "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
         "/SettingsPage": (BuildContext context) => new SettingsPage(),
+
+        "/ObjectPage": (BuildContext context) => new ObjectPage(),
+        "/UserPage": (BuildContext context) => new UserPage(),
       } // (a live example: https://youtu.be/RLyw-_MLLTo)
     );
   }

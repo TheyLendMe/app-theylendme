@@ -15,10 +15,16 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
       body: GridView.count( //GridView de ejemplo:
         crossAxisCount: 2,
         children: List.generate(100, (index) {
-          return Center(
-            child: Text(
-              'Item $index',
-              style: Theme.of(context).textTheme.headline,
+          return GestureDetector(
+            // When the child is tapped, show a snackbar
+            onTap: () {
+              Navigator.of(context).pushNamed("/ObjectPage");
+            },
+            child: Center(
+              child: Text( //TODO: Image here
+                'Item $index',
+                style: Theme.of(context).textTheme.headline,
+              )
             )
           );
         }),
