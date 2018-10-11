@@ -25,8 +25,8 @@ class GroupItem extends StatelessWidget {
 
   //(watching https://youtu.be/iflV0D0d1zQ)
 
-  const GroupItem(this.group); //ASK: const, final..?
-  final Group group; //ASK: this.group || this._group?
+  const GroupItem(this.group);
+  final Group group;
 
   @override
   Widget build(BuildContext context) {

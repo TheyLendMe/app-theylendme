@@ -33,13 +33,13 @@ class TheHome extends StatefulWidget {
   ];
 
   @override
-    _TheHomePageState createState() => _TheHomePageState();
+  _TheHomePageState createState() => _TheHomePageState();
 }
 
 class _TheHomePageState extends State<TheHome> {
 
   //Para MENÚ LATERAL (guarda la opción seleccionada)
-  int _selectedDrawerIndex = 0;
+  int _selectedDrawerIndex = 0; // '_' = privado
   _getDrawerItemWidget(int pos) { //TODO: is this necessary?
     return pos;
   }
