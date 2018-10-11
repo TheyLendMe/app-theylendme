@@ -1,7 +1,7 @@
 
 import 'entity.dart';
-import 'package:flutter_app/Singletons/UserSingleton.dart';
-import 'package:flutter_app/Utilities/reqresp.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/Utilities/reqresp.dart';
 
 abstract class Obj{
   final ObjType _type;

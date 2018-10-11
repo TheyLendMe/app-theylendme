@@ -1,4 +1,4 @@
-import 'package:flutter_app/Objects/entity.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 
 class UserSingleton{
   static final UserSingleton singleton = new UserSingleton._internal();

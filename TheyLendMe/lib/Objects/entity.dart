@@ -1,6 +1,6 @@
-import 'package:flutter_app/Utilities/reqresp.dart';
-import 'package:flutter_app/Objects/obj.dart';
-import 'package:flutter_app/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/Utilities/reqresp.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:async';
 
 abstract class Entity{

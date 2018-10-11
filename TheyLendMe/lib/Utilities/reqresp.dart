@@ -1,7 +1,7 @@
 
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/Objects/obj.dart';
-import 'package:flutter_app/Objects/entity.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 import 'dart:convert';
 import 'dart:async';
 
