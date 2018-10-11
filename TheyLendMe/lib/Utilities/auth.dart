@@ -4,8 +4,8 @@
 
 ///Dependencies needed  flutter_facebook_login: ^1.1.1 , firebase_core: ^0.2.5,   google_sign_in: ^3.0.5, firebase_auth: ^0.5.20
 
-import 'package:flutter_app/Singletons/UserSingleton.dart';
-import 'package:flutter_app/Objects/entity.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 
 class Auth {
 
