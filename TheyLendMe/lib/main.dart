@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/the_home.dart';
+
 import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
@@ -11,27 +12,6 @@ void main() => runApp(TheApp());
 
 class TheApp extends StatelessWidget {
   // This widget is the root of your application.
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  void pruebas() async{
-   // _handleSignIn();
-
-   ///Con poner esto debería de valer para obtener los o bjetos de este usuario
-    Auth.googleAuth();
-    await (new User("myid","nombre").getObjects());
-  }
-
-  Future<FirebaseUser> _handleSignIn() async {
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    FirebaseUser user = await _auth.signInWithGoogle(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    print("signed in " + user.displayName);
-    return user;
-  }
 
   @override
   Widget build(BuildContext context) {

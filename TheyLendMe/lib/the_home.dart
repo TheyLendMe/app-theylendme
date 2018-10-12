@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:TheyLendMe/tabs/the_objects_tab.dart';
 import 'package:TheyLendMe/tabs/the_groups_tab.dart';
 import 'package:TheyLendMe/pages/the_home.dart';
@@ -7,6 +6,15 @@ import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/settings.dart';
+
+//PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (2º)
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'Utilities/auth.dart';
+// import 'Utilities/reqresp.dart';
+// import 'package:TheyLendMe/Objects/entity.dart';
+// import 'package:TheyLendMe/Objects/obj.dart';
+// import 'Singletons/UserSingleton.dart';
 
 // Para MENÚ LATERAL
 class DrawerItem {
@@ -68,6 +76,27 @@ class _TheHomePageState extends State<TheHome> {
       );
     }
 
+    //PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar  (2º)
+    // final GoogleSignIn _googleSignIn = GoogleSignIn();
+    // final FirebaseAuth _auth = FirebaseAuth.instance;
+    // void pruebas() async{
+    //   // _handleSignIn();
+    //   ///Con poner esto debería de valer para obtener los objetos de este usuario
+    //   Auth.googleAuth();
+    //   await (new User("myid","nombre").getObjects());
+    // }
+
+    // Future<FirebaseUser> _handleSignIn() async {
+    //   GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    //   GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    //   FirebaseUser user = await _auth.signInWithGoogle(
+    //     accessToken: googleAuth.accessToken,
+    //     idToken: googleAuth.idToken,
+    //   );
+    //   print("signed in " + user.displayName);
+    //   return user;
+    // }
+
     return Scaffold(
       body: DefaultTabController(
         length: 2,
@@ -106,6 +135,10 @@ class _TheHomePageState extends State<TheHome> {
               ],
             ),
           ),
+          //PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar  (2º)
+          // floatingActionButton: new FloatingActionButton(
+          //   onPressed: pruebas
+          // ),
         )
       ),
       // si ponemos el drawer aquí (como estaba antes), ocupa toda la pantalla
