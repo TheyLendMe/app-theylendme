@@ -2,11 +2,14 @@
 import 'entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
+import 'package:TheyLendMe/Objects/objState.dart';
 
 abstract class Obj{
   final ObjType _type;
   final int _idObject;
   final Entity owner;
+  ObjState _objState;
+  
   
 
 
@@ -22,33 +25,31 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState}){
     this._name = name;
     this._desc = desc;
     this._image = image;
+    this._objState = objState;
   }
 
 
 
 ///Abstract Methods 
-  void lend(int idRequest);
+  void lendObj({int idRequest});
 
   void requestObj();
 
   ///Devolver--> no me deja poner return D: valdra solo con requestObj???
-  void returnObj(int idLoan);
+  void returnObj({int idLoan});
 
-  void claim(int idLoan);
-
-  void setObjectInfo({String name, String desc});
+  void claim({int idLoan});
 
   void delObject();
 
   void objHistory();
 
-  void getInventory();
 
-  void updateObject();
+  void updateObject({String name,String imagen,int amount});
 ///Getters and setters methods
 
   String get name => _name;
@@ -74,17 +75,14 @@ class UserObject extends Obj{
 
 
   ///Constructor
-  UserObject(int idObject, Entity owner, String name, {String desc}) : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc){
-
-
-
-  }
+  UserObject(int idObject, User owner, String name, {String desc, ObjState objState}) 
+  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, objState: objState);
 
   @override
-  void lend(int idRequest) {
-    new Request("http://54.188.52.254/Funciones/lendObject.php").dataBuilder(
+  void lendObj({int idRequest}) {
+    new Request("lendObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
-        idRequest: idRequest
+        idRequest: idRequest != null ? idRequest : _objState.idState
     ).doRequest();
   }
 
@@ -92,7 +90,7 @@ class UserObject extends Obj{
   ///If the user does not set any amount, it will ask just for one object
   @override
   void requestObj({int amount = 1, String msg, var context}) {
-    new Request("http://54.188.52.254/Funciones/requestObject.php").dataBuilder(
+    new Request("requestObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idObject : _idObject,
         msg : msg
@@ -102,10 +100,10 @@ class UserObject extends Obj{
 
 
   @override
-  void claim(int idLoan, {String claimMsg}) {
-    new Request("http://54.188.52.254/Funciones/claimObject.php").dataBuilder(
+  void claim({int idLoan ,String claimMsg}) {
+    new Request("claimObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
-        idLoan: idLoan,
+        idLoan: idLoan != null ? idLoan : _objState.idState,
         claimMsg: claimMsg
     ).doRequest();
   }
@@ -117,7 +115,7 @@ class UserObject extends Obj{
 
   @override
   void delObject() {
-    new Request("http://54.188.52.254/Funciones/deleteObject.php").dataBuilder(
+    new Request("deleteObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idObject : _idObject
     ).doRequest();
@@ -128,16 +126,12 @@ class UserObject extends Obj{
     // TODO: implement objHistory
   }
 
-  @override
-  void getInventory() {
-    // TODO: implement getInventory
-  }
 
   @override
-  void returnObj(int idLoan) {
-    new Request("http://54.188.52.254/Funciones/returnLendedObject.php").dataBuilder(
+  void returnObj({int idLoan}) {
+    new Request("returnLendedObject").dataBuilder(
       idUser: UserSingleton.singleton.user.idEntity,
-      idLoan: idLoan
+      idLoan: idLoan != null ? idLoan : _objState.idState
     ).doRequest();
   }
 
@@ -146,7 +140,7 @@ class UserObject extends Obj{
 ///TODO Falta por probar
   @override
   void updateObject({String name,String imagen,int amount}) {
-    new Request("http://54.188.52.254/Funciones/updateObject.php").dataBuilder(
+    new Request("updateObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idObject : _idObject,
         name: name,
@@ -162,9 +156,8 @@ class GroupObject extends Obj{
 
 
   ///Constructor
-  GroupObject(int idObject, Entity owner, String name, {String desc}) : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc){
-  }
-
+  GroupObject(int idObject, Entity owner, String name, {String desc, ObjState objState}) 
+  : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState);
 
   @override
   void lend(int idRequest) {
@@ -177,14 +170,10 @@ class GroupObject extends Obj{
   }
 
   @override
-  void claim(int idLoan) {
+  void claim({int idLoan}) {
     // TODO: implement claim
   }
 
-  @override
-  void setObjectInfo({String name, String desc}) {
-    // TODO: implement setObjectInfo
-  }
 
   
   @override
@@ -197,19 +186,20 @@ class GroupObject extends Obj{
     // TODO: implement objHistory
   }
 
-  @override
-  void getInventory() {
-    // TODO: implement getInventory
-  }
 
   @override
-  void returnObj(int idLoan) {
+  void returnObj({int idLoan}) {
     // TODO: implement returnObj
   }
 
   @override
-  void updateObject() {
+  void updateObject({String name,String imagen,int amount}) {
     // TODO: implement updateObject
+  }
+
+  @override
+  void lendObj({int idRequest}) {
+    // TODO: implement lendObj
   }
 
 
@@ -225,10 +215,4 @@ class GroupObject extends Obj{
 
   enum ObjType {
     USER_OBJECT, GROUP_OBJECT
-  }
-
-  enum ObjetState{
-    
-    DEFAULT, LENDED, REQUESTED, LENT, BORROWED, CLAIMED, 
-
   }

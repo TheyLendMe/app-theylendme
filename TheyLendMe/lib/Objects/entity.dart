@@ -6,12 +6,12 @@ import 'dart:async';
 abstract class Entity{
   final dynamic _idEntity;
   final EntityType _type;
-  String _name,_desc,_img;
+  String _name,_info,_img;
 
   
 
 
-  Entity(this._type,this._idEntity,this._name,{String desc,String img}){
+  Entity(this._type,this._idEntity,this._name,{String info ="",String img =""}){
 
   }
 
@@ -19,13 +19,13 @@ abstract class Entity{
   ///Getters and settes
   get idEntity => _idEntity;
   String get name => _name;
-  String get desc => _desc;
+  String get info => _info;
 
   EntityType get type => _type;
 
 
   set name(name) => _name = name;
-  set desc(desc) => _desc = desc;
+  set info(info) => _info = info;
 
 
   ///Other functions
@@ -37,11 +37,14 @@ abstract class Entity{
 
 
 
-  Future<List<Obj>> getObjects();
 
-  void getRequest();
 
   void updateInfo();
+
+
+////INFOOOOOOOOOOOOOOO
+  Future<List<Obj>> getObjects();
+  void getRequest();
 
 }
 
@@ -50,11 +53,12 @@ abstract class Entity{
 class User extends Entity{
 
   String userEmail;
+  String tfno;
   User(String idEntity, String name, {this.userEmail}) : super(EntityType.USER, idEntity, name);
 
   @override
   void addObject(String name, int amount) {
-     new Request("http://54.188.52.254/Funciones/createObject.php").dataBuilder(
+     new Request("createObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         name: name 
     ).doRequest();
@@ -66,7 +70,7 @@ class User extends Entity{
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!
   @override
   Future<List<Obj>> getObjects() async{
-    Response res = await new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
+    Response res = await new Request("getObjectsByUser").dataBuilder(
         idUser: this.idEntity,
     ).doRequest();
     return res.objectsBuilder(this);
@@ -81,18 +85,19 @@ class User extends Entity{
 
 ///TODO falta probar
   @override
-  void updateInfo({String nickName, String info,String email, String tfno}) async {
-     Response res = await new Request("http://54.188.52.254/Funciones/updateUser.php").dataBuilder(
+  void updateInfo({String fieldName , String info,String email, String tfno}) async {
+     Response res = await new Request("updateUser").dataBuilder(
         idUser: this.idEntity,
-        nickName: nickName,
-        info: info,
-        email: email,
-        tfno: tfno
+        fieldName: fieldName == null ? this.name : fieldName,
+        fieldValue: "",
+        info: info == null ? this.info : info,
+        email: email == null ? this.userEmail : email,
+        tfno: tfno == null ? this.tfno : tfno
     ).doRequest();
   }
 
 
-  get email => email;
+  get email => userEmail;
 
 
 
@@ -137,7 +142,7 @@ class Group extends Entity{
   @override
   Future<List<Obj>> getObjects() async{
     ///TODO change link 
-    Response res = await new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
+    Response res = await new Request("getObjectsByUser").dataBuilder(
         idGroup: this.idEntity,
     ).doRequest();
     return res.objectsBuilder(this);
