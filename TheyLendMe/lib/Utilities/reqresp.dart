@@ -10,14 +10,14 @@ const String endpoint = "http://54.188.52.254/app/";
 class Request{
 
   String _url;
-  Map<String, String> _data;
+  Map<String, dynamic> _data;
   http.Client client;
   http.Request request;
 
 
   Request(String fun){
     _url = endpoint+fun;
-    request = new http.Request('POST', Uri.parse(_url));
+    //request = new http.Request('POST', Uri.parse(_url),);
     client = new http.Client();
     _data = new Map();
   
@@ -25,12 +25,15 @@ class Request{
 
 
   Future<Response> doRequest({var context}) async{
-    request.bodyFields = _data;
+    //request.headers = {'Content-type' : 'application/json', 'Accept': 'application/json',};
+
+    //request.bodyFields = _data;
+  
     ///TODO implementar un manejador de errores si deja de haber conexion
     ///Si el 
     try{
-      http.StreamedResponse response = await client.send(request);
-      return await Response.responseBuilder(response);
+      //http.StreamedResponse response = await client.send(request);
+      return await Response.responseBuilder(await http.post(_url,body: _data));
     }catch(e){
       print("Internet connection error");
       return null;
@@ -43,8 +46,8 @@ class Request{
 
 ///This will be the builder that
   Request dataBuilder({String idUser,int idGroup, int idObject, 
-  String name, String desc,String info, String email,String fieldName, String tfno,
-  int idLoan, int idRequest, int idClaim, int amount, String fieldValue,
+  String name, String desc,String info, String email, String tfno,String nickName,
+  int idLoan, int idRequest, int idClaim, int amount,
   String oUser, String msg, String imagen, String claimMsg//add more fields if they are necessary
   }){
     if(idUser != null) _data['idUser'] = idUser;
@@ -59,11 +62,11 @@ class Request{
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
-    if(fieldName != null) _data ['fieldName'] = fieldName;
-    if(fieldName != null) _data ['fieldValue'] = fieldValue;
-    if(email != null) _data['email'] = email;
-    if(info != null) _data['info'] = info;
-    if(tfno != null) _data['tfno'] = tfno;
+
+    if(nickName != null) _data['fieldName'] = ((new Map<String,String>())['nickName'] = nickName);
+    if(email != null) _data['fieldName']= ((new Map<String,String>())['email'] = email);
+    if(info != null) _data['fieldName']= ((new Map<String,String>())['info'] = info);
+    if(tfno != null) _data['fieldName']=((new Map<String,String>())['tfno'] = tfno);
     if(imagen != null) _data['imagen'] = imagen;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
     return this;
@@ -76,11 +79,11 @@ class Response{
 
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
-  static Future<Response> responseBuilder(http.StreamedResponse response) async{
+  static Future<Response> responseBuilder(http.Response response) async{
     ///In case of server error like 404 not found... this 
     ///
     
-    String resString = await response.stream.bytesToString();
+    String resString = response.body;
     print(resString);
     if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
 
@@ -91,7 +94,7 @@ class Response{
   Response(data){
     this._data = jsonDecode(data);
 
-    if(_data['error'] != false){ throw new ServerException(_data["errorMsg"], _data["errorCode"]);}
+    if(_data['error'] != false && _data['error'] != null){ throw new ServerException(_data["errorMsg"], _data["errorCode"]);}
     
   }
 

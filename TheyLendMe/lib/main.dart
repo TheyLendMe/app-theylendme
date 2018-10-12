@@ -23,7 +23,8 @@ class TheApp extends StatelessWidget {
 
    ///Con poner esto debería de valer para obtener los o bjetos de este usuario
     Auth.googleAuth();
-    await (new User("myid","nombre").getObjects());
+    new User("myid","nombre").updateInfo(nickName: "myid");
+    //await (new User("myid","nombre").getObjects());
   
 
 

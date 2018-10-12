@@ -1,6 +1,7 @@
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
 
 abstract class Entity{
@@ -85,14 +86,15 @@ class User extends Entity{
 
 ///TODO falta probar
   @override
-  void updateInfo({String fieldName , String info,String email, String tfno}) async {
+  void updateInfo({String nickName , String info,String email, String tfno}) async {
+
+
      Response res = await new Request("updateUser").dataBuilder(
         idUser: this.idEntity,
-        fieldName: fieldName == null ? this.name : fieldName,
-        fieldValue: "",
-        info: info == null ? this.info : info,
-        email: email == null ? this.userEmail : email,
-        tfno: tfno == null ? this.tfno : tfno
+        info: info,
+        email:email,
+        tfno: tfno,
+        nickName : nickName
     ).doRequest();
   }
 
