@@ -66,7 +66,7 @@ class User extends Entity{
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!
   @override
   Future<List<Obj>> getObjects() async{
-    Response res = await new Request("http://54.188.52.254/Funciones/getObjectsByUser.php").dataBuilder(
+    Response res = await new Request("http://54.188.52.254/app/getObjectsByUser").dataBuilder(
         idUser: this.idEntity,
     ).doRequest();
     return res.objectsBuilder(this);

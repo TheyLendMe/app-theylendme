@@ -74,9 +74,12 @@ class Response{
   ///returns a Future!
   static Future<Response> responseBuilder(http.StreamedResponse response) async{
     ///In case of server error like 404 not found... this 
-    if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
+    ///
+    
     String resString = await response.stream.bytesToString();
     print(resString);
+    if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
+
     return new Response(resString);
   }
   dynamic _data;
