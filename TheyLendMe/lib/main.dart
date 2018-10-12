@@ -21,7 +21,11 @@ class TheApp extends StatelessWidget {
 
    // _handleSignIn();
 
-    new User("myid","nombre").getObjects();
+   ///Con poner esto debería de valer para obtener los o bjetos de este usuario
+    Auth.googleAuth();
+    await (new User("myid","nombre").getObjects());
+  
+
 
   }
 

@@ -5,15 +5,18 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'dart:convert';
 import 'dart:async';
 
+
+const String endpoint = "http://54.188.52.254/app/";
 class Request{
 
-  final String _url;
+  String _url;
   Map<String, String> _data;
   http.Client client;
   http.Request request;
 
 
-  Request(this._url){
+  Request(String fun){
+    _url = endpoint+fun;
     request = new http.Request('POST', Uri.parse(_url));
     client = new http.Client();
     _data = new Map();
@@ -40,8 +43,8 @@ class Request{
 
 ///This will be the builder that
   Request dataBuilder({String idUser,int idGroup, int idObject, 
-  String name, String desc,String info, String email,String nickName, String tfno,
-  int idLoan, int idRequest, int idClaim, int amount,
+  String name, String desc,String info, String email,String fieldName, String tfno,
+  int idLoan, int idRequest, int idClaim, int amount, String fieldValue,
   String oUser, String msg, String imagen, String claimMsg//add more fields if they are necessary
   }){
     if(idUser != null) _data['idUser'] = idUser;
@@ -56,7 +59,8 @@ class Request{
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
-    if(nickName != null) _data ['nickname'] = nickName;
+    if(fieldName != null) _data ['fieldName'] = fieldName;
+    if(fieldName != null) _data ['fieldValue'] = fieldValue;
     if(email != null) _data['email'] = email;
     if(info != null) _data['info'] = info;
     if(tfno != null) _data['tfno'] = tfno;
