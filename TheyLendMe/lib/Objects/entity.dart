@@ -59,7 +59,7 @@ class User extends Entity{
 
   @override
   void addObject(String name, int amount) {
-     new Request("createObject").dataBuilder(
+     new RequestPost("createObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         name: name 
     ).doRequest();
@@ -71,10 +71,10 @@ class User extends Entity{
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!
   @override
   Future<List<Obj>> getObjects() async{
-    Response res = await new Request("getObjectsByUser").dataBuilder(
+    ResponsePost res = await new RequestPost("getObjectsByUser").dataBuilder(
         idUser: this.idEntity,
     ).doRequest();
-    return res.objectsBuilder(this);
+    return res.objectsBuilder(entity: this);
   }
 
   @override
@@ -87,14 +87,14 @@ class User extends Entity{
 ///TODO falta probar
   @override
   void updateInfo({String nickName , String info,String email, String tfno}) async {
+    
 
+    var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
 
-     Response res = await new Request("updateUser").dataBuilder(
-        idUser: this.idEntity,
-        info: info,
-        email:email,
-        tfno: tfno,
-        nickName : nickName
+    ResponsePost res = await new RequestPost("updateUser").dataBuilder(
+      idUser: this.idEntity,
+      fieldname: l[0],
+      fieldValue: l[1]
     ).doRequest();
   }
 
@@ -106,7 +106,7 @@ class User extends Entity{
 }
 
 class Group extends Entity{
-  Group(EntityType type, String idEntity, String name) : super(EntityType.GROUP, idEntity, name);
+  Group(String idEntity, String name) : super(EntityType.GROUP, idEntity, name);
 
   @override
   void addObject(String name, int amount) {
@@ -144,10 +144,10 @@ class Group extends Entity{
   @override
   Future<List<Obj>> getObjects() async{
     ///TODO change link 
-    Response res = await new Request("getObjectsByUser").dataBuilder(
+    ResponsePost res = await new RequestPost("getObjectsByUser").dataBuilder(
         idGroup: this.idEntity,
     ).doRequest();
-    return res.objectsBuilder(this);
+    return res.objectsBuilder(entity : this);
   }
 }
 

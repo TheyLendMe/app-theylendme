@@ -68,6 +68,14 @@ abstract class Obj{
   ///TODO pensar mejor este tema
   set image(String image) => this._name = image;
 
+  ///Static Methods 
+  static Future<List<Obj>> getObjects() async{
+    ResponsePost res = await new RequestPost("getObjects").dataBuilder(
+    ).doRequest();
+    return res.objectsBuilder();
+  }
+
+
 
 }
 
@@ -80,7 +88,7 @@ class UserObject extends Obj{
 
   @override
   void lendObj({int idRequest}) {
-    new Request("lendObject").dataBuilder(
+    new RequestPost("lendObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idRequest: idRequest != null ? idRequest : _objState.idState
     ).doRequest();
@@ -90,7 +98,7 @@ class UserObject extends Obj{
   ///If the user does not set any amount, it will ask just for one object
   @override
   void requestObj({int amount = 1, String msg, var context}) {
-    new Request("requestObject").dataBuilder(
+    new RequestPost("requestObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idObject : _idObject,
         msg : msg
@@ -101,7 +109,7 @@ class UserObject extends Obj{
 
   @override
   void claim({int idLoan ,String claimMsg}) {
-    new Request("claimObject").dataBuilder(
+    new RequestPost("claimObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idLoan: idLoan != null ? idLoan : _objState.idState,
         claimMsg: claimMsg
@@ -115,7 +123,7 @@ class UserObject extends Obj{
 
   @override
   void delObject() {
-    new Request("deleteObject").dataBuilder(
+    new RequestPost("deleteObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idObject : _idObject
     ).doRequest();
@@ -128,9 +136,9 @@ class UserObject extends Obj{
 
 
   @override
-  void returnObj({int idLoan}) {
-    new Request("returnLendedObject").dataBuilder(
-      idUser: UserSingleton.singleton.user.idEntity,
+  void returnObj({int idLoan, String idUser}) {
+    new RequestPost("returnLendedObject").dataBuilder(
+      idUser: idUser != null ? idUser : UserSingleton.singleton.user.idEntity,
       idLoan: idLoan != null ? idLoan : _objState.idState
     ).doRequest();
   }
@@ -140,7 +148,7 @@ class UserObject extends Obj{
 ///TODO Falta por probar
   @override
   void updateObject({String name,String imagen,int amount}) {
-    new Request("updateObject").dataBuilder(
+    new RequestPost("updateObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idObject : _idObject,
         name: name,
