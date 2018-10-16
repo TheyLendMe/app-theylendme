@@ -37,11 +37,17 @@ class ObjectItem extends StatelessWidget {
           backgroundColor: Colors.yellow
         ),
       title: new Container(
+        //padding: new EdgeInsets.only(left: 8.0),
         child: Row(
-          children: <Widget>[
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
             Text(object.title),
             xN(object.amount),
-            Text(object.state),
+            Text(
+              object.state,
+              style: stateColor(object.state)
+            )
           ]
         )
       )
@@ -51,9 +57,16 @@ class ObjectItem extends StatelessWidget {
 
 Widget xN(amount) {
   if (amount>1)
-    return Text(amount.toString());
+    return Text('x'+amount.toString());
   else
     return Text('');
+}
+
+TextStyle stateColor(state) {
+  if (state=='Disponible')
+    return TextStyle(color: Colors.green);
+  else if (state=='Prestado')
+    return TextStyle(color: Colors.red);
 }
 
 class Object {
@@ -69,7 +82,7 @@ class Object {
 }
 
 final List<Object> objects = <Object>[
-  Object('Cosa',1,'Disponsible'),
+  Object('Cosa',1,'Disponible'),
   Object('Bici',1,'Prestado'),
   Object('Pelota',5,'Disponible'),
   Object('Pelota',2,'Prestado')
