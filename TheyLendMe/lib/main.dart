@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:TheyLendMe/the_home.dart';
 
+import 'package:TheyLendMe/the_home.dart';
+import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';

@@ -130,7 +130,14 @@ class _TheHomePageState extends State<TheHome> {
             child: new Column( // para que al abrirlo no ocupe toda la pantalla
               children: <Widget>[
                 new UserAccountsDrawerHeader(
-                    accountName: new Text("John Doe"), accountEmail: null),
+                  // Aquí habrá que meter los datos de cada usuario
+                    accountName: new Text("John Doe"), accountEmail: new Text("john.doe@gmail.com"),
+                    // Metiendo imagen de user
+                    currentAccountPicture: new CircleAvatar(
+                      //backgroundColor: Colors.blueGrey,
+                      backgroundImage: NetworkImage('https://http.cat/401'),
+                    ),
+                    ),
                 new Column(children: drawerOptions)
               ],
             ),
