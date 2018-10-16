@@ -108,15 +108,7 @@ class _TheHomePageState extends State<TheHome> {
                 Tab(icon: Text('GRUPOS')),
               ],
             ),
-            title: new Container(
-                child: Row(
-                    children: <Widget>[
-                      new Icon(widget.drawerItems[_selectedDrawerIndex].icon),
-                      //TODO: padding entre Icon y Text
-                      new Text(widget.drawerItems[_selectedDrawerIndex].title),
-                    ],
-                  )
-              )
+            title: Text('TheyLendMe')
           ),
           body: TabBarView(
             children: [

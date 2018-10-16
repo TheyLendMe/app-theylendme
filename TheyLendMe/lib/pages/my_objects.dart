@@ -39,7 +39,7 @@ class ObjectItem extends StatelessWidget {
       title: new Container(
         //padding: new EdgeInsets.only(left: 8.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          //crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(object.title),
