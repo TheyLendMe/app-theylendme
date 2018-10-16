@@ -1,7 +1,6 @@
 # flutter_app
 directorio para la app
 
-## últimos screenshots
+## último screencast
 
-![](TheyLendMe/screenshots/home5.gif)
-![](TheyLendMe/screenshots/my_objects1.jpg)
+![](TheyLendMe/screenshots/home6.gif)
