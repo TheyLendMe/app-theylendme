@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'package:TheyLendMe/tabs/the_objects_tab.dart';
 import 'package:TheyLendMe/tabs/the_groups_tab.dart';
+
 import 'package:TheyLendMe/pages/the_home.dart';
 import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
-import 'package:TheyLendMe/pages/settings.dart';
+import 'package:TheyLendMe/pages/my_settings.dart';
+
+//PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (2º)
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'Utilities/auth.dart';
+// import 'Utilities/reqresp.dart';
+// import 'package:TheyLendMe/Objects/entity.dart';
+// import 'package:TheyLendMe/Objects/obj.dart';
+// import 'Singletons/UserSingleton.dart';
 
 // Para MENÚ LATERAL
 class DrawerItem {
@@ -29,7 +39,8 @@ class TheHome extends StatefulWidget {
     new DrawerItem("Mis Objetos",  Icons.folder_open,  "/MyObjectsPage"),
     new DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
     new DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
-    new DrawerItem("Ajustes",      Icons.settings,     "/SettingsPage")
+    new DrawerItem("Ajustes",      Icons.settings,     "/MySettingsPage"),
+    new DrawerItem("TestAuth",      Icons.settings,     "/AuthPage")
   ];
 
   @override
@@ -68,26 +79,39 @@ class _TheHomePageState extends State<TheHome> {
       );
     }
 
+    //PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar  (2º)
+    // final GoogleSignIn _googleSignIn = GoogleSignIn();
+    // final FirebaseAuth _auth = FirebaseAuth.instance;
+    // void pruebas() async{
+    //   // _handleSignIn();
+    //   ///Con poner esto debería de valer para obtener los objetos de este usuario
+    //   Auth.googleAuth();
+    //   await (new User("myid","nombre").getObjects());
+    // }
+
+    // Future<FirebaseUser> _handleSignIn() async {
+    //   GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    //   GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    //   FirebaseUser user = await _auth.signInWithGoogle(
+    //     accessToken: googleAuth.accessToken,
+    //     idToken: googleAuth.idToken,
+    //   );
+    //   print("signed in " + user.displayName);
+    //   return user;
+    // }
+
     return Scaffold(
       body: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: new AppBar(
+          appBar: AppBar(
             bottom: TabBar(
               tabs: [
                 Tab(icon: Text('OBJETOS')),
                 Tab(icon: Text('GRUPOS')),
               ],
             ),
-            title: new Container(
-                child: Row(
-                    children: <Widget>[
-                      new Icon(widget.drawerItems[_selectedDrawerIndex].icon),
-                      //TODO: padding entre Icon y Text
-                      new Text(widget.drawerItems[_selectedDrawerIndex].title),
-                    ],
-                  )
-              )
+            title: Text('TheyLendMe')
           ),
           body: TabBarView(
             children: [
@@ -97,15 +121,28 @@ class _TheHomePageState extends State<TheHome> {
           ),
 
           // MENÚ LATERAL:
-          drawer: new Drawer(  // hay que poner el drawer aquí
-            child: new Column( // para que al abrirlo no ocupe toda la pantalla
+          drawer: Drawer(  // hay que poner el drawer aquí
+            child: Column( // para que al abrirlo no ocupe toda la pantalla
               children: <Widget>[
-                new UserAccountsDrawerHeader(
-                    accountName: new Text("John Doe"), accountEmail: null),
-                new Column(children: drawerOptions)
+                UserAccountsDrawerHeader(
+                  // Aquí habrá que meter los datos de cada usuario
+                  accountName: new Text("John Doe"), accountEmail: new Text("john.doe@gmail.com"),
+                  // Metiendo imagen de user
+                  currentAccountPicture: new CircleAvatar(backgroundImage: NetworkImage('https://http.cat/401')),
+                  decoration: BoxDecoration(
+                    image: new DecorationImage(
+                      image: new AssetImage('images/tlm.jpg')
+                    ),
+                  )
+                ),
+                Column(children: drawerOptions)
               ],
             ),
           ),
+          //PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar  (2º)
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: pruebas
+          // ),
         )
       ),
       // si ponemos el drawer aquí (como estaba antes), ocupa toda la pantalla
