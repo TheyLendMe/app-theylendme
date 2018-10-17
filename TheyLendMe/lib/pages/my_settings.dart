@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
 
-class SettingsPage extends StatefulWidget {
+class MySettingsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _SettingsPageState();
 }
@@ -22,7 +22,7 @@ String _validateEmail(String value) {
   return '';
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<MySettingsPage> {
 
   //VALIDACIÓN
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
