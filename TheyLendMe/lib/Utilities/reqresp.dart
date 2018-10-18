@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 
 const String endpoint = "http://54.188.52.254/app/";
-
+//const String endpoint ="http://10.0.2.2/";
 
 
 
@@ -50,10 +50,16 @@ class RequestPost{
 
 
 ///This will be the builder that
- RequestPost dataBuilder({String idUser,int idGroup, int idObject, 
+ RequestPost dataBuilder({String idUser,dynamic idGroup, int idObject, 
   String name, String desc,String info, String email, String tfno,String nickName,
+<<<<<<< HEAD
   int idLoan, int idRequest, int idClaim, int amount,Map fieldname,Map fieldValue,
   String oUser, String msg, String imagen, String claimMsg,bool userInfo = false,//add more fields if they are necessary
+=======
+  int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
+  String oUser, String msg, String imagen, String claimMsg, String groupName, bool autoLoan,
+  bool private, int idMemeber,//add more fields if they are necessary
+>>>>>>> 71f845fe7a73d6cc1e229890b857182c0e812f6d
   }){
     if(userInfo){_data.addAll(authInfo());}
     if(idUser != null) _data['idUser'] = idUser;
@@ -70,8 +76,17 @@ class RequestPost{
     if(msg != null) _data['msg'] = msg;
     if(imagen != null) _data['imagen'] = imagen;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
+<<<<<<< HEAD
     if(fieldname != null) {_data['fieldName'] = fieldname; _data ['fieldValue'] = fieldValue;}
   
+=======
+    if(fieldname != null) {_data['fieldName'] = [fieldname.toList()]; _data ['fieldValue'] = [fieldValue];}
+    if(groupName != null) {_data['groupName'] = name;}
+    if(autoLoan != null){_data['autoloan'] = autoLoan ? 1 : 0;}
+    if(private != null)_data['private'] = private ? 1 : 0;
+    if(idMemeber != null)_data['idMember'] = idMemeber;
+    
+>>>>>>> 71f845fe7a73d6cc1e229890b857182c0e812f6d
     return this;
   }
 }
@@ -89,16 +104,16 @@ Map<String,dynamic> authInfo(){
 
 
 List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno}){
-    Map fieldName = new Map();
-    Map fieldValue = new Map();
+    List fieldName = new List();
+    List fieldValue = new List();
     List<dynamic> r = new List();
     r.add(fieldName);
     r.add(fieldValue);
 
-    if(nickName != null){fieldName['nickname'] = ("nickName");fieldValue['nickname'] =nickName;}
-    if(email != null){fieldName['email'] = ("email");fieldValue['email'] = (email);}
-    if(info != null){fieldName['info'] = "info";fieldValue['info'] = info;}
-    if(tfno != null){fieldName['tfno'] = ("tfno");fieldValue['tfno'] = (tfno);}
+    if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
+    if(email != null){fieldName.add(email);fieldValue.add(email);}
+    if(info != null){fieldName.add('info');fieldValue.add(info);}
+    if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
     return r;
 }
 
@@ -121,7 +136,6 @@ class ResponsePost{
   
   ResponsePost(data){
     this._data = data;
-
     if(_data['error'] != null && _data['error'] ) { throw new ServerException(_data["errorMsg"], _data["errorCode"]);}
     
   }

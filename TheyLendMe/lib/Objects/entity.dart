@@ -55,7 +55,10 @@ class User extends Entity{
 
   String userEmail;
   String tfno;
-  User(String idEntity, String name, {this.userEmail}) : super(EntityType.USER, idEntity, name);
+
+  int idMember;
+
+  User(String idEntity, String name, {this.userEmail,this.idMember}) : super(EntityType.USER, idEntity, name);
 
   @override
   void addObject(String name, int amount) {
@@ -98,6 +101,15 @@ class User extends Entity{
     ).doRequest();
   }
 
+  void createGroup({String groupName, String info, String email, String tfno}) async{
+    ResponsePost res = await new RequestPost("createGroup").dataBuilder(
+      idUser: this.idEntity,
+      groupName: groupName,
+      info: info,
+      email : email,
+      tfno: tfno
+    ).doRequest();
+  }
 
   get email => userEmail;
 
@@ -106,28 +118,42 @@ class User extends Entity{
 }
 
 class Group extends Entity{
-  Group(String idEntity, String name) : super(EntityType.GROUP, idEntity, name);
+  Group(int idEntity, String name) : super(EntityType.GROUP, idEntity.toString(), name);
+
+
+  /// idGroup, idUser(admin), [name, imagen, amount]
 
   @override
   void addObject(String name, int amount) {
-    // TODO: implement addObject
+    new RequestPost("createGObject").dataBuilder(
+        idGroup: this.idEntity,
+        idUser: "myid", ///TODO Poner el id del actual usuario
+        name: name 
+    ).doRequest();
   }
 
   @override
   void getRequest() {
     // TODO: implement getRequest
   }
-
-
-  void addUser(){
-
+  void addUser() async{
+    ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
+      idUser: "myid",//UserSingleton.singleton.user.idEntity,
+     // idMemeber: u.idEntity,
+      idGroup: this.idEntity,
+    ).doRequest();
   }
 
   void delUser({User u}){
   
   }
 
-  void addAdmin({User u}){
+  void addAdmin(User u) async{
+    ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
+      idUser: "myid",//UserSingleton.singleton.user.idEntity,
+      idMemeber: 8,
+      idGroup: this.idEntity,
+    ).doRequest();
   }
 
 
