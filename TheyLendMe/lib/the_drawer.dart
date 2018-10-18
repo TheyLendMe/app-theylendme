@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:TheyLendMe/pages/the_home.dart';
 import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
@@ -66,10 +65,14 @@ class _TheDrawerState extends State<TheDrawer> {
 
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
-    Navigator.of(context).pushNamed(widget.drawerItems[index].route);
     // A Navigator is a widget that manages routes
+    //TODO: generalizar esta condición:
+    if (widget.drawerItems[index].route=="/")
+      Navigator.pop(context);
+    else
+      Navigator.of(context).pushNamed(widget.drawerItems[index].route);
   }
-  
+
 }
 
 class DrawerItem {
