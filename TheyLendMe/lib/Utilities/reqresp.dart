@@ -1,6 +1,8 @@
 
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -51,8 +53,9 @@ class RequestPost{
  RequestPost dataBuilder({String idUser,int idGroup, int idObject, 
   String name, String desc,String info, String email, String tfno,String nickName,
   int idLoan, int idRequest, int idClaim, int amount,Map fieldname,Map fieldValue,
-  String oUser, String msg, String imagen, String claimMsg//add more fields if they are necessary
+  String oUser, String msg, String imagen, String claimMsg,bool userInfo = false,//add more fields if they are necessary
   }){
+    if(userInfo){_data.addAll(authInfo());}
     if(idUser != null) _data['idUser'] = idUser;
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
@@ -68,8 +71,20 @@ class RequestPost{
     if(imagen != null) _data['imagen'] = imagen;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
     if(fieldname != null) {_data['fieldName'] = fieldname; _data ['fieldValue'] = fieldValue;}
+  
     return this;
   }
+}
+
+Map<String,dynamic> authInfo(){
+
+  if(!UserSingleton.singleton.login){
+    throw new NotLogedException("You are not loged");
+  }
+  Map<String,dynamic> m = new Map();
+  m['idUser']= UserSingleton.singleton.user.idEntity;
+  m['token'] = UserSingleton.singleton.token;
+  return m;
 }
 
 
@@ -96,6 +111,7 @@ class ResponsePost{
   static Future<ResponsePost> responseBuilder(Response response) async{
     ///In case of server error like 404 not found... this 
     ///
+    print(response.request.baseUrl+response.request.path);
     print(response.data);
     if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
 
@@ -161,4 +177,10 @@ class StatusException extends RequestException{
 }
 class ServerException extends RequestException{
   ServerException(String errMsg, int idErr) : super(errMsg, idErr);
+}
+
+///Login Exception
+class NotLogedException implements Exception{
+  final String errMsg;
+  NotLogedException(this.errMsg);
 }

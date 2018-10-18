@@ -71,7 +71,7 @@ class User extends Entity{
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!
   @override
   Future<List<Obj>> getObjects() async{
-    ResponsePost res = await new RequestPost("getObjectsByUser").dataBuilder(
+    ResponsePost res = await new RequestPost("getObjectsByUser_v2").dataBuilder(
         idUser: this.idEntity,
     ).doRequest();
     return res.objectsBuilder(entity: this);
