@@ -32,8 +32,8 @@ class ObjectItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ListTile(
-      leading: new CircleAvatar(
-          child: new Text(object.title[0]), //just the initial letter in a circle
+      leading: new CircleAvatar( //TODO: square?
+          child: new Text(object.title[0]),
           backgroundColor: Colors.yellow
         ),
       title: new Container(

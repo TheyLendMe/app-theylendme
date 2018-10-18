@@ -9,6 +9,8 @@ import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
 
+//TODO: WIP: separar el menú lateral
+
 //PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (2º)
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
