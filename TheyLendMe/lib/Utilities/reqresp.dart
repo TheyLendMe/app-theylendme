@@ -52,14 +52,11 @@ class RequestPost{
 ///This will be the builder that
  RequestPost dataBuilder({String idUser,dynamic idGroup, int idObject, 
   String name, String desc,String info, String email, String tfno,String nickName,
-<<<<<<< HEAD
+
   int idLoan, int idRequest, int idClaim, int amount,Map fieldname,Map fieldValue,
-  String oUser, String msg, String imagen, String claimMsg,bool userInfo = false,//add more fields if they are necessary
-=======
-  int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
-  String oUser, String msg, String imagen, String claimMsg, String groupName, bool autoLoan,
+  String oUser, String msg, String imagen, String claimMsg,bool userInfo = false, String groupName, bool autoLoan,
   bool private, int idMemeber,//add more fields if they are necessary
->>>>>>> 71f845fe7a73d6cc1e229890b857182c0e812f6d
+
   }){
     if(userInfo){_data.addAll(authInfo());}
     if(idUser != null) _data['idUser'] = idUser;
@@ -76,17 +73,14 @@ class RequestPost{
     if(msg != null) _data['msg'] = msg;
     if(imagen != null) _data['imagen'] = imagen;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
-<<<<<<< HEAD
     if(fieldname != null) {_data['fieldName'] = fieldname; _data ['fieldValue'] = fieldValue;}
-  
-=======
-    if(fieldname != null) {_data['fieldName'] = [fieldname.toList()]; _data ['fieldValue'] = [fieldValue];}
+
+    if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];}
     if(groupName != null) {_data['groupName'] = name;}
     if(autoLoan != null){_data['autoloan'] = autoLoan ? 1 : 0;}
     if(private != null)_data['private'] = private ? 1 : 0;
     if(idMemeber != null)_data['idMember'] = idMemeber;
-    
->>>>>>> 71f845fe7a73d6cc1e229890b857182c0e812f6d
+
     return this;
   }
 }
