@@ -10,11 +10,13 @@ class UserSingleton{
 
   factory UserSingleton(){return singleton;}
   UserSingleton._internal(){
-    FirebaseAuth.instance.currentUser().then((user){
-      this._user = new User(user.uid, user.displayName,userEmail: user.email);
-      this.firebaseUser = user;
+
+    this._user = new User("myid", "hey");
+    // FirebaseAuth.instance.currentUser().then((user){
+    //   this._user = new User(user.uid, user.displayName,userEmail: user.email);
+    //   this.firebaseUser = user;
       
-    });
+    // });
   } 
 
 

@@ -23,10 +23,12 @@ class TheApp extends StatelessWidget {
 
 
    ///Con poner esto debería de valer para obtener los o bjetos de este usuario
-    // await Auth.login(google:true);
+    // // await Auth.login(google:true);
     await Auth.login(google:true);
 
-    await Obj.getObjects();
+
+
+    // await Obj.getObjects();
     // new User("myid","nombre").updateInfo(nickName: "myid");
     //await (new User("myid","nombre").getObjects());
     // var a = fieldNameFieldValue(nickName: "hey", info: "heyyy");
@@ -48,6 +50,15 @@ class TheApp extends StatelessWidget {
 
     //new UserObject(3, new User("myid","nombre"), "xdd", objState: new ObjState(id: 6, state: StateOfObject.BORROWED)).returnObj(idUser:"otherid");
 
+    // User u = new User("myid", "hey");
+    // User o = new User("otherid", "hey");
+
+    // UserObject uO = new UserObject(3, u, "hey");
+    
+    // uO.requestObj();
+
+
+    //new User("otherid", "prueba").upgradeToAdmin(new Group(4, "hey"));
    
 
 

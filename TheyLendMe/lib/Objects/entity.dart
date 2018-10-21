@@ -130,7 +130,7 @@ class Group extends Entity{
   void addObject(String name, int amount) {
     new RequestPost("createGObject").dataBuilder(
         idGroup: this.idEntity,
-        idUser: "myid", ///TODO Poner el id del actual usuario
+        idUser: UserSingleton.singleton.user.idEntity, ///TODO Poner el id del actual usuario
         name: name 
     ).doRequest();
   }
@@ -139,12 +139,12 @@ class Group extends Entity{
   void getRequest() {
     // TODO: implement getRequest
   }
-  void addUser() async{
-    ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
-      idUser: "myid",//UserSingleton.singleton.user.idEntity,
-     // idMemeber: u.idEntity,
-      idGroup: this.idEntity,
-    ).doRequest();
+  void addUser(Entity u) async{
+    // ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
+    //   idUser: "myid",//UserSingleton.singleton.user.idEntity,
+    //   idMemeber: u.idEntity,
+    //   idGroup: this.idEntity,
+    // ).doRequest();
   }
 
   void delUser({User u}){
@@ -153,8 +153,15 @@ class Group extends Entity{
 
   void addAdmin(User u) async{
     ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
-      idUser: "myid",//UserSingleton.singleton.user.idEntity,
-      idMemeber: 8,
+      idUser: UserSingleton.singleton.user.idEntity,//UserSingleton.singleton.user.idEntity,
+      idMemeber: u.idMember,
+      idGroup: this.idEntity,
+    ).doRequest();
+  }
+
+  void delGroup() async{
+    ResponsePost res = await new RequestPost("deleteGroup").dataBuilder(
+      idUser: UserSingleton.singleton.user.idEntity,//UserSingleton.singleton.user.idEntity,
       idGroup: this.idEntity,
     ).doRequest();
   }

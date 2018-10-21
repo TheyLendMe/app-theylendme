@@ -94,7 +94,7 @@ class UserObject extends Obj{
     new RequestPost("requestObject").dataBuilder(
         idUser: UserSingleton.singleton.user.idEntity,
         idObject : _idObject,
-        msg : msg
+        requestMsg : msg
     ).doRequest(context : context);
   }
 
@@ -178,7 +178,10 @@ class GroupObject extends Obj{
   
   @override
   void delObject() {
-    // TODO: implement delObject
+    new RequestPost("deleteGObject").dataBuilder(
+      idUser: UserSingleton.singleton.user.idEntity,
+      idObject : this._idObject
+    ).doRequest();
   }
 
   @override

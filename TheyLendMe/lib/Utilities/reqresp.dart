@@ -55,11 +55,11 @@ class RequestPost{
 
   int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
   String oUser, String msg, String imagen, String claimMsg,bool userInfo = false, String groupName, bool autoLoan,
-  bool private, int idMemeber,//add more fields if they are necessary
+  bool private, int idMemeber, String requestMsg//add more fields if they are necessary
 
   }){
     if(userInfo){_data.addAll(authInfo());}
-    if(idUser != null) _data['idUser'] = "myid"; ///TODO modificar por iduser
+    if(idUser != null) _data['idUser'] = "otherid"; ///TODO modificar por iduser
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
@@ -68,6 +68,7 @@ class RequestPost{
     if(idRequest != null) _data['idRequest'] = idRequest.toString();
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
+    if(requestMsg != null) _data['request'] = requestMsg;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
