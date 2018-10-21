@@ -24,7 +24,7 @@ class RequestPost{
     _url = fun;
 
     dio.options.baseUrl=endpoint;
-    dio.options.connectTimeout = 5000; //5s
+    dio.options.connectTimeout = 10000; //5s
     dio.options.receiveTimeout=3000;  
 
     _data = new Map();
@@ -53,13 +53,13 @@ class RequestPost{
  RequestPost dataBuilder({String idUser,dynamic idGroup, int idObject, 
   String name, String desc,String info, String email, String tfno,String nickName,
 
-  int idLoan, int idRequest, int idClaim, int amount,Map fieldname,Map fieldValue,
+  int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
   String oUser, String msg, String imagen, String claimMsg,bool userInfo = false, String groupName, bool autoLoan,
   bool private, int idMemeber,//add more fields if they are necessary
 
   }){
     if(userInfo){_data.addAll(authInfo());}
-    if(idUser != null) _data['idUser'] = idUser;
+    if(idUser != null) _data['idUser'] = "myid"; ///TODO modificar por iduser
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
@@ -73,39 +73,46 @@ class RequestPost{
     if(msg != null) _data['msg'] = msg;
     if(imagen != null) _data['imagen'] = imagen;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
-    if(fieldname != null) {_data['fieldName'] = fieldname; _data ['fieldValue'] = fieldValue;}
-
     if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];}
-    if(groupName != null) {_data['groupName'] = name;}
+    if(info != null){_data['info'] = info;}
+    if(email != null){_data['email']=email;}
+    if(tfno != null){_data['tfno'] = tfno;}
+    if(groupName != null) {_data['groupName'] = groupName;}
     if(autoLoan != null){_data['autoloan'] = autoLoan ? 1 : 0;}
     if(private != null)_data['private'] = private ? 1 : 0;
     if(idMemeber != null)_data['idMember'] = idMemeber;
 
     return this;
   }
-}
 
-Map<String,dynamic> authInfo(){
-
-  if(!UserSingleton.singleton.login){
-    throw new NotLogedException("You are not loged");
+  Map<String,dynamic> authInfo(){
+    if(!UserSingleton.singleton.login){
+      throw new NotLogedException("You are not loged");
+    }
+    Map<String,dynamic> m = new Map();
+    m['idUser']= UserSingleton.singleton.user.idEntity;
+    m['token'] = UserSingleton.singleton.token;
+    m['nickname'] = UserSingleton.singleton.user.name;
+    m['email'] = UserSingleton.singleton.firebaseUser.email;
+    m['tfno'] = UserSingleton.singleton.firebaseUser.phoneNumber;
+    return m;
   }
-  Map<String,dynamic> m = new Map();
-  m['idUser']= UserSingleton.singleton.user.idEntity;
-  m['token'] = UserSingleton.singleton.token;
-  return m;
 }
 
 
+
+ /* if(nickName != null){fieldName[i] = 'nickname'; fieldValue[i]=nickName; i++;}
+  if(email != null){fieldName[i]='email';fieldValue[i]= (email); i++;}
+  if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
+  if(tfno != null){fieldName[i]=('tfno');fieldValue[i]=(tfno);i++;}*/
 List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno}){
     List fieldName = new List();
     List fieldValue = new List();
     List<dynamic> r = new List();
     r.add(fieldName);
     r.add(fieldValue);
-
     if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
-    if(email != null){fieldName.add(email);fieldValue.add(email);}
+    if(email != null){fieldName.add('email');fieldValue.add(email);}
     if(info != null){fieldName.add('info');fieldValue.add(info);}
     if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
     return r;

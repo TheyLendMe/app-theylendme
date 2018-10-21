@@ -10,13 +10,6 @@ abstract class Obj{
   final Entity owner;
   ObjState _objState;
   
-  
-
-
-
-
-
-
   ///TODO pensar mejor el tema de las imagenes. Deberia de ser una lista???
   String _name, _desc, _image;
   // Group groupBorrowed;
@@ -104,7 +97,6 @@ class UserObject extends Obj{
         msg : msg
     ).doRequest(context : context);
   }
-
 
 
   @override

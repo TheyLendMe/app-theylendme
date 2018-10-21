@@ -10,6 +10,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 
+
+///Responsetype 10:cuenta login, sin verificar eail
+//////Responsetye: 11, login true,
+///Resposetype: 12, recien creada
+///
 class Auth {
 
 
@@ -22,10 +27,11 @@ static void facebookAuth(){
 }
 
 
-static Future login({String email,String pass, bool google, bool facebook}) async{
+static Future login({String email,String pass, bool google= false, bool facebook= false}) async{
   ///First we have to make sure that the user is loged in
   try{
     if(google){await googleAuth();}
+    if(email !=null){emailAuth(email,pass);}
   
   }catch(e){
     
@@ -63,13 +69,28 @@ static Future googleAuth() async{
 
 }
 
-static void emailAuth(){
-
+static void emailAuth(String email,String pass){
+  FirebaseAuth _auth= FirebaseAuth.instance;
+  _auth.signInWithEmailAndPassword(email:email,password:pass);
 
 }
 
 
-static void emailRegister(){
+static Future emailRegister(String email, String pass) async{
+   FirebaseAuth _auth= FirebaseAuth.instance;
+   try{
+   _auth.createUserWithEmailAndPassword(email: email,password:pass);
+
+   //(await _auth.currentUser()).sendEmailVerification();
+   print(UserSingleton.singleton.firebaseUser.uid);
+   //login(email: email, pass: pass);
+
+   }catch(e){
+    ///TODO hay que poner todos los errores posbiles y ver como manejarlos
+      print(e);
+   }
+
+
 
 }
 

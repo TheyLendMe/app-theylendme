@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 abstract class Entity{
-  final dynamic _idEntity;
+  ///TODO Poner final
+  dynamic _idEntity;
   final EntityType _type;
   String _name,_info,_img;
 
@@ -17,10 +18,12 @@ abstract class Entity{
   }
 
 
-  ///Getters and settes
+  ///Getters and setters
   get idEntity => _idEntity;
   String get name => _name;
   String get info => _info;
+
+  set idEntity(dynamic id) => _idEntity =id;
 
   EntityType get type => _type;
 

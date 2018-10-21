@@ -11,8 +11,9 @@ class UserSingleton{
   factory UserSingleton(){return singleton;}
   UserSingleton._internal(){
     FirebaseAuth.instance.currentUser().then((user){
-      this._user = new User(user.uid, user.displayName);
+      this._user = new User(user.uid, user.displayName,userEmail: user.email);
       this.firebaseUser = user;
+      
     });
   } 
 
@@ -21,7 +22,7 @@ class UserSingleton{
   Future refreshUser() async{
     firebaseUser = await FirebaseAuth.instance.currentUser();
     this.token = await firebaseUser.getIdToken();
-
+    user.idEntity = firebaseUser.uid;;
     if(user == null){this._user = new User(firebaseUser.uid, firebaseUser.displayName); print("Me actaulizo");}
   }
 
