@@ -37,18 +37,18 @@ abstract class Entity{
   
 
   ///Add an object to a group or to a user.
-  void addObject(String name, int amount);
+  Future addObject(String name, int amount);
 
 
 
 
 
-  void updateInfo();
+  Future updateInfo();
 
 
 ////INFOOOOOOOOOOOOOOO
   Future<List<Obj>> getObjects();
-  void getRequest();
+  Future getRequest();
 
 }
 
@@ -64,9 +64,9 @@ class User extends Entity{
   User(String idEntity, String name, {this.userEmail,this.idMember}) : super(EntityType.USER, idEntity, name);
 
   @override
-  void addObject(String name, int amount) {
+  Future addObject(String name, int amount) {
      new RequestPost("createObject").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+        userInfo: true,
         name: name 
     ).doRequest();
     
@@ -78,13 +78,13 @@ class User extends Entity{
   @override
   Future<List<Obj>> getObjects() async{
     ResponsePost res = await new RequestPost("getObjectsByUser_v2").dataBuilder(
-        idUser: this.idEntity,
+        userInfo: true,
     ).doRequest();
     return res.objectsBuilder(entity: this);
   }
 
   @override
-  void getRequest() {
+  Future getRequest() {
     // TODO: implement getRequest
   }
 
@@ -92,25 +92,32 @@ class User extends Entity{
 
 ///TODO falta probar
   @override
-  void updateInfo({String nickName , String info,String email, String tfno}) async {
+  Future updateInfo({String nickName , String info,String email, String tfno}) async {
     
 
     var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
 
     ResponsePost res = await new RequestPost("updateUser").dataBuilder(
-      idUser: this.idEntity,
+      userInfo: true,
       fieldname: l[0],
       fieldValue: l[1]
     ).doRequest();
   }
 
-  void createGroup({String groupName, String info, String email, String tfno}) async{
+  Future createGroup({String groupName, String info, String email, String tfno}) async{
     ResponsePost res = await new RequestPost("createGroup").dataBuilder(
-      idUser: this.idEntity,
+      userInfo: true,
       groupName: groupName,
       info: info,
       email : email,
       tfno: tfno
+    ).doRequest();
+  }
+
+  Future joinGroup(Group group) async{
+    ResponsePost res = await new RequestPost("createGroup").dataBuilder(
+      userInfo: true,
+      idGroup: group.idEntity,
     ).doRequest();
   }
 
@@ -127,41 +134,43 @@ class Group extends Entity{
   /// idGroup, idUser(admin), [name, imagen, amount]
 
   @override
-  void addObject(String name, int amount) {
+  Future addObject(String name, int amount) {
     new RequestPost("createGObject").dataBuilder(
         idGroup: this.idEntity,
-        idUser: UserSingleton.singleton.user.idEntity, ///TODO Poner el id del actual usuario
+        userInfo: true, ///TODO Poner el id del actual usuario
         name: name 
     ).doRequest();
   }
 
   @override
-  void getRequest() {
+  Future getRequest() {
     // TODO: implement getRequest
   }
-  void addUser(Entity u) async{
-    // ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
-    //   idUser: "myid",//UserSingleton.singleton.user.idEntity,
-    //   idMemeber: u.idEntity,
-    //   idGroup: this.idEntity,
+
+  ///TODO Falta
+  Future addUser(Entity newUser) async{
+    //  ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
+    //    userInfo: true,
+    //    idMemeber: u.idEntity,
+    //    idGroup: this.idEntity,
     // ).doRequest();
   }
 
-  void delUser({User u}){
+  Future delUser({User u}){
   
   }
 
-  void addAdmin(User u) async{
+  Future addAdmin(User u) async{
     ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
-      idUser: UserSingleton.singleton.user.idEntity,//UserSingleton.singleton.user.idEntity,
+      userInfo: true,//UserSingleton.singleton.user.idEntity,
       idMemeber: u.idMember,
       idGroup: this.idEntity,
     ).doRequest();
   }
 
-  void delGroup() async{
+  Future delGroup() async{
     ResponsePost res = await new RequestPost("deleteGroup").dataBuilder(
-      idUser: UserSingleton.singleton.user.idEntity,//UserSingleton.singleton.user.idEntity,
+      userInfo: true,//UserSingleton.singleton.user.idEntity,
       idGroup: this.idEntity,
     ).doRequest();
   }
@@ -173,8 +182,16 @@ class Group extends Entity{
   }
 
   @override
-  void updateInfo() {
-    // TODO: implement updateInfo
+  Future updateInfo({String groupName, bool private, bool autoloan, String email, String tfno, String info}) async {
+    
+    var l = fieldNameFieldValue(groupName: groupName,autoloan: autoloan,private: private, email: email, tfno: tfno, info: info);
+
+    ResponsePost res = await new RequestPost("updateGroup").dataBuilder(
+      userInfo: true,
+      idGroup: this.idEntity,
+      fieldname: l[0],
+      fieldValue: l[1]
+    ).doRequest();
   }
 
   @override

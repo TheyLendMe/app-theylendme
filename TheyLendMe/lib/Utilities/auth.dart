@@ -37,8 +37,8 @@ static Future login({String email,String pass, bool google= false, bool facebook
     
     return;
   }
-    await UserSingleton.singleton.refreshUser();
-    new RequestPost('login').dataBuilder(userInfo: true).doRequest();
+  await UserSingleton.singleton.refreshUser();
+  new RequestPost('login').dataBuilder(userInfo: true).doRequest();
 
   
 

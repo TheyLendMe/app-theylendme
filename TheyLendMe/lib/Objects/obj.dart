@@ -28,21 +28,21 @@ abstract class Obj{
 
 
 ///Abstract Methods 
-  void lendObj({int idRequest});
+  Future lendObj({int idRequest});
 
-  void requestObj();
+  Future requestObj();
 
   ///Devolver--> no me deja poner return D: valdra solo con requestObj???
-  void returnObj({int idLoan});
+  Future returnObj({int idLoan});
 
-  void claim({int idLoan});
+  Future claim({int idLoan});
 
-  void delObject();
+  Future delObject();
 
-  void objHistory();
+  Future objHistory();
 
 
-  void updateObject({String name,String imagen,int amount});
+  Future updateObject({String name,String imagen,int amount});
 ///Getters and setters methods
 
   String get name => _name;
@@ -80,9 +80,9 @@ class UserObject extends Obj{
   : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, objState: objState);
 
   @override
-  void lendObj({int idRequest}) {
+  Future lendObj({int idRequest}) {
     new RequestPost("lendObject").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+        userInfo: true,
         idRequest: idRequest != null ? idRequest : _objState.idState
     ).doRequest();
   }
@@ -90,9 +90,9 @@ class UserObject extends Obj{
 
   ///If the user does not set any amount, it will ask just for one object
   @override
-  void requestObj({int amount = 1, String msg, var context}) {
+  Future requestObj({int amount = 1, String msg, var context}) {
     new RequestPost("requestObject").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+        userInfo: true,
         idObject : _idObject,
         requestMsg : msg
     ).doRequest(context : context);
@@ -100,9 +100,9 @@ class UserObject extends Obj{
 
 
   @override
-  void claim({int idLoan ,String claimMsg}) {
+  Future claim({int idLoan ,String claimMsg}) {
     new RequestPost("claimObject").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+        userInfo: true,
         idLoan: idLoan != null ? idLoan : _objState.idState,
         claimMsg: claimMsg
     ).doRequest();
@@ -114,38 +114,38 @@ class UserObject extends Obj{
   }
 
   @override
-  void delObject() {
+  Future delObject() {
     new RequestPost("deleteObject").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+        userInfo: true,
         idObject : _idObject
     ).doRequest();
   }
 
   @override
-  void objHistory() {
+  Future objHistory() {
     // TODO: implement objHistory
   }
 
 
   @override
-  void returnObj({int idLoan, String idUser}) {
+  Future returnObj({int idLoan, String idUser}) {
     new RequestPost("returnLendedObject").dataBuilder(
-      idUser: idUser != null ? idUser : UserSingleton.singleton.user.idEntity,
+      userInfo: true,
       idLoan: idLoan != null ? idLoan : _objState.idState
     ).doRequest();
   }
 
 
 
-///TODO Falta por probar
+///TODO Como añadimos imagenes? 
   @override
-  void updateObject({String name,String imagen,int amount}) {
+  Future updateObject({String name,String imagen,int amount}) {
+    List l = fieldNameFieldValue(name: name, amount: amount);
     new RequestPost("updateObject").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+        userInfo: true,
         idObject : _idObject,
-        name: name,
-        imagen: imagen,
-        amount: amount,
+        fieldname: l[0],
+        fieldValue: l[1]
     ).doRequest();
   }
 }
@@ -165,44 +165,50 @@ class GroupObject extends Obj{
   }
 
   @override
-  void requestObj() {
+  Future requestObj() {
     // TODO: implement requestObj
   }
 
   @override
-  void claim({int idLoan}) {
+  Future claim({int idLoan}) {
     // TODO: implement claim
   }
 
 
   
   @override
-  void delObject() {
+  Future delObject() {
     new RequestPost("deleteGObject").dataBuilder(
-      idUser: UserSingleton.singleton.user.idEntity,
+      userInfo: true,
       idObject : this._idObject
     ).doRequest();
   }
 
   @override
-  void objHistory() {
+  Future objHistory() {
     // TODO: implement objHistory
   }
 
 
   @override
-  void returnObj({int idLoan}) {
-    // TODO: implement returnObj
+  Future returnObj({int idLoan}) {
+        new RequestPost("returnLendedObject").dataBuilder(
+      userInfo: true,
+      idLoan: idLoan != null ? idLoan : _objState.idState
+    ).doRequest();
   }
 
   @override
-  void updateObject({String name,String imagen,int amount}) {
+  Future updateObject({String name,String imagen,int amount}) {
     // TODO: implement updateObject
   }
 
   @override
-  void lendObj({int idRequest}) {
-    // TODO: implement lendObj
+  Future lendObj({int idRequest}) async {
+    await new RequestPost("lendGObject").dataBuilder(
+        userInfo: true,
+        idRequest: idRequest != null ? idRequest : _objState.idState
+    ).doRequest();
   }
 
 

@@ -11,12 +11,12 @@ class UserSingleton{
   factory UserSingleton(){return singleton;}
   UserSingleton._internal(){
 
-    this._user = new User("myid", "hey");
-    // FirebaseAuth.instance.currentUser().then((user){
-    //   this._user = new User(user.uid, user.displayName,userEmail: user.email);
-    //   this.firebaseUser = user;
+ 
+     FirebaseAuth.instance.currentUser().then((user){
+       this._user = new User(user.uid, user.displayName,userEmail: user.email);
+       this.firebaseUser = user;
       
-    // });
+     });
   } 
 
 
@@ -24,12 +24,12 @@ class UserSingleton{
   Future refreshUser() async{
     firebaseUser = await FirebaseAuth.instance.currentUser();
     this.token = await firebaseUser.getIdToken();
-    user.idEntity = firebaseUser.uid;;
+    _user.idEntity = firebaseUser.uid;
     if(user == null){this._user = new User(firebaseUser.uid, firebaseUser.displayName); print("Me actaulizo");}
   }
 
   set user(user) => _user = user;
-  User get user=> _user;
+  User get user => _user;
 
   bool get login=> firebaseUser != null;
 

@@ -59,7 +59,7 @@ class RequestPost{
 
   }){
     if(userInfo){_data.addAll(authInfo());}
-    if(idUser != null) _data['idUser'] = "otherid"; ///TODO modificar por iduser
+    //if(idUser != null) _data['idUser'] = "otherid"; ///TODO modificar por iduser
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
@@ -106,13 +106,19 @@ class RequestPost{
   if(email != null){fieldName[i]='email';fieldValue[i]= (email); i++;}
   if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
   if(tfno != null){fieldName[i]=('tfno');fieldValue[i]=(tfno);i++;}*/
-List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno}){
+List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
+String name, String groupName, bool private, bool autoloan, }){
     List fieldName = new List();
     List fieldValue = new List();
     List<dynamic> r = new List();
     r.add(fieldName);
     r.add(fieldValue);
     if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
+    if(groupName != null){fieldName.add('groupName'); fieldValue.add(groupName);}
+    if(amount != null){fieldName.add('amount'); fieldValue.add(amount);}
+    if(private != null){fieldName.add('private'); fieldValue.add(private ? 0 : 1);}
+    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan ? 0 : 1);}
+    if(name != null){fieldName.add('name'); fieldValue.add(name);}
     if(email != null){fieldName.add('email');fieldValue.add(email);}
     if(info != null){fieldName.add('info');fieldValue.add(info);}
     if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
