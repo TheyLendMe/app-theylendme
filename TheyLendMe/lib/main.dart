@@ -29,7 +29,7 @@ class TheApp extends StatelessWidget {
         "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
         "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
 
-        "/ObjectPage": (BuildContext context) => new ObjectPage(),
+        //"/ObjectPage": (BuildContext context) => new ObjectPage(),
         "/UserPage": (BuildContext context) => new UserPage(),
         "/AuthPage": (BuildContext context) => new AuthPage(),
       } // (a live example: https://youtu.be/RLyw-_MLLTo)
