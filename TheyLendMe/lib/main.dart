@@ -27,7 +27,7 @@ class TheApp extends StatelessWidget {
         "/MyObjectsPage": (BuildContext context) => new MyObjectsPage(),
         "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
         "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
-        "/SettingsPage": (BuildContext context) => new MySettingsPage(),
+        "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
 
         "/ObjectPage": (BuildContext context) => new ObjectPage(),
         "/UserPage": (BuildContext context) => new UserPage(),

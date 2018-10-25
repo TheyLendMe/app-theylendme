@@ -32,17 +32,23 @@ class ObjectItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ListTile(
-      leading: new CircleAvatar(
-          child: new Text(object.title[0]), //just the initial letter in a circle
-          backgroundColor: Colors.yellow
+      leading: new Container(
+        child: new Text(object.name[0]), //just the initial letter in a circle
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+          borderRadius: BorderRadius.all(
+            const Radius.circular(4.0),
+          ),
         ),
+        padding: EdgeInsets.all(16.0),
+      ),
       title: new Container(
         //padding: new EdgeInsets.only(left: 8.0),
         child: Row(
           //crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(object.title),
+            Text(object.name),
             xN(object.amount),
             Text(
               object.state,
@@ -71,12 +77,12 @@ TextStyle stateColor(state) {
 
 class Object {
   Object(
-    this.title,
+    this.name,
     this.amount,
     this.state,
   );
 
-  final String title;
+  final String name;
   final int amount;
   final String state;
 }
