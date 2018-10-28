@@ -12,6 +12,9 @@ import 'package:TheyLendMe/pages/auth_page.dart';
 
 void main() => runApp(TheApp());
 
+final firstColor = const Color(0xFF35504d);
+final secondColor = const Color(0xFFf3e2bb);
+
 class TheApp extends StatelessWidget {
   // This widget is the root of your application.
 
@@ -19,7 +22,10 @@ class TheApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'app de préstamos',
-      theme: ThemeData( primarySwatch: Colors.blue, ),
+      theme: ThemeData(
+        primaryColor: firstColor,
+        accentColor: secondColor,
+      ),
       home: TheHome(title: 'TheyLendMe'),
 
       //A Route is an abstraction for a “screen” or “page” of an app,

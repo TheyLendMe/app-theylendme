@@ -27,12 +27,12 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
           return GestureDetector(
             onTap: () {
               showDialog(
-                  context: this.context,
-                  builder: (BuildContext context){
-                    return ObjectPage(imgs[index%5]);
-                  }
-                  //Navigator.of(context).pushNamed("/ObjectPage");
-                );
+                context: this.context,
+                builder: (BuildContext context){
+                  return ObjectPage(imgs[index%5]);
+                }
+                //Navigator.of(context).pushNamed("/ObjectPage");
+              );
             },
             child: Center(
               child: imgs[index%5]
