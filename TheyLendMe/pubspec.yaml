@@ -16,6 +16,12 @@ dependencies:
   dio: ^1.0.6
   firebase_messaging: ^2.0.2
   shared_preferences: ^0.4.3
+  validate: ^1.4.0
+  #PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (1º)
+  #firebase_auth: ^0.5.20
+  #firebase_core: ^0.2.5+1
+  #google_sign_in: ^3.2.1
+
 
 dev_dependencies:
   flutter_test:
@@ -26,8 +32,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
+  assets:
+    - images/tlm.jpg
   #  - images/a_dot_ham.jpeg
   #
   # For details:
