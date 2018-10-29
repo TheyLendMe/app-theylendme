@@ -87,15 +87,15 @@ class RequestPost{
   }
 
   Map<String,dynamic> authInfo(){
-    if(!UserSingleton.singleton.login){
+    if(!UserSingleton().login){
       throw new NotLogedException("You are not loged");
     }
     Map<String,dynamic> m = new Map();
-    m['idUser']= UserSingleton.singleton.user.idEntity;
-    m['token'] = UserSingleton.singleton.token;
-    m['nickname'] = UserSingleton.singleton.user.name;
-    m['email'] = UserSingleton.singleton.firebaseUser.email;
-    m['tfno'] = UserSingleton.singleton.firebaseUser.phoneNumber;
+    m['idUser']= UserSingleton().user.idEntity;
+    m['token'] = UserSingleton().token;
+    m['nickname'] = UserSingleton().user.name;
+    m['email'] = UserSingleton().firebaseUser.email;
+    m['tfno'] = UserSingleton().firebaseUser.phoneNumber;
     return m;
   }
 }
@@ -143,20 +143,21 @@ class ResponsePost{
   dynamic _data;
   
   ResponsePost(data){
-    this._data = data;
-    if(_data['error'] != null && _data['error'] ) { throw new ServerException(_data["errorMsg"], _data["errorCode"]);}
-    
+ 
+    if(data['error'] != null && data['error'] ) { throw new ServerException(data["errorMsg"], data["errorCode"]);}
+    this._data = data['responseData'];
   }
 
   dynamic get data => _data;
 
+////-----------Objects builders------------//////////
   List<Obj> objectsBuilder({Entity entity}){
     List<dynamic> l = new List();
-    if(_data['responseData'] is Map){
-      l.addAll(_data['responseData']['UsersObjects']);
-      l.addAll(_data['responseData']['GroupsObjects']);
+    if(_data is Map){
+      l.addAll(_data['UsersObjects']);
+      l.addAll(_data['GroupsObjects']);
     }else{
-      l = _data['responseData'];
+      l = _data;
     }
  
 
@@ -173,6 +174,7 @@ class ResponsePost{
     return objs;
 
   } 
+
   Obj objectBuilder({Entity entity,Map<String,dynamic> data}){
     data = data == null ? _data as Map : data; 
 
@@ -180,6 +182,27 @@ class ResponsePost{
       new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
       new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
   }
+
+////-------------GetTopics----------------//////////
+  List<String> topicsBuilder(){
+    List<dynamic> l= new List();
+    
+    l.addAll(_data['admin']);
+    //l.addAll(_data['member']); ver si añadimos al grupo de notificaciones, el tema de si son admins o no o ver como lo hacemos.
+
+    List<String> topics = new List();
+
+    l.forEach((value){
+      topics.add(topicBuilder(value));
+    });
+    return topics;
+  }
+  String topicBuilder(Map<String,dynamic> data){
+    data = data == null ? _data as Map : data;
+    return data['idGroup'];
+  }
+
+
 }
 
 

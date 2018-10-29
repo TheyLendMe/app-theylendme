@@ -15,6 +15,7 @@ dependencies:
   google_sign_in: ^3.2.1
   dio: ^1.0.6
   firebase_messaging: ^2.0.2
+  shared_preferences: ^0.4.3
 
 dev_dependencies:
   flutter_test:

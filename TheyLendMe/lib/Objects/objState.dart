@@ -13,7 +13,7 @@ class ObjState{
 
   ObjState({StateOfObject state = StateOfObject.DEFAULT, Entity e, int id}){
     _idState = id;
-    _actual = e != null ? e : UserSingleton.singleton.user;
+    _actual = e != null ? e : UserSingleton().user;
     _state = state != null ? state : StateOfObject.DEFAULT;
   }
 

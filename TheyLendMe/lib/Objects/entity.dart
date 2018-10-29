@@ -64,8 +64,8 @@ class User extends Entity{
   User(String idEntity, String name, {this.userEmail,this.idMember}) : super(EntityType.USER, idEntity, name);
 
   @override
-  Future addObject(String name, int amount) {
-     new RequestPost("createObject").dataBuilder(
+  Future addObject(String name, int amount) async{
+     await new RequestPost("createObject").dataBuilder(
         userInfo: true,
         name: name 
     ).doRequest();
@@ -91,12 +91,9 @@ class User extends Entity{
 
 
 ///TODO falta probar
-  @override
+  @override 
   Future updateInfo({String nickName , String info,String email, String tfno}) async {
-    
-
     var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
-
     ResponsePost res = await new RequestPost("updateUser").dataBuilder(
       userInfo: true,
       fieldname: l[0],
@@ -119,6 +116,14 @@ class User extends Entity{
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest();
+  }
+
+  Future<List<String>> getNotTopics() async{
+    ResponsePost res = await new RequestPost("getAsociatedGroups").dataBuilder(
+      userInfo: true,
+    ).doRequest();
+    print(res.topicsBuilder());
+    return res.topicsBuilder();
   }
 
   get email => userEmail;

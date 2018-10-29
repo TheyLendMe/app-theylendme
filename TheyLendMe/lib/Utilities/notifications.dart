@@ -1,22 +1,40 @@
 
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-class NotHandler{
-  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+class Notifications{
+  final FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  final List<Map<String,dynamic>> notList = new List();
+  static Notifications _singleton;
   String _token;
 
-  NotHandler(){
 
+  factory Notifications(){
+    if(_singleton == null){
+      _singleton = new Notifications._internal();
+    }
+    return _singleton;
+  }
+  
+  Notifications._internal(){
     firebaseMessaging.configure(
       onLaunch: (Map<String,dynamic> msg){
-        print(msg);
+        print("hey1");
+        this.addNot(msg);
       },
+
+      ///When the user clicks on the notification
       onResume: (Map<String,dynamic> msg){
-        print(msg);
+        print("hey2");
+        this.addNot(msg);
       },
+
+      ///When we receive the notification, esto actua.
       onMessage: (Map<String,dynamic> msg){
-        print(msg);
+        print("hey3");
+        this.addNot(msg);
+
       }
    
     );
@@ -34,14 +52,22 @@ class NotHandler{
     });
 
     firebaseMessaging.getToken().then((token){
-      print(token);
+      //print(token);
       _token = token;
 
     });
-
-    firebaseMessaging.subscribeToTopic("Objetos");
-
   }
+
+  void addNot(Map msg){
+    notList.add(msg);
+  }
+
+  void suscribeToTopic(String topic){
+    firebaseMessaging.subscribeToTopic(topic);
+  }
+
+
+
 
 
 
