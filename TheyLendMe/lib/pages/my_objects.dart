@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/object_page.dart';
 
 class MyObjectsPage extends StatefulWidget {
     @override
@@ -31,33 +32,43 @@ class ObjectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
-      leading: new Container(
-        child: new Text(object.name[0]), //just the initial letter in a circle
-        decoration: BoxDecoration(
-          color: Colors.yellow,
-          borderRadius: BorderRadius.all(
-            const Radius.circular(4.0),
+    return new GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return ObjectPage(object.img);
+          }
+        );
+      },
+      child: ListTile(
+        leading: new Container(
+          child: new Text(object.name[0]), //just the initial letter in a circle
+          decoration: BoxDecoration(
+            color: Colors.yellow,
+            borderRadius: BorderRadius.all(
+              const Radius.circular(4.0),
+            ),
           ),
-        ),
-        padding: EdgeInsets.all(16.0),
-      ),
-      title: new Container(
-        //padding: new EdgeInsets.only(left: 8.0),
-        child: Row(
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(object.name),
-            xN(object.amount),
-            Text(
-              object.state,
-              style: stateColor(object.state)
-            )
-          ]
-        )
-      )
-    );
+          padding: EdgeInsets.all(16.0),
+        ), //leading (Container)
+        title: new Container(
+          //padding: new EdgeInsets.only(left: 8.0),
+          child: Row(
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(object.name),
+              xN(object.amount),
+              Text(
+                object.state,
+                style: stateColor(object.state)
+              )
+            ]
+          )
+        ) //title (Container)
+      ) //ListTile
+    ); //GestureDetector
   }
 }
 
@@ -80,16 +91,18 @@ class Object {
     this.name,
     this.amount,
     this.state,
+    this.img
   );
 
   final String name;
   final int amount;
   final String state;
+  final Image img;
 }
 
 final List<Object> objects = <Object>[
-  Object('Cosa',1,'Disponible'),
-  Object('Bici',1,'Prestado'),
-  Object('Pelota',5,'Disponible'),
-  Object('Pelota',2,'Prestado')
+  Object('Cosa',1,'Disponible',Image.network('https://http.cat/400')),
+  Object('Bici',1,'Prestado',Image.network('https://http.cat/401')),
+  Object('Pelota',5,'Disponible',Image.network('https://http.cat/402')),
+  Object('Pelota',2,'Prestado',Image.network('https://http.cat/403'))
 ];

@@ -37,7 +37,7 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
             child: Center(
               child: imgs[index%5]
             )
-          );
+          ); //GestureDetector
         }),
       ),
     );
