@@ -21,7 +21,8 @@ import 'package:TheyLendMe/pages/auth_page.dart';
 
 void main() => runApp(TheApp());
 
-
+final firstColor = const Color(0xFF35504d);
+final secondColor = const Color(0xFFf3e2bb);
 
 class TheApp extends StatelessWidget {
 
@@ -31,7 +32,10 @@ class TheApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'app de préstamos',
-      theme: ThemeData( primarySwatch: Colors.blue, ),
+      theme: ThemeData(
+        primaryColor: firstColor,
+        accentColor: secondColor,
+      ),
       home: TheHome(title: 'TheyLendMe'),
 
       //A Route is an abstraction for a “screen” or “page” of an app,
@@ -41,7 +45,7 @@ class TheApp extends StatelessWidget {
         "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
         "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
 
-        "/ObjectPage": (BuildContext context) => new ObjectPage(),
+        //"/ObjectPage": (BuildContext context) => new ObjectPage(),
         "/UserPage": (BuildContext context) => new UserPage(),
         "/AuthPage": (BuildContext context) => new AuthPage(),
       } // (a live example: https://youtu.be/RLyw-_MLLTo)
