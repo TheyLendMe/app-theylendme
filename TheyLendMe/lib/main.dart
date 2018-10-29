@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/the_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'Utilities/auth.dart';
+import 'Utilities/reqresp.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/Objects/objState.dart';
+import 'package:http/http.dart' as Http;
 
 import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
@@ -12,11 +21,14 @@ import 'package:TheyLendMe/pages/auth_page.dart';
 
 void main() => runApp(TheApp());
 
-class TheApp extends StatelessWidget {
-  // This widget is the root of your application.
 
+
+class TheApp extends StatelessWidget {
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'app de préstamos',
       theme: ThemeData( primarySwatch: Colors.blue, ),

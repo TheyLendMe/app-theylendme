@@ -1,10 +1,12 @@
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
 
 abstract class Entity{
-  final dynamic _idEntity;
+  ///TODO Poner final
+  dynamic _idEntity;
   final EntityType _type;
   String _name,_info,_img;
 
@@ -16,10 +18,12 @@ abstract class Entity{
   }
 
 
-  ///Getters and settes
+  ///Getters and setters
   get idEntity => _idEntity;
   String get name => _name;
   String get info => _info;
+
+  set idEntity(dynamic id) => _idEntity =id;
 
   EntityType get type => _type;
 
@@ -33,18 +37,18 @@ abstract class Entity{
   
 
   ///Add an object to a group or to a user.
-  void addObject(String name, int amount);
+  Future addObject(String name, int amount);
 
 
 
 
 
-  void updateInfo();
+  Future updateInfo();
 
 
 ////INFOOOOOOOOOOOOOOO
   Future<List<Obj>> getObjects();
-  void getRequest();
+  Future getRequest();
 
 }
 
@@ -54,12 +58,15 @@ class User extends Entity{
 
   String userEmail;
   String tfno;
-  User(String idEntity, String name, {this.userEmail}) : super(EntityType.USER, idEntity, name);
+
+  int idMember;
+
+  User(String idEntity, String name, {this.userEmail,this.idMember}) : super(EntityType.USER, idEntity, name);
 
   @override
-  void addObject(String name, int amount) {
-     new Request("createObject").dataBuilder(
-        idUser: UserSingleton.singleton.user.idEntity,
+  Future addObject(String name, int amount) async{
+     await new RequestPost("createObject").dataBuilder(
+        userInfo: true,
         name: name 
     ).doRequest();
     
@@ -70,32 +77,54 @@ class User extends Entity{
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!
   @override
   Future<List<Obj>> getObjects() async{
-    Response res = await new Request("getObjectsByUser").dataBuilder(
-        idUser: this.idEntity,
+    ResponsePost res = await new RequestPost("getObjectsByUser_v2").dataBuilder(
+        userInfo: true,
     ).doRequest();
-    return res.objectsBuilder(this);
+    return res.objectsBuilder(entity: this);
   }
 
   @override
-  void getRequest() {
+  Future getRequest() {
     // TODO: implement getRequest
   }
 
 
 
 ///TODO falta probar
-  @override
-  void updateInfo({String fieldName , String info,String email, String tfno}) async {
-     Response res = await new Request("updateUser").dataBuilder(
-        idUser: this.idEntity,
-        fieldName: fieldName == null ? this.name : fieldName,
-        fieldValue: "",
-        info: info == null ? this.info : info,
-        email: email == null ? this.userEmail : email,
-        tfno: tfno == null ? this.tfno : tfno
+  @override 
+  Future updateInfo({String nickName , String info,String email, String tfno}) async {
+    var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
+    ResponsePost res = await new RequestPost("updateUser").dataBuilder(
+      userInfo: true,
+      fieldname: l[0],
+      fieldValue: l[1]
     ).doRequest();
   }
 
+  Future createGroup({String groupName, String info, String email, String tfno}) async{
+    ResponsePost res = await new RequestPost("createGroup").dataBuilder(
+      userInfo: true,
+      groupName: groupName,
+      info: info,
+      email : email,
+      tfno: tfno
+    ).doRequest();
+  }
+
+  Future joinGroup(Group group) async{
+    ResponsePost res = await new RequestPost("createGroup").dataBuilder(
+      userInfo: true,
+      idGroup: group.idEntity,
+    ).doRequest();
+  }
+
+  Future<List<String>> getNotTopics() async{
+    ResponsePost res = await new RequestPost("getAsociatedGroups").dataBuilder(
+      userInfo: true,
+    ).doRequest();
+    print(res.topicsBuilder());
+    return res.topicsBuilder();
+  }
 
   get email => userEmail;
 
@@ -104,28 +133,51 @@ class User extends Entity{
 }
 
 class Group extends Entity{
-  Group(EntityType type, String idEntity, String name) : super(EntityType.GROUP, idEntity, name);
+  Group(int idEntity, String name) : super(EntityType.GROUP, idEntity.toString(), name);
+
+
+  /// idGroup, idUser(admin), [name, imagen, amount]
 
   @override
-  void addObject(String name, int amount) {
-    // TODO: implement addObject
+  Future addObject(String name, int amount) {
+    new RequestPost("createGObject").dataBuilder(
+        idGroup: this.idEntity,
+        userInfo: true, ///TODO Poner el id del actual usuario
+        name: name 
+    ).doRequest();
   }
 
   @override
-  void getRequest() {
+  Future getRequest() {
     // TODO: implement getRequest
   }
 
-
-  void addUser(){
-
+  ///TODO Falta
+  Future addUser(Entity newUser) async{
+    //  ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
+    //    userInfo: true,
+    //    idMemeber: u.idEntity,
+    //    idGroup: this.idEntity,
+    // ).doRequest();
   }
 
-  void delUser({User u}){
+  Future delUser({User u}){
   
   }
 
-  void addAdmin({User u}){
+  Future addAdmin(User u) async{
+    ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
+      userInfo: true,//UserSingleton.singleton.user.idEntity,
+      idMemeber: u.idMember,
+      idGroup: this.idEntity,
+    ).doRequest();
+  }
+
+  Future delGroup() async{
+    ResponsePost res = await new RequestPost("deleteGroup").dataBuilder(
+      userInfo: true,//UserSingleton.singleton.user.idEntity,
+      idGroup: this.idEntity,
+    ).doRequest();
   }
 
 
@@ -135,17 +187,25 @@ class Group extends Entity{
   }
 
   @override
-  void updateInfo() {
-    // TODO: implement updateInfo
+  Future updateInfo({String groupName, bool private, bool autoloan, String email, String tfno, String info}) async {
+    
+    var l = fieldNameFieldValue(groupName: groupName,autoloan: autoloan,private: private, email: email, tfno: tfno, info: info);
+
+    ResponsePost res = await new RequestPost("updateGroup").dataBuilder(
+      userInfo: true,
+      idGroup: this.idEntity,
+      fieldname: l[0],
+      fieldValue: l[1]
+    ).doRequest();
   }
 
   @override
   Future<List<Obj>> getObjects() async{
     ///TODO change link 
-    Response res = await new Request("getObjectsByUser").dataBuilder(
+    ResponsePost res = await new RequestPost("getObjectsByUser").dataBuilder(
         idGroup: this.idEntity,
     ).doRequest();
-    return res.objectsBuilder(this);
+    return res.objectsBuilder(entity : this);
   }
 }
 
