@@ -5,24 +5,24 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 
 class ObjState{
-  State _state;
+  StateOfObject _state;
   Entity _actual;
   int _idState;
 
 
 
-  ObjState({State state = State.DEFAULT, Entity e, int id}){
+  ObjState({StateOfObject state = StateOfObject.DEFAULT, Entity e, int id}){
     _idState = id;
-    _actual = e != null ? e : UserSingleton.singleton.user;
-    _state = state != null ? state : State.DEFAULT;
+    _actual = e != null ? e : UserSingleton().user;
+    _state = state != null ? state : StateOfObject.DEFAULT;
   }
 
 
-  State get state => _state;
+  StateOfObject get state => _state;
   Entity get actual => _actual;
   int get idState => _idState;
 
-  set state (State state) => _state = state;
+  set state (StateOfObject state) => _state = state;
   set actual (Entity e) => _actual = e;
   set idState (int i) => _idState = i;
 
@@ -33,6 +33,6 @@ class ObjState{
 }
 
 
-enum State{
+enum StateOfObject{
   DEFAULT, LENDED, REQUESTED, LENT, BORROWED, CLAIMED, 
 }
