@@ -15,8 +15,8 @@ import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
 
-import 'package:TheyLendMe/pages/object_page.dart';
-import 'package:TheyLendMe/pages/user_page.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/auth_page.dart';
 
 void main() => runApp(TheApp());

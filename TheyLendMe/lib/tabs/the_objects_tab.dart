@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/object_page.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
 
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
@@ -29,9 +29,8 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
               showDialog(
                 context: this.context,
                 builder: (BuildContext context){
-                  return ObjectPage(imgs[index%5]);
+                  return ObjectDetails(imgs[index%5]);
                 }
-                //Navigator.of(context).pushNamed("/ObjectPage");
               );
             },
             child: Center(

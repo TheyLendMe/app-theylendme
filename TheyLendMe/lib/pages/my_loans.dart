@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/object_page.dart';
+import 'package:TheyLendMe/pages/loan_details.dart';
 
 class MyLoansPage extends StatefulWidget {
     @override
@@ -36,7 +36,7 @@ class LoanItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return ObjectPage(loan.img);
+            return LoanDetails(loan.img);
           }
         );
       },

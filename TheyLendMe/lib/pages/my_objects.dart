@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/object_page.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
 
 class MyObjectsPage extends StatefulWidget {
     @override
@@ -37,7 +37,7 @@ class ObjectItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return ObjectPage(object.img);
+            return ObjectDetails(object.img);
           }
         );
       },

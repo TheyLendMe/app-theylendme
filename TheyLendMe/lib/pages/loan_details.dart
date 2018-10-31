@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ObjectPage extends StatefulWidget {
+class LoanDetails extends StatefulWidget {
   final Image _img;
 
-  ObjectPage(
+  LoanDetails(
     this._img
   );
 
   @override
-    _ObjectPageState createState() => _ObjectPageState();
+    _LoanDetailsState createState() => _LoanDetailsState();
 }
 
-class _ObjectPageState extends State<ObjectPage> {
+class _LoanDetailsState extends State<LoanDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(

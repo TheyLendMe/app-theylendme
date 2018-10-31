@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class UserPage extends StatefulWidget {
+class ObjectDetails extends StatefulWidget {
   final Image _img;
 
-  UserPage(
+  ObjectDetails(
     this._img
   );
 
   @override
-    _UserPageState createState() => _UserPageState();
+    _ObjectDetailsState createState() => _ObjectDetailsState();
 }
 
-class _UserPageState extends State<UserPage> {
+class _ObjectDetailsState extends State<ObjectDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/user_page.dart';
+import 'package:TheyLendMe/pages/user_details.dart';
 
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
@@ -36,7 +36,7 @@ class GroupItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return UserPage(group.img);
+            return UserDetails(group.img);
           }
         );
       },
