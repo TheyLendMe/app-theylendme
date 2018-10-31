@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'dart:io';
+import 'package:path/path.dart';
 
 const String endpoint = "http://54.188.52.254/app/";
 //const String endpoint ="http://10.0.2.2/";
@@ -54,7 +56,7 @@ class RequestPost{
   String name, String desc,String info, String email, String tfno,String nickName,
 
   int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
-  String oUser, String msg, String imagen, String claimMsg,bool userInfo = false, String groupName, bool autoLoan,
+  String oUser, String msg, File img, String claimMsg,bool userInfo = false, String groupName, bool autoLoan,
   bool private, int idMemeber, String requestMsg//add more fields if they are necessary
 
   }){
@@ -71,7 +73,7 @@ class RequestPost{
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
-    if(imagen != null) _data['imagen'] = imagen;
+    if(img != null) _data['image'] = new UploadFileInfo(img, basename(img.path));
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
     if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];}
     if(info != null){_data['info'] = info;}
@@ -123,7 +125,6 @@ String name, String groupName, bool private, bool autoloan}){
     if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
     return r;
 }
-
 class ResponsePost{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
@@ -141,8 +142,6 @@ class ResponsePost{
     this._data = data['responseData'];
   }
   dynamic get data => _data;
-
-
 ////-----------Objects builders------------//////////
   List<Obj> objectsBuilder({Entity entity}){
     List<dynamic> l = new List();
@@ -153,8 +152,6 @@ class ResponsePost{
       l = _data;
     }
  
-
-
     List<Obj> objs = new List();
     l.forEach((element){
       Entity e;

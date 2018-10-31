@@ -3,6 +3,7 @@ import 'entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
+import 'dart:io';
 
 abstract class Obj{
   final ObjType _type;
@@ -35,7 +36,7 @@ abstract class Obj{
   Future claimObj({String claimMsg});
   Future delObj();
   Future objHistory();
-  Future updateObject({String name,String img,int amount});
+  Future updateObject({String name,File img,int amount});
 ///Getters and setters methods
   String get name => _name;
   String get desc => _desc;
@@ -104,48 +105,36 @@ class UserObject extends Obj{
       idLoan: idLoan != null ? idLoan : _objState.idState
     ).doRequest();
   }
-
-
-
-///TODO Como añadimos imagenes? 
   @override
-  Future updateObject({String name,String img,int amount}) {
+  Future updateObject({String name,File img,int amount}) {
     List l = fieldNameFieldValue(name: name, amount: amount);
     new RequestPost("updateObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         fieldname: l[0],
-        fieldValue: l[1]
+        fieldValue: l[1],
+        img: img
+
     ).doRequest();
   }
 }
 
-
-
 class GroupObject extends Obj{
-
-
-  ///Constructor
+  //Constructor
   GroupObject(int idObject, Entity owner, String name, {String desc, ObjState objState}) 
   : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState);
-
   @override
   void lend(int idRequest) {
     // TODO: implement lend
   }
-
   @override
   Future requestObj({int amount, String msg, var context}) {
     // TODO: implement requestObj
   }
-
   @override
   Future claimObj({int idLoan ,String claimMsg}) {
     // TODO: implement claim
   }
-
-
-  
   @override
   Future delObj() {
     new RequestPost("deleteGObject").dataBuilder(
@@ -153,13 +142,10 @@ class GroupObject extends Obj{
       idObject : this._idObject
     ).doRequest();
   }
-
   @override
   Future objHistory() {
     // TODO: implement objHistory
   }
-
-
   @override
   Future returnObj({int idLoan}) {
         new RequestPost("returnLendedObject").dataBuilder(
@@ -167,12 +153,10 @@ class GroupObject extends Obj{
       idLoan: idLoan != null ? idLoan : _objState.idState
     ).doRequest();
   }
-
   @override
-  Future updateObject({String name,String img,int amount}) {
+  Future updateObject({String name,File img,int amount}) {
     // TODO: implement updateObject
   }
-
   @override
   Future lendObj({int idRequest}) async {
     await new RequestPost("lendGObject").dataBuilder(
@@ -180,17 +164,7 @@ class GroupObject extends Obj{
         idRequest: idRequest != null ? idRequest : _objState.idState
     ).doRequest();
   }
-
-
-
 }
-
-
-
-
-
-
-
 
   enum ObjType {
     USER_OBJECT, GROUP_OBJECT

@@ -3,6 +3,8 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 abstract class Entity{
 
@@ -42,10 +44,10 @@ abstract class Entity{
   ///To get the actual objects of the user
   Future<List<Obj>> getObjects();
   ///Get the actual petitions of a user
-  Future getRequest();
-  Future getLoans();
-  Future getReturns();
-  Future getClaims();
+  Future<List<Obj>> getRequest();
+  Future<List<Obj>> getLoans();
+  Future<List<Obj>> getReturns();
+  Future<List<Obj>> getClaims();
 
 }
 
@@ -56,10 +58,13 @@ class User extends Entity{
   super(EntityType.USER, idEntity, name, tfno : tfno, info : info, img : img, email : email);
 
   @override
-  Future addObject(String name, int amount) async{
+  Future addObject(String name, int amount,{String info,File img}) async{
+
      await new RequestPost("createObject").dataBuilder(
         userInfo: true,
-        name: name 
+        name: name,
+        info: info,
+        img: img,
     ).doRequest();
     
   }
@@ -79,16 +84,18 @@ class User extends Entity{
   }
   
   @override 
-  Future updateInfo({String nickName , String info,String email, String tfno}) async {
+  Future updateInfo({String nickName , String info,String email, String tfno, File img}) async {
     var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
     ResponsePost res = await new RequestPost("updateUser").dataBuilder(
       userInfo: true,
       fieldname: l[0],
-      fieldValue: l[1]
+      fieldValue: l[1],
+      img: img
+
     ).doRequest();
   }
 
-  Future createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false}) async{
+  Future createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img}) async{
     ResponsePost res = await new RequestPost("createGroup").dataBuilder(
       userInfo: true,
       groupName: groupName,
@@ -96,7 +103,8 @@ class User extends Entity{
       email : email,
       autoLoan: autoloan,
       private: private,
-      tfno: tfno
+      tfno: tfno,
+      img: img
     ).doRequest();
   }
 
@@ -118,19 +126,19 @@ class User extends Entity{
 
 
   @override
-  Future getClaims() {
+  Future<List<Obj>> getClaims() {
     // TODO: implement getClaims
     return null;
   }
 
   @override
-  Future getLoans() {
+  Future<List<Obj>> getLoans() {
     // TODO: implement getLoans
     return null;
   }
 
   @override
-  Future getReturns() {
+  Future<List<Obj>> getReturns() {
     // TODO: implement getReturns
     return null;
   }
@@ -167,7 +175,7 @@ class Group extends Entity{
   }
 
   @override
-  Future getRequest() {
+  Future<List<Obj>> getRequest() {
     // TODO: implement getRequest
   }
 
@@ -206,7 +214,7 @@ class Group extends Entity{
   }
 
   @override
-  Future updateInfo({String groupName, bool private, bool autoloan, String email, String tfno, String info}) async {
+  Future updateInfo({String groupName, bool private, bool autoloan, String email, String tfno, String info, File}) async {
     
     var l = fieldNameFieldValue(groupName: groupName,autoloan: autoloan,private: private, email: email, tfno: tfno, info: info);
 
@@ -214,7 +222,8 @@ class Group extends Entity{
       userInfo: true,
       idGroup: this.idEntity,
       fieldname: l[0],
-      fieldValue: l[1]
+      fieldValue: l[1],
+      img: img
     ).doRequest();
   }
 
@@ -228,19 +237,19 @@ class Group extends Entity{
   }
 
   @override
-  Future getClaims() {
+  Future<List<Obj>> getClaims() {
     // TODO: implement getClaims
     return null;
   }
 
   @override
-  Future getLoans() {
+  Future<List<Obj>> getLoans() {
     // TODO: implement getLoans
     return null;
   }
 
   @override
-  Future getReturns() {
+  Future<List<Obj>> getReturns() {
     // TODO: implement getReturns
     return null;
   }
