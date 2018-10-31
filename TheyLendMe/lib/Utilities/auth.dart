@@ -12,13 +12,11 @@ import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-///Responsetype 10:cuenta login, sin verificar eail
+///Responsetype 10:cuenta login, sin verificar email
 //////Responsetye: 11, login true,
 ///Resposetype: 12, recien creada
 ///
 class Auth {
-
-
 
 ///Method to loging with facebook
 
@@ -34,9 +32,7 @@ static Future login({String email,String pass, bool google= false, bool facebook
   try{
     if(google){await googleAuth();}
     if(email !=null){await emailAuth(email,pass);}
-  
   }catch(e){
-    
     return;
   }
   
@@ -60,9 +56,8 @@ static Future googleAuth() async{
   }
 
   if(googleUser == null){return null;}
-  
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
   final FirebaseUser user = await _auth.signInWithGoogle(
     accessToken: googleAuth.accessToken,
     idToken: googleAuth.idToken,
@@ -75,19 +70,14 @@ static Future googleAuth() async{
 static Future emailAuth(String email,String pass) async{
   FirebaseAuth _auth= FirebaseAuth.instance;
   await _auth.signInWithEmailAndPassword(email:email,password:pass);
-
 }
 
 
 static Future emailRegister(String email, String pass) async{
    FirebaseAuth _auth= FirebaseAuth.instance;
    try{
-   _auth.createUserWithEmailAndPassword(email: email,password:pass);
-
-   //(await _auth.currentUser()).sendEmailVerification();
-   print(UserSingleton().firebaseUser.uid);
-   //login(email: email, pass: pass);
-
+    _auth.createUserWithEmailAndPassword(email: email,password:pass);
+    await login(email: email, pass: pass);
    }catch(e){
     ///TODO hay que poner todos los errores posbiles y ver como manejarlos
       print(e);
