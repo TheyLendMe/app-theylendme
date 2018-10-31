@@ -57,8 +57,8 @@ abstract class Obj{
 
 class UserObject extends Obj{
   ///Constructor
-  UserObject(int idObject, User owner, String name, {String desc, ObjState objState}) 
-  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, objState: objState);
+  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState})
+  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState);
   @override
   Future lendObj({int idRequest}) {
     new RequestPost("lendObject").dataBuilder(
