@@ -1,8 +1,6 @@
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:TheyLendMe/Utilities/notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSingleton{
   static UserSingleton _singleton;
@@ -17,19 +15,16 @@ class UserSingleton{
     }
     return _singleton;
     }
-
-
   UserSingleton._internal(){
     notifications = Notifications();
     FirebaseAuth.instance.currentUser().then((user){
       if(user != null){
-        this._user = new User(user.uid, user.displayName,userEmail: user.email);
+        this._user = new User(user.uid, user.displayName,email: user.email);
         this.firebaseUser = user;
       }
     });
   
   } 
-
   Future refreshUser() async{
     firebaseUser = await FirebaseAuth.instance.currentUser();
     if(firebaseUser == null){return;}

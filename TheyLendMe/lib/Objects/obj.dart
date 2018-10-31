@@ -11,7 +11,7 @@ abstract class Obj{
   ObjState _objState;
   
   ///TODO pensar mejor el tema de las imagenes. Deberia de ser una lista???
-  String _name, _desc, _image;
+  String _name, _desc, _img;
   // Group groupBorrowed;
   // User userBorrowed;
 
@@ -21,43 +21,29 @@ abstract class Obj{
   Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState}){
     this._name = name;
     this._desc = desc;
-    this._image = image;
+    this._img = image;
     this._objState = objState;
   }
 
 
 
 ///Abstract Methods 
-  Future lendObj({int idRequest});
-
-  Future requestObj();
-
+  Future lendObj();
+  Future requestObj({int amount, String msg, var context});
   ///Devolver--> no me deja poner return D: valdra solo con requestObj???
-  Future returnObj({int idLoan});
-
-  Future claim({int idLoan});
-
-  Future delObject();
-
+  Future returnObj();
+  Future claimObj({String claimMsg});
+  Future delObj();
   Future objHistory();
-
-
-  Future updateObject({String name,String imagen,int amount});
+  Future updateObject({String name,String img,int amount});
 ///Getters and setters methods
-
   String get name => _name;
   String get desc => _desc;
-  String get image => _image;
-
+  String get image => _img;
   int get idObject => _idObject;
   ObjType get type => _type;
-  
-
-
-
   set name(String name) => this._name = name;
   set desc(String desc) => this._desc = desc;
-
   ///TODO pensar mejor este tema
   set image(String image) => this._name = image;
 
@@ -67,18 +53,12 @@ abstract class Obj{
     ).doRequest();
     return res.objectsBuilder();
   }
-
-
-
 }
 
 class UserObject extends Obj{
-
-
   ///Constructor
   UserObject(int idObject, User owner, String name, {String desc, ObjState objState}) 
   : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, objState: objState);
-
   @override
   Future lendObj({int idRequest}) {
     new RequestPost("lendObject").dataBuilder(
@@ -86,8 +66,6 @@ class UserObject extends Obj{
         idRequest: idRequest != null ? idRequest : _objState.idState
     ).doRequest();
   }
-
-
   ///If the user does not set any amount, it will ask just for one object
   @override
   Future requestObj({int amount = 1, String msg, var context}) {
@@ -97,24 +75,16 @@ class UserObject extends Obj{
         requestMsg : msg
     ).doRequest(context : context);
   }
-
-
   @override
-  Future claim({int idLoan ,String claimMsg}) {
+  Future claimObj({int idLoan ,String claimMsg}) {
     new RequestPost("claimObject").dataBuilder(
         userInfo: true,
         idLoan: idLoan != null ? idLoan : _objState.idState,
         claimMsg: claimMsg
     ).doRequest();
   }
-
   @override
-  void setObjectInfo({String name, String desc}) {
-    // TODO: implement setObjectInfo
-  }
-
-  @override
-  Future delObject() {
+  Future delObj() {
     new RequestPost("deleteObject").dataBuilder(
         userInfo: true,
         idObject : _idObject
@@ -128,7 +98,7 @@ class UserObject extends Obj{
 
 
   @override
-  Future returnObj({int idLoan, String idUser}) {
+  Future returnObj({int idLoan}) {
     new RequestPost("returnLendedObject").dataBuilder(
       userInfo: true,
       idLoan: idLoan != null ? idLoan : _objState.idState
@@ -139,7 +109,7 @@ class UserObject extends Obj{
 
 ///TODO Como añadimos imagenes? 
   @override
-  Future updateObject({String name,String imagen,int amount}) {
+  Future updateObject({String name,String img,int amount}) {
     List l = fieldNameFieldValue(name: name, amount: amount);
     new RequestPost("updateObject").dataBuilder(
         userInfo: true,
@@ -165,19 +135,19 @@ class GroupObject extends Obj{
   }
 
   @override
-  Future requestObj() {
+  Future requestObj({int amount, String msg, var context}) {
     // TODO: implement requestObj
   }
 
   @override
-  Future claim({int idLoan}) {
+  Future claimObj({int idLoan ,String claimMsg}) {
     // TODO: implement claim
   }
 
 
   
   @override
-  Future delObject() {
+  Future delObj() {
     new RequestPost("deleteGObject").dataBuilder(
       userInfo: true,
       idObject : this._idObject
@@ -199,7 +169,7 @@ class GroupObject extends Obj{
   }
 
   @override
-  Future updateObject({String name,String imagen,int amount}) {
+  Future updateObject({String name,String img,int amount}) {
     // TODO: implement updateObject
   }
 
