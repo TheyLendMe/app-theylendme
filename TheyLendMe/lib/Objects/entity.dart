@@ -5,63 +5,55 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 abstract class Entity{
-  ///TODO Poner final
+
   dynamic _idEntity;
   final EntityType _type;
-  String _name,_info,_img;
+  String _name,_info,_img,_tfno,_email;
 
-  
-
-
-  Entity(this._type,this._idEntity,this._name,{String info ="",String img =""}){
-
+  ///COnstructor, you may need info and the url of the image
+  Entity(this._type,this._idEntity,this._name,{String info,String img,String tfno, String email}){
+    _info = info;
+    _img = img;
+    _tfno = tfno;
+    _email = email;
   }
-
 
   ///Getters and setters
   get idEntity => _idEntity;
   String get name => _name;
   String get info => _info;
-
   set idEntity(dynamic id) => _idEntity =id;
-
   EntityType get type => _type;
-
-
   set name(name) => _name = name;
   set info(info) => _info = info;
+  get email => email;
+  set email(String email) => _email = email;
+  get tfno => tfno;
+  set tfno(String tfno) => _tfno = tfno;
+  get img => img;
+  set img(String img) => _img = img;
 
 
-  ///Other functions
-  ///
-  
 
   ///Add an object to a group or to a user.
   Future addObject(String name, int amount);
-
-
-
-
-
+  ///Update info for the user ----> only for the actual user UserSingleton.user!!
   Future updateInfo();
-
-
-////INFOOOOOOOOOOOOOOO
+  ///To get the actual objects of the user
   Future<List<Obj>> getObjects();
+  ///Get the actual petitions of a user
   Future getRequest();
+  Future getLoans();
+  Future getReturns();
+  Future getClaims();
 
 }
 
-
-
 class User extends Entity{
-
-  String userEmail;
-  String tfno;
-
   int idMember;
-
-  User(String idEntity, String name, {this.userEmail,this.idMember}) : super(EntityType.USER, idEntity, name);
+  ///You may need the email and the idMember (if you are searching for a group)
+  User(String idEntity, String name, {this.idMember,String email,String tfno,String info, String img}) : 
+  super(EntityType.USER, idEntity, name, tfno : tfno, info : info, img : img, email : email);
 
   @override
   Future addObject(String name, int amount) async{
@@ -71,8 +63,6 @@ class User extends Entity{
     ).doRequest();
     
   }
-
-
 
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!
   @override
@@ -87,10 +77,7 @@ class User extends Entity{
   Future getRequest() {
     // TODO: implement getRequest
   }
-
-
-
-///TODO falta probar
+  
   @override 
   Future updateInfo({String nickName , String info,String email, String tfno}) async {
     var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
@@ -101,12 +88,14 @@ class User extends Entity{
     ).doRequest();
   }
 
-  Future createGroup({String groupName, String info, String email, String tfno}) async{
+  Future createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false}) async{
     ResponsePost res = await new RequestPost("createGroup").dataBuilder(
       userInfo: true,
       groupName: groupName,
       info: info,
       email : email,
+      autoLoan: autoloan,
+      private: private,
       tfno: tfno
     ).doRequest();
   }
@@ -126,15 +115,45 @@ class User extends Entity{
     return res.topicsBuilder();
   }
 
-  get email => userEmail;
+
+
+  @override
+  Future getClaims() {
+    // TODO: implement getClaims
+    return null;
+  }
+
+  @override
+  Future getLoans() {
+    // TODO: implement getLoans
+    return null;
+  }
+
+  @override
+  Future getReturns() {
+    // TODO: implement getReturns
+    return null;
+  }
 
 
 
 }
 
 class Group extends Entity{
-  Group(int idEntity, String name) : super(EntityType.GROUP, idEntity.toString(), name);
 
+  bool _private;
+  bool _autoloan; 
+  Group(int idEntity, String name,{String email,String tfno,String info, String img,bool private = false, bool autoloan = false}) 
+  : super(EntityType.GROUP, idEntity.toString(), name,tfno : tfno, info : info, img : img, email : email){
+    _private = private;
+    _autoloan = autoloan;
+  }
+
+  get private => _private;
+  set private(bool private) => private;
+
+  get autoloan => _autoloan; 
+  set autoloan(bool autoloan) => _autoloan;
 
   /// idGroup, idUser(admin), [name, imagen, amount]
 
@@ -162,7 +181,7 @@ class Group extends Entity{
   }
 
   Future delUser({User u}){
-  
+
   }
 
   Future addAdmin(User u) async{
@@ -206,6 +225,24 @@ class Group extends Entity{
         idGroup: this.idEntity,
     ).doRequest();
     return res.objectsBuilder(entity : this);
+  }
+
+  @override
+  Future getClaims() {
+    // TODO: implement getClaims
+    return null;
+  }
+
+  @override
+  Future getLoans() {
+    // TODO: implement getLoans
+    return null;
+  }
+
+  @override
+  Future getReturns() {
+    // TODO: implement getReturns
+    return null;
   }
 }
 

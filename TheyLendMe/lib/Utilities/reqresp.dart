@@ -59,7 +59,6 @@ class RequestPost{
 
   }){
     if(userInfo){_data.addAll(authInfo());}
-    //if(idUser != null) _data['idUser'] = "otherid"; ///TODO modificar por iduser
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
@@ -107,7 +106,7 @@ class RequestPost{
   if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
   if(tfno != null){fieldName[i]=('tfno');fieldValue[i]=(tfno);i++;}*/
 List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
-String name, String groupName, bool private, bool autoloan, }){
+String name, String groupName, bool private, bool autoloan}){
     List fieldName = new List();
     List fieldValue = new List();
     List<dynamic> r = new List();
@@ -125,30 +124,24 @@ String name, String groupName, bool private, bool autoloan, }){
     return r;
 }
 
-
-
 class ResponsePost{
-
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
   static Future<ResponsePost> responseBuilder(Response response) async{
     ///In case of server error like 404 not found... this 
-    ///
     print(response.request.baseUrl+response.request.path);
     print(response.data);
     if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
-
     return new ResponsePost(response.data);
   }
   dynamic _data;
-  
   ResponsePost(data){
  
     if(data['error'] != null && data['error'] ) { throw new ServerException(data["errorMsg"], data["errorCode"]);}
     this._data = data['responseData'];
   }
-
   dynamic get data => _data;
+
 
 ////-----------Objects builders------------//////////
   List<Obj> objectsBuilder({Entity entity}){
@@ -205,11 +198,7 @@ class ResponsePost{
 
 }
 
-
-
-
 /// TODO Implement a exception mangager
-
 class RequestException implements Exception{
   final String errMsg;
   final int idErr;
