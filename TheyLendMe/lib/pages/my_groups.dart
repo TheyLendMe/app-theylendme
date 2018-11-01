@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/user_details.dart';
+import 'package:TheyLendMe/pages/group_details.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 
 class MyGroupsPage extends StatefulWidget {
   @override
@@ -37,7 +38,7 @@ class GroupItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return UserDetails(group.img);
+            return GroupDetails(group);
           }
         );
       },
@@ -45,7 +46,7 @@ class GroupItem extends StatelessWidget {
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
           leading: new CircleAvatar(
-              child: new Text(group.title[0]), //just the initial letter in a circle
+              child: new Text(group.name[0]), //just the initial letter in a circle
               backgroundColor: Colors.yellow
             ),
           title: new Container(
@@ -53,7 +54,7 @@ class GroupItem extends StatelessWidget {
               //crossAxisAlignment: CrossAxisAlignment.start,
               //mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(group.title),
+                Text(group.name),
               ]
             )
           )
@@ -63,17 +64,7 @@ class GroupItem extends StatelessWidget {
   }
 }
 
-class Group {
-  Group(
-    this.title,
-    this.img
-  );
-
-  final String title;
-  final Image img;
-}
-
 final List<Group> groups = <Group>[
-  Group('MiGrupo1',Image.network('https://http.cat/400')),
-  Group('MiGrupo2',Image.network('https://http.cat/401'))
+  Group(1,'MiGrupo1', img: 'https://http.cat/400'),
+  Group(2,'MiGrupo2', img: 'https://http.cat/401')
 ];

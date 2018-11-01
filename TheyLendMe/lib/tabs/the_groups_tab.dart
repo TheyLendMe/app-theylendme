@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/user_details.dart';
+import 'package:TheyLendMe/pages/group_details.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
@@ -36,38 +37,26 @@ class GroupItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return UserDetails(group.img);
+            return GroupDetails(group);
           }
         );
       },
       child: ListTile(
         leading: new CircleAvatar(
-            child: new Text(group.title[0]), //just the initial letter in a circle
+            child: new Text(group.name[0]), //just the initial letter in a circle
             backgroundColor: Colors.yellow
           ),
-        title: Text(group.title),
-        subtitle: new Text(group.subtitle)
+        title: Text(group.name),
+        subtitle: new Text(group.info)
       )
     );
   }
 }
 
-class Group {
-  Group(
-    this.title,
-    this.subtitle,
-    this.img
-  );
-
-  final String title;
-  final String subtitle;
-  final Image img;
-}
-
 final List<Group> groups = <Group>[
-  Group('Asociación ASOC','una asociación',Image.network('https://http.cat/400')),
-  Group('Grupo GRP','un grupo',Image.network('https://http.cat/401')),
-  Group('Equipo C.D.EQUIPO','un equipo',Image.network('https://http.cat/402')),
-  Group('Organización ORGANIZ','una organización',Image.network('https://http.cat/403')),
-  Group('Clase CLAS1','una clase',Image.network('https://http.cat/404')),
+  Group(1,'Asociación ASOC', info: 'una asociación', img: 'https://http.cat/400'),
+  Group(2,'Grupo GRP', info: 'un grupo', img: 'https://http.cat/401'),
+  Group(3,'Equipo C.D: .EQUIPO', info:'un equipo', img: 'https://http.cat/402'),
+  Group(4,'Organización ORGANIZ', info: 'una organización', img: 'https://http.cat/403'),
+  Group(5,'Clase CLAS1', info: 'una clase', img: 'https://http.cat/404'),
 ];

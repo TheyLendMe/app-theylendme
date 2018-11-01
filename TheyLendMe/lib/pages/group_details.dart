@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 
-class ObjectDetails extends StatefulWidget {
-  final UserObject _object;
+class GroupDetails extends StatefulWidget {
+  final Group _group;
 
-  ObjectDetails(this._object);
+  GroupDetails(this._group);
 
   @override
-    _ObjectDetailsState createState() => _ObjectDetailsState();
+    GroupDetailsState createState() => GroupDetailsState();
 }
 
-class _ObjectDetailsState extends State<ObjectDetails> {
+class GroupDetailsState extends State<GroupDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
@@ -22,19 +22,14 @@ class _ObjectDetailsState extends State<ObjectDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: Image.network(widget._object.image),
-            //TODO: indicador xN de cantidad
+            child: Image.network(widget._group.img) //TODO: circular
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
+            child: Column(
               children: [
-                Text(widget._object.name, style: Theme.of(context).textTheme.title),
-                Text(' de ', style: Theme.of(context).textTheme.subtitle),
-                Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle) //TODO: abrir UserDetails
+                Text(widget._group.name, style: Theme.of(context).textTheme.title),
+                Text(widget._group.info, style: Theme.of(context).textTheme.subtitle)
               ]
             )
           ),
@@ -49,6 +44,12 @@ class _ObjectDetailsState extends State<ObjectDetails> {
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )
+          ),
+          MaterialButton(
+            height: 42.0, //TODO: pegar al borde inferior
+            onPressed:(){}, //TODO acción de contactar
+            color: Theme.of(context).indicatorColor,
+            child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
           )
         ]
       );

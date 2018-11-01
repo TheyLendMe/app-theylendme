@@ -32,7 +32,7 @@ abstract class Entity{
   set email(String email) => _email = email;
   get tfno => tfno;
   set tfno(String tfno) => _tfno = tfno;
-  get img => img;
+  get img => _img;
   set img(String img) => _img = img;
 
 
