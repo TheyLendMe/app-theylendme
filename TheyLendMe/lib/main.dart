@@ -18,6 +18,7 @@ import 'package:TheyLendMe/pages/my_settings.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/auth_page.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(TheApp());
 
@@ -26,6 +27,13 @@ final secondColor = const Color(0xFFf3e2bb);
 
 class TheApp extends StatelessWidget {
 
+  void pruebas() async{
+    await Auth.googleAuth();
+    UserSingleton().refreshUser();
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    UserSingleton().user.addObject("Prueba de imagen", 1, img: image, info: "Esto es una prueba de imagen");
+    
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -47,6 +55,6 @@ class TheApp extends StatelessWidget {
 
         "/AuthPage": (BuildContext context) => new AuthPage(),
       } // (a live example: https://youtu.be/RLyw-_MLLTo)
-    );
+    )
   }
 }
