@@ -38,7 +38,7 @@ static Future login({String email,String pass, bool google= false, bool facebook
   
   await UserSingleton().refreshUser();
   await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
-
+  
   if(await _checkFirstLogIn()){print("First Login"); firstSteps(google :google, pass: pass,facebook: facebook);}
 
 
