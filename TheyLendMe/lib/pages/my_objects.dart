@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart'; // provisional
+import 'dart:math'; // provisional
 
 class MyObjectsPage extends StatefulWidget {
     @override
@@ -27,37 +31,47 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
 class ObjectItem extends StatelessWidget {
 
   const ObjectItem(this.object);
-  final Object object;
+  final UserObject object;
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
-      leading: new Container(
-        child: new Text(object.name[0]), //just the initial letter in a circle
-        decoration: BoxDecoration(
-          color: Colors.yellow,
-          borderRadius: BorderRadius.all(
-            const Radius.circular(4.0),
+    return new GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return ObjectDetails(object);
+          }
+        );
+      },
+      child: ListTile(
+        leading: new Container(
+          child: new Text(object.name[0]), //just the initial letter in a circle
+          decoration: BoxDecoration(
+            color: Colors.yellow,
+            borderRadius: BorderRadius.all(
+              const Radius.circular(4.0),
+            ),
           ),
-        ),
-        padding: EdgeInsets.all(16.0),
-      ),
-      title: new Container(
-        //padding: new EdgeInsets.only(left: 8.0),
-        child: Row(
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(object.name),
-            xN(object.amount),
-            Text(
-              object.state,
-              style: stateColor(object.state)
-            )
-          ]
-        )
-      )
-    );
+          padding: EdgeInsets.all(16.0),
+        ), //leading (Container)
+        title: new Container(
+          //padding: new EdgeInsets.only(left: 8.0),
+          child: Row(
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(object.name),
+              xN( Random().nextInt(20) ), //provisional
+              Text(
+                'Disponible', //provisional
+                style: stateColor('Disponible') //provisional
+              )
+            ]
+          )
+        ) //title (Container)
+      ) //ListTile
+    ); //GestureDetector
   }
 }
 
@@ -75,21 +89,12 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.red);
 }
 
-class Object {
-  Object(
-    this.name,
-    this.amount,
-    this.state,
-  );
+final User propietario = User('1', 'Señor Propietario');
 
-  final String name;
-  final int amount;
-  final String state;
-}
-
-final List<Object> objects = <Object>[
-  Object('Cosa',1,'Disponible'),
-  Object('Bici',1,'Prestado'),
-  Object('Pelota',5,'Disponible'),
-  Object('Pelota',2,'Prestado')
+final List<UserObject> objects = <UserObject>[
+  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
+  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
+  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
+  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
+  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
 ];

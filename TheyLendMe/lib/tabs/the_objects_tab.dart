@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
@@ -17,14 +20,29 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
         children: List.generate(100, (index) {
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).pushNamed("/ObjectPage");
+              showDialog(
+                context: this.context,
+                builder: (BuildContext context){
+                  return ObjectDetails(objects[index%5]);
+                }
+              );
             },
             child: Center(
-              child: Image.network('https://http.cat/40'+(index%5).toString())
+              child: Image.network(objects[index%5].image)
             )
-          );
+          ); //GestureDetector
         }),
       ),
     );
   }
 }
+
+final User propietario = User('1', 'Señor Propietario');
+
+final List<UserObject> objects = <UserObject>[
+  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
+  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
+  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
+  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
+  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
+];

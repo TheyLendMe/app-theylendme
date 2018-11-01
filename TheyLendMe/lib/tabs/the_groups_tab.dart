@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/user_details.dart';
 
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
@@ -30,13 +31,23 @@ class GroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
-      leading: new CircleAvatar(
-          child: new Text(group.title[0]), //just the initial letter in a circle
-          backgroundColor: Colors.yellow
-        ),
-      title: Text(group.title),
-      subtitle: new Text(group.subtitle)
+    return new GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return UserDetails(group.img);
+          }
+        );
+      },
+      child: ListTile(
+        leading: new CircleAvatar(
+            child: new Text(group.title[0]), //just the initial letter in a circle
+            backgroundColor: Colors.yellow
+          ),
+        title: Text(group.title),
+        subtitle: new Text(group.subtitle)
+      )
     );
   }
 }
@@ -45,18 +56,18 @@ class Group {
   Group(
     this.title,
     this.subtitle,
-    //[this.children = const <Group>[]]
+    this.img
   );
 
   final String title;
   final String subtitle;
-  //final List<Group> children; //TODO: expandable list maybe?
+  final Image img;
 }
 
 final List<Group> groups = <Group>[
-  Group('Asociación ASOC','una asociación'),
-  Group('Grupo GRP','un grupo'),
-  Group('Equipo C.D.EQUIPO','un equipo'),
-  Group('Organización ORGANIZ','una organización'),
-  Group('Clase CLAS1','una clase'),
+  Group('Asociación ASOC','una asociación',Image.network('https://http.cat/400')),
+  Group('Grupo GRP','un grupo',Image.network('https://http.cat/401')),
+  Group('Equipo C.D.EQUIPO','un equipo',Image.network('https://http.cat/402')),
+  Group('Organización ORGANIZ','una organización',Image.network('https://http.cat/403')),
+  Group('Clase CLAS1','una clase',Image.network('https://http.cat/404')),
 ];
