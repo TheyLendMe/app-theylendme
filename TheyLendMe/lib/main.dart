@@ -15,14 +15,15 @@ import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
 
-import 'package:TheyLendMe/pages/object_page.dart';
-import 'package:TheyLendMe/pages/user_page.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/auth_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(TheApp());
 
-
+final firstColor = const Color(0xFF35504d);
+final secondColor = const Color(0xFFf3e2bb);
 
 class TheApp extends StatelessWidget {
 
@@ -39,26 +40,21 @@ class TheApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'app de préstamos',
-      theme: ThemeData( primarySwatch: Colors.blue, ),
-      home: new Scaffold(
-        floatingActionButton: new FloatingActionButton(
-          onPressed: pruebas,
-        ),
+      theme: ThemeData(
+        primaryColor: firstColor,
+        accentColor: secondColor,
       ),
-    );
-    //   home: TheHome(title: 'TheyLendMe'),
+      home: TheHome(title: 'TheyLendMe'),
 
-    //   //A Route is an abstraction for a “screen” or “page” of an app,
-    //   routes: <String, WidgetBuilder> {
-    //     "/MyObjectsPage": (BuildContext context) => new MyObjectsPage(),
-    //     "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
-    //     "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
-    //     "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
+      //A Route is an abstraction for a “screen” or “page” of an app,
+      routes: <String, WidgetBuilder> {
+        "/MyObjectsPage": (BuildContext context) => new MyObjectsPage(),
+        "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
+        "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
+        "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
 
-    //     "/ObjectPage": (BuildContext context) => new ObjectPage(),
-    //     "/UserPage": (BuildContext context) => new UserPage(),
-    //     "/AuthPage": (BuildContext context) => new AuthPage(),
-    //   } // (a live example: https://youtu.be/RLyw-_MLLTo)
-    // );
+        "/AuthPage": (BuildContext context) => new AuthPage(),
+      } // (a live example: https://youtu.be/RLyw-_MLLTo)
+    )
   }
 }
