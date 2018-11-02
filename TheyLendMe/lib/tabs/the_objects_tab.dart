@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/object_page.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
     @override
     _TheObjectsTabState createState() => _TheObjectsTabState();
 }
-
-final List<Image> imgs = <Image>[
-  Image.network('https://http.cat/400'),
-  Image.network('https://http.cat/401'),
-  Image.network('https://http.cat/402'),
-  Image.network('https://http.cat/403'),
-  Image.network('https://http.cat/404'),
-];
 
 // CONTENIDO de la pestaña OBJETOS
 class _TheObjectsTabState extends State<TheObjectsTab> {
@@ -29,13 +23,12 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
               showDialog(
                 context: this.context,
                 builder: (BuildContext context){
-                  return ObjectPage(imgs[index%5]);
+                  return ObjectDetails(objects[index%5]);
                 }
-                //Navigator.of(context).pushNamed("/ObjectPage");
               );
             },
             child: Center(
-              child: imgs[index%5]
+              child: Image.network(objects[index%5].image)
             )
           ); //GestureDetector
         }),
@@ -43,3 +36,14 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
     );
   }
 }
+
+final User propietario = User('1', 'Señora Propietaria',
+  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
+
+final List<UserObject> objects = <UserObject>[
+  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
+  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
+  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
+  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
+  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
+];

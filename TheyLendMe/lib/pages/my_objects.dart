@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:TheyLendMe/pages/object_page.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart'; // provisional
+import 'dart:math'; // provisional
 
 class MyObjectsPage extends StatefulWidget {
     @override
@@ -28,7 +31,7 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
 class ObjectItem extends StatelessWidget {
 
   const ObjectItem(this.object);
-  final Object object;
+  final UserObject object;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class ObjectItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return ObjectPage(object.img);
+            return ObjectDetails(object);
           }
         );
       },
@@ -59,10 +62,10 @@ class ObjectItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(object.name),
-              xN(object.amount),
+              xN( Random().nextInt(20) ), //provisional
               Text(
-                object.state,
-                style: stateColor(object.state)
+                'Disponible', //provisional
+                style: stateColor('Disponible') //provisional
               )
             ]
           )
@@ -86,23 +89,13 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.red);
 }
 
-class Object {
-  Object(
-    this.name,
-    this.amount,
-    this.state,
-    this.img
-  );
+final User propietario = User('1', 'Señora Propietaria',
+  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
 
-  final String name;
-  final int amount;
-  final String state;
-  final Image img;
-}
-
-final List<Object> objects = <Object>[
-  Object('Cosa',1,'Disponible',Image.network('https://http.cat/400')),
-  Object('Bici',1,'Prestado',Image.network('https://http.cat/401')),
-  Object('Pelota',5,'Disponible',Image.network('https://http.cat/402')),
-  Object('Pelota',2,'Prestado',Image.network('https://http.cat/403'))
+final List<UserObject> objects = <UserObject>[
+  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
+  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
+  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
+  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
+  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
 ];

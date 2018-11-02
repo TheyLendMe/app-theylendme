@@ -17,6 +17,9 @@ dependencies:
   firebase_messaging: ^2.0.2
   shared_preferences: ^0.4.3
   validate: ^1.4.0
+  path: ^1.6.2
+  image_picker: ^0.4.10
+
   #PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (1º)
   #firebase_auth: ^0.5.20
   #firebase_core: ^0.2.5+1

@@ -27,8 +27,8 @@ static void facebookAuth(){
 
 
 static Future login({String email,String pass, bool google= false, bool facebook= false}) async{
-  ///First we have to make sure that the user is loged in
-
+  ///First we have to make sure that the user is loged in 
+  if(UserSingleton().login){return;}
   try{
     if(google){await googleAuth();}
     if(email !=null){await emailAuth(email,pass);}
@@ -38,7 +38,7 @@ static Future login({String email,String pass, bool google= false, bool facebook
   
   await UserSingleton().refreshUser();
   await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
-
+  
   if(await _checkFirstLogIn()){print("First Login"); firstSteps(google :google, pass: pass,facebook: facebook);}
 
 
