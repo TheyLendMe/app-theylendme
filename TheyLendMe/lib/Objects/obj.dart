@@ -41,6 +41,7 @@ abstract class Obj{
   String get name => _name;
   String get desc => _desc;
   String get image => _img;
+  ObjState get objState => _objState;
   int get idObject => _idObject;
   ObjType get type => _type;
   set name(String name) => this._name = name;

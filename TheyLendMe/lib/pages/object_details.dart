@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/pages/user_details.dart';
 
 class ObjectDetails extends StatefulWidget {
-  final UserObject _object;
+  final Obj _object;
 
   ObjectDetails(this._object);
 
@@ -42,7 +43,17 @@ class _ObjectDetailsState extends State<ObjectDetails> {
               children: [
                 Text(widget._object.name, style: Theme.of(context).textTheme.title),
                 Text(' de ', style: Theme.of(context).textTheme.subtitle),
-                Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle) //TODO: abrir UserDetails
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context){
+                        return UserDetails(widget._object.owner); //WIP (FIXME)
+                      }
+                    );
+                  },
+                  child: Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle)
+                )
               ]
             )
           ),

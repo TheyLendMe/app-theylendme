@@ -15,6 +15,7 @@ class ObjState{
     _next = next;
     _state = state != null ? state : StateOfObject.DEFAULT;
   }
+
   StateOfObject get state => _state;
   Entity get actual => _actual;
   Entity get next => _next;
@@ -23,6 +24,7 @@ class ObjState{
   set actual (Entity e) => _actual = e;
   set idState (int i) => _idState = i;
 }
+
 enum StateOfObject{
-  DEFAULT, LENDED, REQUESTED, LENT, BORROWED, CLAIMED, 
+  DEFAULT, REQUESTED, LENT, BORROWED, CLAIMED
 }

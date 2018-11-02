@@ -40,11 +40,17 @@ class _UserDetailsState extends State<UserDetails> {
             alignment: Alignment.center,
             child: Text(widget._user.name, style: Theme.of(context).textTheme.title)
           ),
-          MaterialButton(
-            height: 42.0, //TODO: hacer que no ocupe todo el ancho
-            onPressed:(){}, //TODO acción de contactar
-            color: Theme.of(context).buttonColor,
-            child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+          Container(
+            constraints: BoxConstraints.expand(
+              height: Theme.of(context).textTheme.display1.fontSize * 1.5,
+            ),
+            padding: const EdgeInsets.all(8.0),
+            child: MaterialButton(
+              height: 42.0,
+              onPressed:(){}, //TODO acción de contactar
+              color: Theme.of(context).buttonColor,
+              child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+            )
           )
         ]
       );
