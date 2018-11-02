@@ -4,6 +4,7 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
+import 'package:TheyLendMe/Utilities/errorHandler.dart';
 import 'dart:io';
 
 abstract class Entity{
@@ -32,7 +33,7 @@ abstract class Entity{
   set email(String email) => _email = email;
   get tfno => tfno;
   set tfno(String tfno) => _tfno = tfno;
-  get img => img;
+  get img => _img;
   set img(String img) => _img = img;
 
 
@@ -44,7 +45,7 @@ abstract class Entity{
   ///To get the actual objects of the user
   Future<List<Obj>> getObjects({var context});
   ///Get the actual petitions of a user
-  Future<List<Obj>> getRequest({var context});
+  Future<List<Obj>> getRequests({var context});
   Future<List<Obj>> getLoans({var context});
   Future<List<Obj>> getReturns({var context});
   Future<List<Obj>> getClaims({var context});
@@ -61,11 +62,11 @@ class User extends Entity{
   Future addObject(String name, int amount,{String info,File img, var context}) async{
 
      await new RequestPost("createObject").dataBuilder(
-        userInfo: true,
+        //userInfo: true,
         name: name,
         info: info,
         img: img,
-    ).doRequest(context: context);
+    ).doRequest(context: context, errorHandler: new ErrorToast());
     
   }
 
@@ -79,8 +80,10 @@ class User extends Entity{
   }
 
   @override
-  Future<List<Obj>> getRequest({var context}) {
-    // TODO: implement getRequest
+  Future<List<Obj>> getRequests({var context}) async {
+    ResponsePost res = await new RequestPost("getRequestedObjects").dataBuilder(
+      userInfo: true,
+    ).doRequest(context:context);
   }
   
   @override 
@@ -169,13 +172,14 @@ class Group extends Entity{
   Future addObject(String name, int amount,{var context}) {
     new RequestPost("createGObject").dataBuilder(
         idGroup: this.idEntity,
-        userInfo: true, ///TODO Poner el id del actual usuario
+        userInfo: true,
+ ///TODO Poner el id del actual usuario
         name: name 
     ).doRequest(context: context);
   }
 
   @override
-  Future<List<Obj>> getRequest({var context}) {
+  Future<List<Obj>> getRequests({var context}) {
     // TODO: implement getRequest
   }
 
@@ -183,6 +187,7 @@ class Group extends Entity{
   Future addUser(Entity newUser) async{
     //  ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
     //    userInfo: true,
+    //context: context,
     //    idMemeber: u.idEntity,
     //    idGroup: this.idEntity,
     // ).doRequest(context: context);
@@ -194,7 +199,8 @@ class Group extends Entity{
 
   Future addAdmin(User u,{var context}) async{
     ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
-      userInfo: true,//UserSingleton.singleton.user.idEntity,
+      userInfo: true,
+//UserSingleton.singleton.user.idEntity,
       idMemeber: u.idMember,
       idGroup: this.idEntity,
     ).doRequest(context: context);
@@ -202,7 +208,8 @@ class Group extends Entity{
 
   Future delGroup({var context}) async{
     ResponsePost res = await new RequestPost("deleteGroup").dataBuilder(
-      userInfo: true,//UserSingleton.singleton.user.idEntity,
+      userInfo: true,
+//UserSingleton.singleton.user.idEntity,
       idGroup: this.idEntity,
     ).doRequest(context: context);
   }

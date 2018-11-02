@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:path/path.dart';
+import 'package:TheyLendMe/Utilities/errorHandler.dart';
+import 'package:flutter/material.dart';
 
 const String endpoint = "http://54.188.52.254/app/";
 //const String endpoint ="http://10.0.2.2/";
@@ -20,6 +22,7 @@ class RequestPost{
   String _url;
   Map<String, dynamic> _data;
   Dio dio = new Dio();
+  bool userInfo = false;
 
 
   RequestPost(String fun){
@@ -34,15 +37,25 @@ class RequestPost{
   }
 
 
-  Future<ResponsePost> doRequest({var context}) async{
+  Future<ResponsePost> doRequest({var context, ErrorHandler errorHandler}) async{
 
     ///TODO implementar un manejador de errores si deja de haber conexion
     ///Si el 
     try{
-      return ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
+      if(userInfo){
+          Map<String,dynamic> m = await authInfo();
+          this._data.addAll(m);
+      }
+      return await ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
       
-    }catch(e){
-      print("Internet connection error");
+    }on StatusException catch(e){
+      new ErrorToast().handleError(msg : e.errMsg);
+      return null;
+    }on AuthException catch(e){
+      new ErrorAuth(context).handleError();
+
+    }on ServerException catch(e){
+      errorHandler.handleError(msg : e.errMsg);
       return null;
     }
     
@@ -56,11 +69,11 @@ class RequestPost{
   String name, String desc,String info, String email, String tfno,String nickName,
 
   int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
-  String oUser, String msg, File img, String claimMsg,bool userInfo = false, String groupName, bool autoLoan,
-  bool private, int idMemeber, String requestMsg//add more fields if they are necessary
-
+  String oUser, String msg, File img, String claimMsg, String groupName, bool autoLoan,
+  bool private, int idMemeber, String requestMsg, bool userInfo = false//add more fields if they are necessary
   }){
-    if(userInfo){_data.addAll(authInfo());}
+    this.userInfo = userInfo;
+    if(idUser != null && !userInfo)_data['idGroup'] = idGroup.toString();
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
@@ -87,10 +100,8 @@ class RequestPost{
     return this;
   }
 
-  Map<String,dynamic> authInfo(){
-    if(!UserSingleton().login){
-      throw new NotLogedException("You are not loged");
-    }
+  Future<Map<String,dynamic>> authInfo() async{
+    await UserSingleton().refreshUser();
     Map<String,dynamic> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
     m['token'] = UserSingleton().token;
@@ -100,9 +111,6 @@ class RequestPost{
     return m;
   }
 }
-
-
-
  /* if(nickName != null){fieldName[i] = 'nickname'; fieldValue[i]=nickName; i++;}
   if(email != null){fieldName[i]='email';fieldValue[i]= (email); i++;}
   if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
@@ -138,7 +146,12 @@ class ResponsePost{
   dynamic _data;
   ResponsePost(data){
  
-    if(data['error'] != null && data['error'] ) { throw new ServerException(data["errorMsg"], data["errorCode"]);}
+    if(data['error'] != null && data['error'] ) { 
+      if(data['errorCode'] == 1) throw new AuthException(data["errorMsg"], data["errorCode"]);
+
+      throw new ServerException(data["errorMsg"], data["errorCode"]);
+
+    }
     this._data = data['responseData'];
   }
   dynamic get data => _data;
@@ -208,10 +221,4 @@ class StatusException extends RequestException{
 }
 class ServerException extends RequestException{
   ServerException(String errMsg, int idErr) : super(errMsg, idErr);
-}
-
-///Login Exception
-class NotLogedException implements Exception{
-  final String errMsg;
-  NotLogedException(this.errMsg);
 }
