@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
 
+/*
+//TODO:
+* - Validation
+* - Load data from API
+*/
+
 class MySettingsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _SettingsPageState();

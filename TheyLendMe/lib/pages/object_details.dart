@@ -14,9 +14,17 @@ class _ObjectDetailsState extends State<ObjectDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
-        //TODO: botón de cerrar
         //title: new Text('Detalles'), //TODO: poner título?
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: new Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(null),
+              ),
+            ]
+          ),
           Container(
             constraints: BoxConstraints.expand(
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,

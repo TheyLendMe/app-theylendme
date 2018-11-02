@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/loan_details.dart';
 
+/*
+//TODO:
+* - Complete Dismissible behaviour
+*/
+
 class MyLoansPage extends StatefulWidget {
     @override
     _MyLoansPageState createState() => _MyLoansPageState();
