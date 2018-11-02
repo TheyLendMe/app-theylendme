@@ -53,7 +53,7 @@ class LoanItem extends StatelessWidget {
       child: Dismissible(
         key: new Key(object.name),
         background: new Container(
-          color: (object.objState.state==StateOfObject.LENT //WIP: usar los valores de StateOfObject
+          color: (object.objState.state==StateOfObject.LENT
             ? Colors.green
             : Colors.blue
           ),

@@ -14,7 +14,6 @@ class _UserDetailsState extends State<UserDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
-        //title: new Text('Detalles'), //TODO: poner título?
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

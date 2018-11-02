@@ -15,7 +15,6 @@ class _LoanDetailsState extends State<LoanDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
-        //title: new Text('Detalles'), //TODO: poner título?
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -48,7 +47,7 @@ class _LoanDetailsState extends State<LoanDetails> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context){
-                        return UserDetails(widget._object.owner); //WIP (FIXME)
+                        return UserDetails(widget._object.owner);
                       }
                     );
                   },
