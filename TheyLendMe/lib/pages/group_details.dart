@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 
+//TODO: ver miembros
+
 class GroupDetails extends StatefulWidget {
   final Group _group;
 
