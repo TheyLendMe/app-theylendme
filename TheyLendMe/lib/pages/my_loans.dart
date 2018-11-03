@@ -178,3 +178,4 @@ final List<UserObject> loanObjects = <UserObject>[
   UserObject(4, usuario2, 'Caja', image: 'https://http.cat/403', objState: ObjState()),
   UserObject(5, usuario1, 'Goma', image: 'https://http.cat/404', objState: ObjState())
 ];
+

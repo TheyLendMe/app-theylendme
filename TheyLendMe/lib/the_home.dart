@@ -38,7 +38,28 @@ class _TheHomePageState extends State<TheHome> {
           ),
 
           // MENÚ LATERAL:
-          drawer: TheDrawer()
+          //drawer: TheDrawer()
+
+          drawer: new Drawer(  // hay que poner el drawer aquí
+            child: new Column( // para que al abrirlo no ocupe toda la pantalla
+              children: <Widget>[
+                new UserAccountsDrawerHeader(
+                  // Aquí habrá que meter los datos de cada usuario
+                    accountName: new Text("John Doe"), accountEmail: new Text("john.doe@gmail.com"),
+                    // Metiendo imagen de user
+                    currentAccountPicture: new CircleAvatar(
+                      //backgroundColor: Colors.blueGrey,
+                      backgroundImage: NetworkImage('https://http.cat/401'),
+                    ),
+                    ),
+                new Column(children: drawerOptions)
+              ],
+            ),
+          ),
+          //PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar  (2º)
+          // floatingActionButton: new FloatingActionButton(
+          //   onPressed: pruebas
+          // ),
         )
       )
     );
