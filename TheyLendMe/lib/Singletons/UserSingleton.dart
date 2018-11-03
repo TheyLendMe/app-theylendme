@@ -1,13 +1,40 @@
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:TheyLendMe/Utilities/notifications.dart';
 
 class UserSingleton{
-  static final UserSingleton singleton = new UserSingleton._internal();
+  static UserSingleton _singleton;
   User _user;
-  factory UserSingleton(){return singleton;}
-  UserSingleton._internal();   
+  FirebaseUser firebaseUser;
+  Notifications notifications;
+  String token;
+
+  factory UserSingleton(){
+    if(_singleton == null){
+      _singleton = new UserSingleton._internal();
+    }
+    return _singleton;
+    }
+  UserSingleton._internal(){
+    notifications = Notifications();
+    FirebaseAuth.instance.currentUser().then((user){
+      if(user != null){
+        this._user = new User(user.uid, user.displayName,email: user.email);
+        this.firebaseUser = user;
+      }
+    });
+  
+  } 
+  Future refreshUser() async{
+    firebaseUser = await FirebaseAuth.instance.currentUser();
+    if(firebaseUser == null){return;}
+    this.token = await firebaseUser.getIdToken();
+    if(_user == null){this._user = new User(firebaseUser.uid, firebaseUser.displayName); print("Me actaulizo");}
+  }
 
   set user(user) => _user = user;
-  User get user=> _user;
+  User get user => _user;
 
+  bool get login=> firebaseUser != null;
 
 }

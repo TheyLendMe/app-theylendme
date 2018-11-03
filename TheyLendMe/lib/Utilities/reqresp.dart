@@ -1,36 +1,46 @@
 
-import 'package:http/http.dart' as http;
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:convert';
 import 'dart:async';
-
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'dart:io';
+import 'package:path/path.dart';
 
 const String endpoint = "http://54.188.52.254/app/";
-class Request{
+//const String endpoint ="http://10.0.2.2/";
+
+
+
+class RequestPost{
 
   String _url;
-  Map<String, String> _data;
-  http.Client client;
-  http.Request request;
+  Map<String, dynamic> _data;
+  Dio dio = new Dio();
 
 
-  Request(String fun){
-    _url = endpoint+fun;
-    request = new http.Request('POST', Uri.parse(_url));
-    client = new http.Client();
+  RequestPost(String fun){
+    _url = fun;
+
+    dio.options.baseUrl=endpoint;
+    dio.options.connectTimeout = 10000; //5s
+    dio.options.receiveTimeout=3000;  
+
     _data = new Map();
   
   }
 
 
-  Future<Response> doRequest({var context}) async{
-    request.bodyFields = _data;
+  Future<ResponsePost> doRequest({var context}) async{
+
     ///TODO implementar un manejador de errores si deja de haber conexion
     ///Si el 
     try{
-      http.StreamedResponse response = await client.send(request);
-      return await Response.responseBuilder(response);
+      return ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
+      
     }catch(e){
       print("Internet connection error");
       return null;
@@ -42,12 +52,15 @@ class Request{
 
 
 ///This will be the builder that
-  Request dataBuilder({String idUser,int idGroup, int idObject, 
-  String name, String desc,String info, String email,String fieldName, String tfno,
-  int idLoan, int idRequest, int idClaim, int amount, String fieldValue,
-  String oUser, String msg, String imagen, String claimMsg//add more fields if they are necessary
+ RequestPost dataBuilder({String idUser,dynamic idGroup, int idObject, 
+  String name, String desc,String info, String email, String tfno,String nickName,
+
+  int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
+  String oUser, String msg, File img, String claimMsg,bool userInfo = false, String groupName, bool autoLoan,
+  bool private, int idMemeber, String requestMsg//add more fields if they are necessary
+
   }){
-    if(idUser != null) _data['idUser'] = idUser;
+    if(userInfo){_data.addAll(authInfo());}
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
@@ -56,63 +69,133 @@ class Request{
     if(idRequest != null) _data['idRequest'] = idRequest.toString();
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
+    if(requestMsg != null) _data['request'] = requestMsg;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
-    if(fieldName != null) _data ['fieldName'] = fieldName;
-    if(fieldName != null) _data ['fieldValue'] = fieldValue;
-    if(email != null) _data['email'] = email;
-    if(info != null) _data['info'] = info;
-    if(tfno != null) _data['tfno'] = tfno;
-    if(imagen != null) _data['imagen'] = imagen;
+    if(img != null) _data['image'] = new UploadFileInfo(img, basename(img.path));
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
+    if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];}
+    if(info != null){_data['info'] = info;}
+    if(email != null){_data['email']=email;}
+    if(tfno != null){_data['tfno'] = tfno;}
+    if(groupName != null) {_data['groupName'] = groupName;}
+    if(autoLoan != null){_data['autoloan'] = autoLoan ? 1 : 0;}
+    if(private != null)_data['private'] = private ? 1 : 0;
+    if(idMemeber != null)_data['idMember'] = idMemeber;
+
     return this;
+  }
+
+  Map<String,dynamic> authInfo(){
+    if(!UserSingleton().login){
+      throw new NotLogedException("You are not loged");
+    }
+    Map<String,dynamic> m = new Map();
+    m['idUser']= UserSingleton().user.idEntity;
+    m['token'] = UserSingleton().token;
+    m['nickname'] = UserSingleton().user.name;
+    m['email'] = UserSingleton().firebaseUser.email;
+    m['tfno'] = UserSingleton().firebaseUser.phoneNumber;
+    return m;
   }
 }
 
 
 
-class Response{
-
+ /* if(nickName != null){fieldName[i] = 'nickname'; fieldValue[i]=nickName; i++;}
+  if(email != null){fieldName[i]='email';fieldValue[i]= (email); i++;}
+  if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
+  if(tfno != null){fieldName[i]=('tfno');fieldValue[i]=(tfno);i++;}*/
+List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
+String name, String groupName, bool private, bool autoloan}){
+    List fieldName = new List();
+    List fieldValue = new List();
+    List<dynamic> r = new List();
+    r.add(fieldName);
+    r.add(fieldValue);
+    if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
+    if(groupName != null){fieldName.add('groupName'); fieldValue.add(groupName);}
+    if(amount != null){fieldName.add('amount'); fieldValue.add(amount);}
+    if(private != null){fieldName.add('private'); fieldValue.add(private ? 0 : 1);}
+    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan ? 0 : 1);}
+    if(name != null){fieldName.add('name'); fieldValue.add(name);}
+    if(email != null){fieldName.add('email');fieldValue.add(email);}
+    if(info != null){fieldName.add('info');fieldValue.add(info);}
+    if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
+    return r;
+}
+class ResponsePost{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
-  static Future<Response> responseBuilder(http.StreamedResponse response) async{
+  static Future<ResponsePost> responseBuilder(Response response) async{
     ///In case of server error like 404 not found... this 
+    print(response.request.baseUrl+response.request.path);
+    print(response.data);
     if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
-    String resString = await response.stream.bytesToString();
-    print(resString);
-    return new Response(resString);
+    return new ResponsePost(response.data);
   }
   dynamic _data;
-  
-  Response(data){
-    this._data = jsonDecode(data);
-
-    if(_data['error'] != false){ throw new ServerException(_data["errorMsg"], _data["errorCode"]);}
-    
+  ResponsePost(data){
+ 
+    if(data['error'] != null && data['error'] ) { throw new ServerException(data["errorMsg"], data["errorCode"]);}
+    this._data = data['responseData'];
   }
-
   dynamic get data => _data;
-
-  List<Obj> objectsBuilder(Entity entity){
-    List<dynamic> l = _data['responseData'];   
+////-----------Objects builders------------//////////
+  List<Obj> objectsBuilder({Entity entity}){
+    List<dynamic> l = new List();
+    if(_data is Map){
+      l.addAll(_data['UsersObjects']);
+      l.addAll(_data['GroupsObjects']);
+    }else{
+      l = _data;
+    }
+ 
     List<Obj> objs = new List();
     l.forEach((element){
-      objs.add(objectBuilder(entity, data: element as Map<String,dynamic>));
+      Entity e;
+      if(entity == null){
+        bool isFromUser = element['idUser'] != null;
+        e= isFromUser ? new User(element['idUser'],"") : new Group(element['idGroup'], "");
+      }
+      objs.add(objectBuilder(entity: entity != null ? entity : e, data: element as Map<String,dynamic>));
     });
     return objs;
 
   } 
-  Obj objectBuilder(Entity entity, {Map<String,dynamic> data}){
-    data = data == null ?   _data as Map : data; 
+
+  Obj objectBuilder({Entity entity,Map<String,dynamic> data}){
+    data = data == null ? _data as Map : data; 
+
     return entity.type  == EntityType.USER ? 
       new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
       new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
   }
+
+////-------------GetTopics----------------//////////
+  List<String> topicsBuilder(){
+    List<dynamic> l= new List();
+    
+    l.addAll(_data['admin']);
+    //l.addAll(_data['member']); ver si añadimos al grupo de notificaciones, el tema de si son admins o no o ver como lo hacemos.
+
+    List<String> topics = new List();
+
+    l.forEach((value){
+      topics.add(topicBuilder(value));
+    });
+    return topics;
+  }
+  String topicBuilder(Map<String,dynamic> data){
+    data = data == null ? _data as Map : data;
+    return data['idGroup'];
+  }
+
+
 }
 
 /// TODO Implement a exception mangager
-
 class RequestException implements Exception{
   final String errMsg;
   final int idErr;
@@ -125,4 +208,10 @@ class StatusException extends RequestException{
 }
 class ServerException extends RequestException{
   ServerException(String errMsg, int idErr) : super(errMsg, idErr);
+}
+
+///Login Exception
+class NotLogedException implements Exception{
+  final String errMsg;
+  NotLogedException(this.errMsg);
 }
