@@ -37,11 +37,7 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
                     border: InputBorder.none,
                     hintText: 'Nombre del objeto')),
                   //new Image.network('https://wakyma.com/blog/wp-content/uploads/2017/10/Tipos-de-diarrea-en-gatos-y-su-tratamiento-770x460.'),
-                  new Container(
-                    child: new Center(
-                      child: SaleONoLaImagen(),
-                    )
-                  ),
+                  new SaleONoLaImagen(),
                   new TextField(
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -90,7 +86,7 @@ class CameraAppState extends State<CameraApp> {
       setState(() {});
     }
   }*/
-  cameraPicker() async{
+  void cameraPicker() async{
     print("CameraPick llamado");
     cameraFile = await ImagePicker.pickImage(source: ImageSource.camera);
     displaySelectedFile(cameraFile);
@@ -103,7 +99,7 @@ class CameraAppState extends State<CameraApp> {
   Widget build(BuildContext context) {
     return new FloatingActionButton(
       child: new Icon(Icons.photo_camera),
-      onPressed: cameraPicker(),
+      onPressed: cameraPicker,
     );
   }
 
