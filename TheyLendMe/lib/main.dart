@@ -27,17 +27,18 @@ final secondColor = const Color(0xFFf3e2bb);
 
 class TheApp extends StatelessWidget {
 
-  void pruebas() async{
-    await Auth.googleAuth();
-    UserSingleton().refreshUser();
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    UserSingleton().user.addObject("Prueba de imagen", 1, img: image, info: "Esto es una prueba de imagen");
+  void pruebas(BuildContext context) async{
+    //await Auth.googleAuth();
+    //Navigator.of(context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));
+    //UserSingleton().refreshUser();
+    // var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    // UserSingleton().user.addObject("Prueba de imagen", 1, img: image, info: "Esto es una prueba de imagen",context: context);
+    UserSingleton().user.getRequests(context: context);
     
   }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'app de préstamos',
       theme: ThemeData(
