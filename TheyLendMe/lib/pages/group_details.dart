@@ -56,7 +56,7 @@ class GroupDetailsState extends State<GroupDetails> {
           ),
           MaterialButton(
             height: 42.0, //TODO: pegar al borde inferior
-            onPressed:(){}, //TODO acción de contactar
+            onPressed:(){},
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
           )
