@@ -29,9 +29,9 @@ abstract class Entity{
   EntityType get type => _type;
   set name(name) => _name = name;
   set info(info) => _info = info;
-  get email => email;
+  get email => _email;
   set email(String email) => _email = email;
-  get tfno => tfno;
+  get tfno => _tfno;
   set tfno(String tfno) => _tfno = tfno;
   get img => _img;
   set img(String img) => _img = img;
@@ -49,6 +49,8 @@ abstract class Entity{
   Future<List<Obj>> getLoans({var context});
   Future<List<Obj>> getReturns({var context});
   Future<List<Obj>> getClaims({var context});
+  Future<List<Obj>> getLents({var context});
+
 
 }
 
@@ -76,15 +78,10 @@ class User extends Entity{
     ResponsePost res = await new RequestPost("getObjectsByUser_v2").dataBuilder(
         userInfo: true,
     ).doRequest(context: context);
-    return res.objectsBuilder(entity: this);
+    //return res.objectsBuilder(entity: this);
+    return null;
   }
 
-  @override
-  Future<List<Obj>> getRequests({var context}) async {
-    ResponsePost res = await new RequestPost("getRequestedObjects").dataBuilder(
-      userInfo: true,
-    ).doRequest(context:context);
-  }
   
   @override 
   Future updateInfo({String nickName , String info,String email, String tfno, File img, var context}) async {
@@ -112,7 +109,7 @@ class User extends Entity{
   }
 
   Future joinGroup(Group group, {var context}) async{
-    ResponsePost res = await new RequestPost("createGroup").dataBuilder(
+    ResponsePost res = await new RequestPost("joinRequest").dataBuilder(
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest(context: context);
@@ -127,11 +124,20 @@ class User extends Entity{
   }
 
 
+  @override
+  Future<List<Obj>> getRequests({var context}) async {
+    ResponsePost res = await new RequestPost("getRequestedObjects").dataBuilder(
+      userInfo: true,
+    ).doRequest(context:context);
+    return res.objectsUserBuilder(stateType: "requested");
+  }
 
   @override
-  Future<List<Obj>> getClaims({var context}) {
-    // TODO: implement getClaims
-    return null;
+  Future<List<Obj>> getClaims({var context}) async{
+    ResponsePost res = await new RequestPost("getClaimsByUser").dataBuilder(
+      userInfo: true,
+    ).doRequest(context:context);
+    return res.objectsUserBuilder(stateType: "claims");
   }
 
   @override
@@ -146,7 +152,27 @@ class User extends Entity{
     return null;
   }
 
+  @override
+  Future<List<Obj>> getLents({context}) {
+    // TODO: implement getLents
+    return null;
+  }
 
+
+  Future<List<Obj>> getMyRequests({var context}) async{
+     ResponsePost res = await new RequestPost("getObjectsRequestedByUser").dataBuilder(
+      userInfo: true,
+    ).doRequest(context:context);
+    return res.objectsUserBuilder(stateType :"requested", mine: true);
+  }
+  
+
+  Future<List<Obj>> getMyClaims({var context}) async{
+     ResponsePost res = await new RequestPost("getClaimsToUser").dataBuilder(
+      userInfo: true,
+    ).doRequest(context:context);
+   // return res.objectsUserBuilder(stateType :"requested", mine: true);
+  }
 
 
 }
@@ -240,7 +266,8 @@ class Group extends Entity{
     ResponsePost res = await new RequestPost("getObjectsByUser").dataBuilder(
         idGroup: this.idEntity,
     ).doRequest(context: context);
-    return res.objectsBuilder(entity : this);
+    //return res.objectsBuilder(entity : this);
+    return null;
   }
 
   @override
@@ -258,6 +285,12 @@ class Group extends Entity{
   @override
   Future<List<Obj>> getReturns({var context}) {
     // TODO: implement getReturns
+    return null;
+  }
+
+  @override
+  Future<List<Obj>> getLents({context}) {
+    // TODO: implement getLents
     return null;
   }
 }

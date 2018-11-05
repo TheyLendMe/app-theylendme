@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:TheyLendMe/Utilities/errorHandler.dart';
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/Objects/objState.dart';
 
 const String endpoint = "http://54.188.52.254/app/";
 //const String endpoint ="http://10.0.2.2/";
@@ -144,6 +145,7 @@ class ResponsePost{
     return new ResponsePost(response.data);
   }
   dynamic _data;
+  int _responseType;
   ResponsePost(data){
  
     if(data['error'] != null && data['error'] ) { 
@@ -153,38 +155,236 @@ class ResponsePost{
 
     }
     this._data = data['responseData'];
+    this._responseType = data['responseType'];
   }
   dynamic get data => _data;
 ////-----------Objects builders------------//////////
-  List<Obj> objectsBuilder({Entity entity}){
-    List<dynamic> l = new List();
-    if(_data is Map){
-      l.addAll(_data['UsersObjects']);
-      l.addAll(_data['GroupsObjects']);
-    }else{
-      l = _data;
-    }
- 
-    List<Obj> objs = new List();
-    l.forEach((element){
-      Entity e;
-      if(entity == null){
-        bool isFromUser = element['idUser'] != null;
-        e= isFromUser ? new User(element['idUser'],"") : new Group(element['idGroup'], "");
+
+
+
+
+  List<Obj> objectsUserBuilder({Entity entity,String stateType, bool mine = false}){
+    List<Obj> obj = new List();
+    if(_responseType == 4){
+      
+      ///Obtenemos el estado que se le va a dar a cada uno de los objetos
+      if (stateType == null){
+        obj.addAll(defaultObjects(_data['UsersObjects'], ObjType.USER_OBJECT));
+        obj.addAll(defaultObjects(_data['GroupsObjects'], ObjType.GROUP_OBJECT));
+      }else{
+        List<dynamic> objects = _data;
+        StateOfObject stateOfObject = ObjState.getObjState(stateType);
+        if(stateOfObject == StateOfObject.REQUESTED){objects.forEach((element) => obj.addAll(!mine ? requestObjects(element) : myRequestsObjects(element)));}
+        if(stateOfObject == StateOfObject.CLAIMED){objects.forEach((element) =>obj.addAll(requestObjects(element)));}
       }
-      objs.add(objectBuilder(entity: entity != null ? entity : e, data: element as Map<String,dynamic>));
+    }
+
+    if(_responseType == 3){
+
+    }
+    return obj;
+  }
+
+  List<Obj> defaultObjects(List<dynamic> objects, ObjType objType){
+    List<Obj> objs = new List();
+    objects.forEach((object){
+      Obj obj;
+      obj = objType == ObjType.USER_OBJECT ? 
+      ///Pedir a victor que incluyaa nombres de los owners
+        new UserObject(
+          int.parse(object['idObject']),
+          new User(object['idUser'], "prueba"),
+          object['name'],
+          image : object['imagen'],
+          amount :int.parse(object['amount']),
+          //TODO incluir fecha 
+        ) : 
+        new GroupObject(
+          int.parse(object['idObject']),
+          new Group(int.parse(object['idGroup']), "pruebaGrupo"),
+          object['name'],
+          image : object['imagen'],
+          amount : int.parse(object['amount']),
+          //TODO incluir fecha 
+        );
+      objs.add(obj);
     });
     return objs;
-
-  } 
-
-  Obj objectBuilder({Entity entity,Map<String,dynamic> data}){
-    data = data == null ? _data as Map : data; 
-
-    return entity.type  == EntityType.USER ? 
-      new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
-      new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
+      
   }
+
+///TODO falta incluir el date
+  List<Obj> requestObjects(Map<String,dynamic> requestsInfo){
+    StateOfObject stateOfObject = StateOfObject.REQUESTED;
+      List<Obj> list = new List();
+      List<dynamic> states = requestsInfo["requests"];
+      states.forEach((stateInfo){
+        Entity actual =  UserSingleton().user;
+        Entity next =  User(stateInfo['idUser'], stateInfo['requesterNickName']);
+        ObjState state = new ObjState(
+          actual: actual,
+          next: next,
+          id: stateInfo['id'],
+          state: stateOfObject,
+            
+        );
+        list.add(new UserObject(
+          int.parse(requestsInfo['idObject']),
+          actual,
+          requestsInfo['name'],
+          objState: state
+        ));
+
+      });
+      return list;
+  }
+
+  List<Obj> myRequestsObjects(Map<String,dynamic> request){
+    List<Obj> list = new List();
+    Map<String,dynamic> objInfo = request['objectData'];
+    list.add(new UserObject(
+      int.parse(objInfo['idObject']), 
+      new User(objInfo['owner_id'],objInfo['owner_nickname']), 
+      objInfo['name'],
+      image: objInfo['imagen'],
+      objState: new ObjState(
+        actual: new User(objInfo['owner_id'],objInfo['owner_nickname']),
+        next: UserSingleton().user,
+        id: int.parse(request['idRequest']),
+        state: StateOfObject.REQUESTED
+        )
+    ));
+    return list;
+  }
+
+  List<Obj> claimstObjects(Map<String,dynamic> requestsInfo){
+      StateOfObject stateOfObject = StateOfObject.CLAIMED;
+      List<Obj> list = new List();
+      List<dynamic> states = requestsInfo["claims"];
+      states.forEach((stateInfo){
+        Entity actual =  User(stateInfo['idUser'], stateInfo['owner']);
+        Entity next =  UserSingleton().user;
+        ObjState state = new ObjState(
+          actual: actual,
+          next: next,
+          id: stateInfo['idClaim'],
+          state: stateOfObject,
+            
+        );
+        list.add(new UserObject(
+          int.parse(requestsInfo['idObject']),
+          actual,
+          requestsInfo['name']
+        ));
+
+      });
+      return list;
+  }
+
+    
+  List<Obj> myClaimstObjects(Map<String,dynamic> request){
+    List<Obj> list = new List();
+    Map<String,dynamic> objInfo = request['objectData'];
+    list.add(new UserObject(
+      int.parse(objInfo['idObject']), 
+      new User(objInfo['owner_id'],objInfo['owner_nickname']), 
+      objInfo['name'],
+      image: objInfo['imagen'],
+      objState: new ObjState(
+        actual: new User(objInfo['owner_id'],objInfo['owner_nickname']),
+        next: UserSingleton().user,
+        id: int.parse(request['idRequest']),
+        state: StateOfObject.REQUESTED
+        )
+    ));
+    return list;
+  }
+
+
+
+
+
+
+
+
+
+  // List<Obj> objectsBuilder({Entity entity, String stateType}){
+  //   List<dynamic> l = new List();
+  //   if(_data is Map){
+  //     l.addAll(_data['UsersObjects']);
+  //     l.addAll(_data['GroupsObjects']);
+  //   }else{
+  //     l = _data;
+  //   }
+ 
+  //   List<Obj> objs = new List();
+  //   l.forEach((element){
+  //     Entity e;
+  //     if(entity == null){
+  //       bool isFromUser = element['idUser'] != null;
+  //       e= isFromUser ? new User(element['idUser'],"") : new Group(element['idGroup'], "");
+  //     }
+  //     objs.add(objectsStateBuilder(entity: entity != null ? entity : e, data: element as Map<String,dynamic>));
+  //   });
+  //   return objs;
+
+  // } 
+
+  // Obj objectsStateBuilder({Entity entity,Map<String,dynamic> objData,String stateType}){
+  //   objData = objData == null ? _data as Map : data; 
+
+  //   if(_responseType == 4){
+  //     int id;
+  //     int amount;
+  //     String name;
+  //     String imagen;
+
+
+  //     if(objData.containsKey("requests")){
+  //       List<dynamic> states = objData['requests'];
+  //       states.forEach((elememt){
+  //         ObjState state = new ObjState(
+  //           state: StateOfObject.REQUESTED,
+  //           actual: ,
+  //            id: element['idRequested']
+  //           );
+  //       });
+  //     }
+
+
+  //   }
+
+
+
+  //   return entity.type  == EntityType.USER ? 
+  //     new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
+  //     new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
+  // }
+
+
+  // Obj objectBuilder({Entity entity,Map<String,dynamic> objData,String stateType}){
+  //   objData = objData == null ? _data as Map : data; 
+
+  //   if(_responseType == 4){
+  //     int id;
+  //     int amount;
+  //     String name;
+  //     String imagen;
+
+
+  //     if(objData.containsKey("requests")){
+
+  //     }
+
+
+  //   }
+
+
+
+  //   return entity.type  == EntityType.USER ? 
+  //     new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
+  //     new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
+  // }
 
 ////-------------GetTopics----------------//////////
   List<String> topicsBuilder(){
