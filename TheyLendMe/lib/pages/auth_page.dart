@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/Utilities/auth.dart';
+
+/*
+//TODO:
+* - use googleAuth, emailAuth, facebookAuth from Utilities/auth.dart
+*/
 
 class AuthPage extends StatefulWidget {
 	// this source is better: https://youtu.be/iYH2jzUM1Nc
@@ -28,7 +34,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack( //TODO: Stack? children with only one Widget..
+      body: Stack(
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

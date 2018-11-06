@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 
-//TODO: ver miembros
-
 class GroupDetails extends StatefulWidget {
   final Group _group;
 
@@ -52,6 +50,18 @@ class GroupDetailsState extends State<GroupDetails> {
               onPressed:(){}, //TODO acción de contactar
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+            )
+          ),
+          Container(
+            constraints: BoxConstraints.expand(
+              height: Theme.of(context).textTheme.display1.fontSize * 1.5,
+            ),
+            padding: const EdgeInsets.all(8.0),
+            child: MaterialButton(
+              height: 42.0,
+              onPressed:(){}, //TODO acción de ver miembros
+              color: Theme.of(context).buttonColor,
+              child: Text('Ver Miembros', style: TextStyle(color: Theme.of(context).accentColor)),
             )
           ),
           MaterialButton(

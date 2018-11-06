@@ -14,6 +14,7 @@ class TheDrawer extends StatefulWidget {
     new DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
     new DrawerItem("Ajustes",      Icons.settings,     "/MySettingsPage"),
     new DrawerItem("TestAuth",      Icons.settings,     "/AuthPage")
+    //TODO: AuthPage to the UserAccountsDrawerHeader
   ];
 
   @override
