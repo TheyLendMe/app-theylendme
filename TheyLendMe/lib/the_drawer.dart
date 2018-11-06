@@ -92,7 +92,6 @@ class _TheDrawerState extends State<TheDrawer> {
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
     // A Navigator is a widget that manages routes
-    //TODO: generalizar esta condición:
     if (widget.drawerItems[index].route=="/")
       Navigator.pop(context);
     else

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:TheyLendMe/Utilities/auth.dart';
 
 /*
@@ -21,9 +23,9 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _iconAnimationController = new AnimationController(
-        vsync: this, duration: new Duration(milliseconds: 500));
-    _iconAnimation = new CurvedAnimation(
+    _iconAnimationController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 500));
+    _iconAnimation = CurvedAnimation(
       parent: _iconAnimationController,
       curve: Curves.bounceOut,
     );
@@ -66,12 +68,18 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                       ),
                       MaterialButton(
                         height: 50.0,
-                        minWidth: 150.0,
+                        minWidth: 240.0,
                         color: Colors.green,
                         splashColor: Colors.teal,
                         textColor: Colors.white,
                         child: Text('Registrarme', style: TextStyle(color: Colors.white)),
                         onPressed: () {},
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                      ),
+                      MaterialButton(
+                        child: googleButton()
                       )
                     ],
                   ),
@@ -83,4 +91,50 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
       )
     );
   }
+}
+
+Widget googleButton() {
+  return FlatButton(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30.0),
+    ),
+    color: Color(0Xffdb3236),
+    onPressed: () {}, //TODO: login(context);
+    child: Container(
+      height: 50.0,
+      width: 215.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(
+              top: 15.0,
+              bottom: 15.0,
+            ),
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  FontAwesomeIcons.google,
+                  color: Colors.white,
+                  size: 20.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                ),
+                Text(
+                  "Identificarme con Google",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
