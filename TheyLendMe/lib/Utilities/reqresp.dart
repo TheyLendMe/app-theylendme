@@ -285,16 +285,18 @@ class ResponsePost{
   List<Obj> myClaimstObjects(Map<String,dynamic> request){
     List<Obj> list = new List();
     Map<String,dynamic> objInfo = request['objectData'];
+    Map<String,dynamic> loanData = request['loanData'];
     list.add(new UserObject(
       int.parse(objInfo['idObject']), 
-      new User(objInfo['owner_id'],objInfo['owner_nickname']), 
+      new User(objInfo['idUser'],objInfo['owner_name']), 
       objInfo['name'],
       image: objInfo['imagen'],
       objState: new ObjState(
-        actual: new User(objInfo['owner_id'],objInfo['owner_nickname']),
-        next: UserSingleton().user,
-        id: int.parse(request['idRequest']),
-        state: StateOfObject.REQUESTED
+        actual: UserSingleton().user,
+        next: new User(objInfo['idUser'],objInfo['owner_nickname']),
+        id: int.parse(request['idClaim']),
+        msg: request['claimMsg'],
+        state: StateOfObject.CLAIMED
         )
     ));
     return list;

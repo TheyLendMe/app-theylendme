@@ -125,7 +125,7 @@ class User extends Entity{
 
 
   @override
-  Future<List<Obj>> getRequests({var context}) async {
+  Future<List<UserObject>> getRequests({var context}) async {
     ResponsePost res = await new RequestPost("getRequestedObjects").dataBuilder(
       userInfo: true,
     ).doRequest(context:context);
@@ -171,7 +171,7 @@ class User extends Entity{
      ResponsePost res = await new RequestPost("getClaimsToUser").dataBuilder(
       userInfo: true,
     ).doRequest(context:context);
-   // return res.objectsUserBuilder(stateType :"requested", mine: true);
+   return res.objectsUserBuilder(stateType :"claimed", mine: true);
   }
 
 
