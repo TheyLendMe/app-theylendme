@@ -30,8 +30,19 @@ class _LoanDetailsState extends State<LoanDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: Image.network(widget._object.image),
-            //TODO: indicador xN de cantidad
+            child: Stack(
+              children:[
+                Image.network(widget._object.image),
+                Positioned(
+                  right: 0.0,
+                  bottom: 0.0,
+                  child: new FloatingActionButton(
+                    child: Text('x2', style: Theme.of(context).textTheme.title),
+                    backgroundColor: Theme.of(context).accentColor,
+                  ),
+                ),
+              ]
+            )
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
