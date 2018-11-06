@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
@@ -8,13 +9,11 @@ import 'package:TheyLendMe/pages/my_settings.dart';
 class TheDrawer extends StatefulWidget {
 
   final drawerItems = [
-    new DrawerItem("Home",         Icons.home,         "/"),
-    new DrawerItem("Mis Objetos",  Icons.folder_open,  "/MyObjectsPage"),
-    new DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
-    new DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
-    new DrawerItem("Ajustes",      Icons.settings,     "/MySettingsPage"),
-    new DrawerItem("TestAuth",      Icons.settings,     "/AuthPage")
-    //TODO: AuthPage to the UserAccountsDrawerHeader
+    DrawerItem("Home",         Icons.home,         "/"),
+    DrawerItem("Mis Objetos",  Icons.folder_open,  "/MyObjectsPage"),
+    DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
+    DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
+    DrawerItem("Ajustes",      Icons.settings,     "/MySettingsPage")
   ];
 
   @override
@@ -22,6 +21,20 @@ class TheDrawer extends StatefulWidget {
 }
 
 class _TheDrawerState extends State<TheDrawer> {
+  bool showUserDetails = false;
+
+    /*Widget _buildUserDetail() {
+      return Container(
+        child: ListView(
+          children: [
+            ListTile(
+              title: Text("User details"),
+              leading: Icon(Icons.info_outline),
+            )
+          ],
+        ),
+      );
+    }*/ //TODO: UserDetail needed?
 
   @override
   Widget build(BuildContext context) {
@@ -33,29 +46,41 @@ class _TheDrawerState extends State<TheDrawer> {
       var d = widget.drawerItems[i];
 
       drawerOptions.add(
-        new ListTile(
-          leading: new Icon(d.icon),
-          title: new Text(d.title),
+        ListTile(
+          leading: Icon(d.icon),
+          title: Text(d.title),
           selected: i == _selectedDrawerIndex,
           onTap: () => _onSelectItem(i),
         )
       );
     }
 
-    return new Drawer(
+    return Drawer(
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
             // Aquí habrá que meter los datos de cada usuario
-            accountName: new Text("John Doe"), accountEmail: new Text("john.doe@gmail.com"),
+            accountName: Text("John Doe"), accountEmail: Text("john.doe@gmail.com"),
+            /*onDetailsPressed: () { //TODO: UserDetail needed?
+              setState(() {
+                showUserDetails = !showUserDetails;
+              });
+            },*/
             // Metiendo imagen de user
-            currentAccountPicture: new CircleAvatar(backgroundImage: NetworkImage('https://http.cat/401')),
+            currentAccountPicture: GestureDetector(
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).accentColor,
+                child: Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor)
+              ),
+              onTap: () => Navigator.of(context).pushNamed("/AuthPage")
+            ),
             decoration: BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage('images/tlm.jpg')
+              image: DecorationImage(
+                image: AssetImage('images/tlm.jpg')
               ),
             )
           ),
+          //Expanded(child: showUserDetails ? _buildUserDetail() : Column(children: drawerOptions)), //TODO: UserDetail needed?
           Column(children: drawerOptions)
         ],
       ),
