@@ -19,12 +19,8 @@ dependencies:
   image_picker:
   validate: ^1.4.0
   path: ^1.6.2
-
-  #PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (1º)
-  #firebase_auth: ^0.5.20
-  #firebase_core: ^0.2.5+1
-  #google_sign_in: ^3.2.1
-
+  image_picker: ^0.4.10
+  font_awesome_flutter: ^8.0.0
 
 dev_dependencies:
   flutter_test:

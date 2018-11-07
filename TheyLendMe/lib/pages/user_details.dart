@@ -50,6 +50,12 @@ class _UserDetailsState extends State<UserDetails> {
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )
+          ),
+          MaterialButton(
+            height: 42.0, //TODO: pegar al borde inferior
+            onPressed:(){},
+            color: Theme.of(context).indicatorColor,
+            child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
           )
         ]
       );

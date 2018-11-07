@@ -52,9 +52,21 @@ class GroupDetailsState extends State<GroupDetails> {
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )
           ),
+          Container(
+            constraints: BoxConstraints.expand(
+              height: Theme.of(context).textTheme.display1.fontSize * 1.5,
+            ),
+            padding: const EdgeInsets.all(8.0),
+            child: MaterialButton(
+              height: 42.0,
+              onPressed:(){}, //TODO acción de ver miembros
+              color: Theme.of(context).buttonColor,
+              child: Text('Ver Miembros', style: TextStyle(color: Theme.of(context).accentColor)),
+            )
+          ),
           MaterialButton(
             height: 42.0, //TODO: pegar al borde inferior
-            onPressed:(){}, //TODO acción de contactar
+            onPressed:(){},
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
           )
