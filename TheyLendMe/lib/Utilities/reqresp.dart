@@ -5,12 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:TheyLendMe/Utilities/errorHandler.dart';
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
 const String endpoint = "http://54.188.52.254/app/";
@@ -302,6 +302,77 @@ class ResponsePost{
     return list;
   }
 
+  List<GroupObject> groupObjectsBuilder({Group group, ObjState objState}){
+    List<dynamic> list = _data;
+    List<GroupObject> obs = new List();
+    list.forEach((object){obs.add(objectBuilder(
+        data:object, 
+        user: false, 
+        group: group, 
+        objState: 
+        objState))
+      ;});
+    return obs;
+    
+  }
+  Obj objectBuilder({Map<String, dynamic> data, bool user = true,ObjState objState ,Group group}){
+      data = data == null ? _data : data;
+      return user ? 
+        new UserObject(1, new User("awda", "awd"), "name") : 
+        new GroupObject(
+          int.parse(data['idObject']), 
+          group,
+           //TODO decirle a victor que me incluya todo el grupo
+          data['name'],
+          image : data['image'],
+          amount: int.parse(data['amount']),
+          objState: objState
+        );
+
+  } 
+
+  List<JoinRequest> joinRequestsBuilder(Group group){
+    List<dynamic> list = _data;
+    List<JoinRequest> joinRequests = new List();
+    list.forEach((request){
+      joinRequests.add(joinRequestBuilder(group,data : request));
+    });
+    return joinRequests;
+  }
+  JoinRequest joinRequestBuilder(Group group,{Map<String, dynamic> data}){
+    data = data == null ? _data : data;
+    User user = userBuilder(data : data['user']);
+    return new JoinRequest(int.parse(data['idRequest']), group, user);
+  }
+
+  List<User> groupMembersBuilder(){
+    List<dynamic> list = _data;
+    List<User> u = new List();
+    list.forEach((userInfo){
+      u.add((userBuilder(
+        data : userInfo['user'], 
+        admin: userInfo['admin'] == "1",
+        idMember: int.parse(userInfo['admin'])
+        ))
+      );
+    });
+    return u;
+  }
+  User userBuilder({Map<String, dynamic> data,int idMember, bool admin}){
+    data = data == null ? _data : data;
+    return new User(
+      data['idUser'], 
+      data['nickname'],
+      email: data['email'],
+      tfno: data['tfno'],
+      info: data['info'],
+      idMember: idMember,
+      admin: admin);
+  }
+
+  List<Obj> requestObjectBuilder({Group group}){
+    
+  }
 
 
 

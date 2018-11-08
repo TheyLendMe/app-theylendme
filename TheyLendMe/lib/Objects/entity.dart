@@ -1,7 +1,7 @@
+import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import 'package:TheyLendMe/Utilities/errorHandler.dart';
@@ -56,9 +56,10 @@ abstract class Entity{
 
 class User extends Entity{
   int idMember;
+  bool admin = false;
   ///You may need the email and the idMember (if you are searching for a group)
-  User(String idEntity, String name, {this.idMember,String email,String tfno,String info, String img}) : 
-  super(EntityType.USER, idEntity, name, tfno : tfno, info : info, img : img, email : email);
+  User(String idEntity, String name, {this.idMember,String email,String tfno,String info, String img, this.admin}) : 
+  super(EntityType.USER, idEntity, name, tfno : tfno, info : info, img : img, email : email,);
 
   @override
   Future addObject(String name, int amount,{String info,File img, var context}) async{
@@ -195,18 +196,22 @@ class Group extends Entity{
 
 
   @override
-  Future addObject(String name, int amount,{var context}) {
-    new RequestPost("createGObject").dataBuilder(
+  Future addObject(String name, int amount,{var context}) async{
+    await new RequestPost("createGObject").dataBuilder(
         idGroup: this.idEntity,
         userInfo: true,
- ///TODO Poner el id del actual usuario
         name: name 
     ).doRequest(context: context);
   }
 
   @override
-  Future<List<Obj>> getRequests({var context}) {
-    // TODO: implement getRequest
+  Future<List<Obj>> getRequests({var context}) async{
+     await new RequestPost("getGroupRequests").dataBuilder(
+        idGroup: this.idEntity,
+        userInfo: true,
+    ).doRequest(context: context);
+    return null;
+    
   }
 
   ///TODO Falta
@@ -226,7 +231,6 @@ class Group extends Entity{
   Future addAdmin(User u,{var context}) async{
     ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
       userInfo: true,
-//UserSingleton.singleton.user.idEntity,
       idMemeber: u.idMember,
       idGroup: this.idEntity,
     ).doRequest(context: context);
@@ -235,7 +239,6 @@ class Group extends Entity{
   Future delGroup({var context}) async{
     ResponsePost res = await new RequestPost("deleteGroup").dataBuilder(
       userInfo: true,
-//UserSingleton.singleton.user.idEntity,
       idGroup: this.idEntity,
     ).doRequest(context: context);
   }
@@ -262,12 +265,11 @@ class Group extends Entity{
 
   @override
   Future<List<Obj>> getObjects({var context}) async{
-    ///TODO change link 
-    ResponsePost res = await new RequestPost("getObjectsByUser").dataBuilder(
+    ResponsePost res = await new RequestPost("getGroupObjects").dataBuilder(
         idGroup: this.idEntity,
+        userInfo: true
     ).doRequest(context: context);
-    //return res.objectsBuilder(entity : this);
-    return null;
+    return res.groupObjectsBuilder(group: this);
   }
 
   @override
@@ -293,6 +295,30 @@ class Group extends Entity{
     // TODO: implement getLents
     return null;
   }
+
+  Future<List<JoinRequest>> getJoinRequest({var context})async {
+    ResponsePost response = await new RequestPost("getJoinRequests").dataBuilder(
+        idGroup: this.idEntity,
+        userInfo: true,
+        name: name 
+    ).doRequest(context: context);
+    return response.joinRequestsBuilder(this);
+  }
+
+  Future<List<User>> getGroupMembers({var context}) async{
+    ResponsePost response = await new RequestPost("getGroupMembers").dataBuilder(
+        idGroup: this.idEntity,
+        userInfo: true,
+        name: name 
+    ).doRequest(context: context);
+    return response.groupMembersBuilder();
+  }
+
+
+
+
+
+
 }
 
 
