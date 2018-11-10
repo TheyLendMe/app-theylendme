@@ -24,18 +24,18 @@ class _CreateObjectState extends State<CreateObject> {
             decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'Nombre del objeto')),
-          /*new Container(
+          new Container(
             child: new Center(
               child: SaleONoLaImagen(),
             )
-          ),*/ //FIXME
+          ),//FIXME
           new TextField(
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'Descripción del objeto'
             )
           ),
-          new FlatButton(
+          new SimpleDialogOption(
             child: new Text('Crear'),
           onPressed: (){
             //Aqui mandamos cosas a la base de datos
@@ -59,20 +59,18 @@ class CameraApp extends StatefulWidget{
   CameraAppState createState() => CameraAppState();
 }
  class CameraAppState extends State<CameraApp> {
-  File galleryFile;
-  File cameraFile;
-  galleryPicker() async{
+   File file;
+  void galleryPicker() async{
     print("GalleryPick llamado");
-    galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if(galleryFile != null){
+    file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if(file != null){
       setState(() {});
     }
   }
-  cameraPicker() async{
+  void cameraPicker() async{
     print("CameraPick llamado");
-    cameraFile = await ImagePicker.pickImage(source: ImageSource.camera);
-    displaySelectedFile(cameraFile);
-    if(cameraFile != null){
+    file = await ImagePicker.pickImage(source: ImageSource.camera);
+    if(file != null){
       setState(() {});
     }
   }
@@ -85,35 +83,33 @@ class CameraApp extends StatefulWidget{
   }*/
   @override
   Widget build(BuildContext context){
-     return new Scaffold(
-      body: new Builder(
-        builder: (BuildContext context) {
-          return new Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              new RaisedButton(
-                child: new Text('Select Image from Gallery'),
-                onPressed: galleryPicker(),
-              ),
-              new RaisedButton(
-                child: new Text('Select Image from Camera'),
-                onPressed: cameraPicker(),
-              ),
-              displaySelectedFile(galleryFile),
-              displaySelectedFile(cameraFile)
-            ],
-          );
-        },
-      ),
-    );
+     return new Container(
+       child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            new RaisedButton(
+              child: new Text('Select Image from Gallery'),
+              onPressed: galleryPicker,
+            ),
+            new RaisedButton(
+              child: new Text('Select Image from Camera'),
+              onPressed: cameraPicker,
+            ),
+            displaySelectedFile(),
+          ],
+        ),
+      );
   }
-   Widget displaySelectedFile(File file){
+   
+  Widget displaySelectedFile(){
     return new SizedBox(
       height: 70.0,
       width: 70.0,
-      child: file == null
+      child: new Container(
+        child: file == null
           ? new Text('Nada seleccionado')
           : new Image.file(file),
+      ),
     );
   }
 }
