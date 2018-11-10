@@ -38,6 +38,7 @@ abstract class Entity{
 
 
 
+
   ///Add an object to a group or to a user.
   Future addObject(String name, int amount,{var context});
   ///Update info for the user ----> only for the actual user UserSingleton.user!!
@@ -127,24 +128,26 @@ class User extends Entity{
 
   @override
   Future<List<UserObject>> getRequests({var context}) async {
-    ResponsePost res = await new RequestPost("getRequestedObjects").dataBuilder(
+    ResponsePost res = await new RequestPost("getUserRequests").dataBuilder(
       userInfo: true,
     ).doRequest(context:context);
-    return res.objectsUserBuilder(stateType: "requested");
+    return res.requestsUserObjectBuilder(mine : false);
   }
 
   @override
   Future<List<Obj>> getClaims({var context}) async{
-    ResponsePost res = await new RequestPost("getClaimsByUser").dataBuilder(
+    ResponsePost res = await new RequestPost("getUserClaims").dataBuilder(
       userInfo: true,
     ).doRequest(context:context);
-    return res.objectsUserBuilder(stateType: "claims");
+    return res.claimsUserObjectBuilder(mine : true);
   }
 
   @override
-  Future<List<Obj>> getLoans({var context}) {
-    // TODO: implement getLoans
-    return null;
+  Future<List<Obj>> getLoans({var context}) async{
+    ResponsePost res = await new RequestPost("getUserLoans").dataBuilder(
+      userInfo: true,
+    ).doRequest(context:context);
+    return res.loansUserObjectBuilder(mine : true);
   }
 
   @override
@@ -160,21 +163,29 @@ class User extends Entity{
   }
 
 
-  Future<List<Obj>> getMyRequests({var context}) async{
-     ResponsePost res = await new RequestPost("getObjectsRequestedByUser").dataBuilder(
+  Future<List<Obj>> getRequestsByMe({var context}) async{
+    ResponsePost res = await new RequestPost("getUserRequests").dataBuilder(
       userInfo: true,
     ).doRequest(context:context);
-    return res.objectsUserBuilder(stateType :"requested", mine: true);
+    return res.requestsUserObjectBuilder(mine : true);
   }
   
 
-  Future<List<Obj>> getMyClaims({var context}) async{
-     ResponsePost res = await new RequestPost("getClaimsToUser").dataBuilder(
+  Future<List<Obj>> getClaimsByMe({var context}) async{
+    ResponsePost res = await new RequestPost("getUserClaims").dataBuilder(
       userInfo: true,
     ).doRequest(context:context);
-   return res.objectsUserBuilder(stateType :"claimed", mine: true);
+    return res.claimsUserObjectBuilder(mine : false);
   }
 
+
+  @override
+  Future<List<Obj>> getLoansByMe({var context}) async{
+    ResponsePost res = await new RequestPost("getUserLoans").dataBuilder(
+      userInfo: true,
+    ).doRequest(context:context);
+    return res.loansUserObjectBuilder(mine : false);
+  }
 
 }
 
@@ -203,15 +214,22 @@ class Group extends Entity{
         name: name 
     ).doRequest(context: context);
   }
-
+  ///Las que nos hacen
   @override
   Future<List<Obj>> getRequests({var context}) async{
-     await new RequestPost("getGroupRequests").dataBuilder(
+    ResponsePost responsePost =await new RequestPost("getGroupRequests").dataBuilder(
         idGroup: this.idEntity,
         userInfo: true,
     ).doRequest(context: context);
-    return null;
-    
+    return responsePost.requestsGroupObjectBuilder(this, mine: false);
+  }
+  ///Las que he hecho
+  Future<List<Obj>> getRequestsByMe({var context}) async{
+    ResponsePost responsePost =await new RequestPost("getGroupRequests").dataBuilder(
+        idGroup: this.idEntity,
+        userInfo: true,
+    ).doRequest(context: context);
+    return responsePost.requestsGroupObjectBuilder(this, mine: true);
   }
 
   ///TODO Falta

@@ -213,6 +213,7 @@ class ResponsePost{
       
   }
 
+
 ///TODO falta incluir el date
   List<Obj> requestObjects(Map<String,dynamic> requestsInfo){
     StateOfObject stateOfObject = StateOfObject.REQUESTED;
@@ -307,7 +308,7 @@ class ResponsePost{
     List<GroupObject> obs = new List();
     list.forEach((object){obs.add(objectBuilder(
         data:object, 
-        user: false, 
+        forUser: false, 
         group: group, 
         objState: 
         objState))
@@ -315,16 +316,24 @@ class ResponsePost{
     return obs;
     
   }
-  Obj objectBuilder({Map<String, dynamic> data, bool user = true,ObjState objState ,Group group}){
+  Obj objectBuilder({Map<String, dynamic> data, bool forUser = true,ObjState objState ,Group group, User user}){
       data = data == null ? _data : data;
-      return user ? 
-        new UserObject(1, new User("awda", "awd"), "name") : 
+      return forUser ? 
+        new UserObject(
+          int.parse(data['idObject']), 
+          data['owner'] != null ? userBuilder(data :data['owner']) : UserSingleton().user, 
+          data['name'],
+          amount: int.parse(data['amount']),
+          image : data['imagen'],
+          objState: objState
+          ) 
+          : 
         new GroupObject(
           int.parse(data['idObject']), 
           group,
            //TODO decirle a victor que me incluya todo el grupo
           data['name'],
-          image : data['image'],
+          image : data['imagen'],
           amount: int.parse(data['amount']),
           objState: objState
         );
@@ -359,6 +368,7 @@ class ResponsePost{
     return u;
   }
   User userBuilder({Map<String, dynamic> data,int idMember, bool admin}){
+    if(data == null){return null;}
     data = data == null ? _data : data;
     return new User(
       data['idUser'], 
@@ -370,94 +380,148 @@ class ResponsePost{
       admin: admin);
   }
 
-  List<Obj> requestObjectBuilder({Group group}){
-    
+  Group groupBuilder({Map<String, dynamic> data}){
+    if(data == null){return null;}
+    data = data == null ? _data : data;
+    return new Group(
+      int.parse(data['idGroup']), 
+      data['groupName'],
+      email: data['email'],
+      tfno: data['tfno'],
+      info: data['info'],
+      autoloan:  "1" == data['autoloan'],
+      private: "1" == data['private'],
+    );
+  }
+  
+  List<UserObject> requestsUserObjectBuilder({bool mine = null}){
+    if(mine == null){
+      List<UserObject> list = new List();
+      list.addAll(_requestsUserObjectBuilder(_data['toUser']));
+      list.addAll(_requestsUserObjectBuilder(_data['byUser']));
+      return list;
+    }else{
+      return mine ? _requestsUserObjectBuilder(_data['byUser']) : _requestsUserObjectBuilder(_data['toUser']);
+    }
   }
 
+  List<UserObject> _requestsUserObjectBuilder(List<dynamic> requests){
+    List<UserObject> requestsList= new List();
+    requests.forEach((request){
+      ObjState state = new ObjState(
+        id: int.parse(request['idRequest']),
+        state: StateOfObject.REQUESTED,
+        amount: int.parse(request['amount']),
+        msg: request['requestMsg'],
+        actual: userBuilder(data : request['object']['owner']),
+        next: userBuilder(data : request['requester']),
+        date: request['date'],
+      );
+      requestsList.add(objectBuilder(data: request['object'], objState: state));
+    });
+    return requestsList;
+  }
 
-
-
-
-
-
-
-  // List<Obj> objectsBuilder({Entity entity, String stateType}){
-  //   List<dynamic> l = new List();
-  //   if(_data is Map){
-  //     l.addAll(_data['UsersObjects']);
-  //     l.addAll(_data['GroupsObjects']);
-  //   }else{
-  //     l = _data;
-  //   }
  
-  //   List<Obj> objs = new List();
-  //   l.forEach((element){
-  //     Entity e;
-  //     if(entity == null){
-  //       bool isFromUser = element['idUser'] != null;
-  //       e= isFromUser ? new User(element['idUser'],"") : new Group(element['idGroup'], "");
-  //     }
-  //     objs.add(objectsStateBuilder(entity: entity != null ? entity : e, data: element as Map<String,dynamic>));
-  //   });
-  //   return objs;
+  List<GroupObject> requestsGroupObjectBuilder(Group group,{bool mine = null}){
+    List<GroupObject> list = new List();
+    if(mine == null) {
+      list.addAll(_requestsGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['toOthersGroups'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
+    }
+    if(mine) {
+      list.addAll(_requestsGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['toOthersGroups'], group: group));
+    
+    }
+    if(!mine) {
+      list.addAll(_requestsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
+    }
+    return list;
+  }
 
-  // } 
+  List<GroupObject> _requestsGroupObjectBuilder(List<dynamic> requests, {Group group, bool notFromAGroup = false}){
+    List<GroupObject> requestsList= new List();
+    requests.forEach((request){
+      Group groupTarget = groupBuilder(data : request['groupTarget']);
+      Group requesterGroup = groupBuilder(data : request['requesterGroup']);
+      GroupObjState state = new GroupObjState(
+        id: int.parse(request['idRequest']),
+        state: StateOfObject.REQUESTED,
+        amount: int.parse(request['amount']),
+        msg: request['requestMsg'],
+        actual: groupTarget != null ? groupTarget  : group,
+        next: requesterGroup != null ? requesterGroup  : group,
+        date: request['date'],
+        //actualUser:userBuilder(data : request['user']) ,
+        nextUser: userBuilder(data : request['requester_user']), ///FIXME
+        notFromAGroup: notFromAGroup
+      );
+      requestsList.add(objectBuilder(data: request['object'], objState: state, forUser: false));
+    });
+    return requestsList;
+  }
 
-  // Obj objectsStateBuilder({Entity entity,Map<String,dynamic> objData,String stateType}){
-  //   objData = objData == null ? _data as Map : data; 
+  List<UserObject> claimsUserObjectBuilder({bool mine}){
+    if(mine == null){
+      List<UserObject> list = new List();
+      list.addAll(_claimsUserObjectBuilder(_data['toUser']));
+      list.addAll(_claimsUserObjectBuilder(_data['byUser']));
+    }else{
+      return mine ? _claimsUserObjectBuilder(_data['byUser']) : _claimsUserObjectBuilder(_data['toUser']);
+    }
+  }
 
-  //   if(_responseType == 4){
-  //     int id;
-  //     int amount;
-  //     String name;
-  //     String imagen;
+  List<UserObject> _claimsUserObjectBuilder(List<dynamic> claims){
+    List<UserObject> claimsList= new List();
+    claims.forEach((claim){
+      ObjState state = new ObjState(
+        state: StateOfObject.CLAIMED,
+        amount: int.parse(claim['loan']['amount']),
+        msg: claim['claimMsg'],
+        id: int.parse(claim['idClaim']),
+        actual: userBuilder(data : claim['loan']['keeper']),
+        next: userBuilder(data : claim['loan']['object']['owner']),
+        fromID: int.parse(claim['loan']['idLoan'])
+      );
+      claimsList.add(objectBuilder(data: claim['loan']['object'], objState: state));
+    });
+    return claimsList;
+  }
+
+  List<UserObject> loansUserObjectBuilder({bool mine}){
+    if(mine == null){
+      List<UserObject> list = new List();
+      list.addAll(_loansUserObjectBuilder(_data['toUser']));
+      list.addAll(_loansUserObjectBuilder(_data['byUser']));
+    }else{
+      return mine ? _loansUserObjectBuilder(_data['byUser']) : _loansUserObjectBuilder(_data['toUser']);
+    }
+  }
+
+  List<UserObject> _loansUserObjectBuilder(List<dynamic> loans){
+    List<UserObject> loansList= new List();
+    loans.forEach((loan){
+      ObjState state = new ObjState(
+        state: StateOfObject.LENDED,
+        amount: int.parse(loan['amount']),
+        //date: loan['date'],
+        msg: loan['loanMsg'],
+        id: int.parse(loan['idLoan']),
+        actual: userBuilder(data : loan['keeper']),
+        next: userBuilder(data : loan['object']['owner']),
+      );
+      loansList.add(objectBuilder(data: loan['object'], objState: state));
+    });
+    return loansList;
+  }
+  
 
 
-  //     if(objData.containsKey("requests")){
-  //       List<dynamic> states = objData['requests'];
-  //       states.forEach((elememt){
-  //         ObjState state = new ObjState(
-  //           state: StateOfObject.REQUESTED,
-  //           actual: ,
-  //            id: element['idRequested']
-  //           );
-  //       });
-  //     }
 
-
-  //   }
-
-
-
-  //   return entity.type  == EntityType.USER ? 
-  //     new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
-  //     new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
-  // }
-
-
-  // Obj objectBuilder({Entity entity,Map<String,dynamic> objData,String stateType}){
-  //   objData = objData == null ? _data as Map : data; 
-
-  //   if(_responseType == 4){
-  //     int id;
-  //     int amount;
-  //     String name;
-  //     String imagen;
-
-
-  //     if(objData.containsKey("requests")){
-
-  //     }
-
-
-  //   }
-
-
-
-  //   return entity.type  == EntityType.USER ? 
-  //     new UserObject(int.parse(data["idObject"]),entity, data["name"]) :
-  //     new GroupObject(int.parse(data["idObject"]),entity, data["name"]);
-  // }
 
 ////-------------GetTopics----------------//////////
   List<String> topicsBuilder(){

@@ -11,6 +11,7 @@ abstract class Obj{
   int _amount;
   final Entity owner;
   ObjState _objState;
+  DateTime _date;
   
   ///TODO pensar mejor el tema de las imagenes. Deberia de ser una lista???
   String _name, _desc, _img;
@@ -20,12 +21,13 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState, int amount = 1}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState, int amount = 1, DateTime date}){
     this._name = name;
     this._desc = desc;
     this._img = image;
     this._amount = amount;
     this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;
+    this._date = date;
   }
 
 
@@ -43,12 +45,16 @@ abstract class Obj{
   String get name => _name;
   String get desc => _desc;
   String get image => _img;
+  DateTime get date => _date;
   int get amount => _amount;
   int get idObject => _idObject;
+  ObjState get objState => _objState;
   ObjType get type => _type;
+  set date(DateTime date) => _date = date;
   set name(String name) => this._name = name;
   set desc(String desc) => this._desc = desc;
   set amount(int amoun) => this._amount = amount;
+  set objState(ObjState objState) => _objState = objState;
   ///TODO pensar mejor este tema
   set image(String image) => this._name = image;
 
@@ -64,8 +70,8 @@ abstract class Obj{
 
 class UserObject extends Obj{
   ///Constructor
-  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount})
-  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount);
+  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, DateTime date})
+  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount, date : date);
   @override
   Future lendObj({int idRequest, var context}) {
     new RequestPost("lendObject").dataBuilder(
@@ -126,9 +132,10 @@ class UserObject extends Obj{
 }
 
 class GroupObject extends Obj{
+  
   //Constructor
-  GroupObject(int idObject, Entity owner, String name, {String desc, ObjState objState, int amount, String image}) 
-  : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image);
+  GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, DateTime date}) 
+  : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date);
   @override
   Future lend(int idRequest,{var context}) async {
     new RequestPost("lendGObject").dataBuilder(
@@ -185,6 +192,10 @@ class GroupObject extends Obj{
       amount: amount,
     ).doRequest(context : context);
   }
+  @override
+  GroupObjState get objState => _objState;
+
+
 }
 
   enum ObjType {
