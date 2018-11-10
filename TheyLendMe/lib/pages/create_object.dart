@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 /*
-//FIXME
+//TODO: adaptar el diseño al formato que teníamos pensado
 */
 
 class CreateObject extends StatefulWidget {
@@ -28,7 +28,7 @@ class _CreateObjectState extends State<CreateObject> {
             child: new Center(
               child: SaleONoLaImagen(),
             )
-          ),//FIXME
+          ),
           new TextField(
             decoration: InputDecoration(
               border: InputBorder.none,
