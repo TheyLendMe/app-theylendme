@@ -492,6 +492,52 @@ class ResponsePost{
     return claimsList;
   }
 
+
+
+  List<GroupObject> claimsGroupObjectBuilder(Group group,{bool mine = null}){
+    List<GroupObject> list = new List();
+    if(mine == null) {
+      list.addAll(_claimsGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_claimsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
+      list.addAll(_claimsGroupObjectBuilder(_data['toOthersGroups'], group: group));
+      list.addAll(_claimsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
+    }
+    if(mine) {
+      list.addAll(_claimsGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_claimsGroupObjectBuilder(_data['toOthersGroups'], group: group));
+      list.addAll(_claimsGroupObjectBuilder(_data['toOthersUsers'], group: group, notFromAGroup: true));
+    
+    }
+    if(!mine) {
+      list.addAll(_claimsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
+
+    }
+    return list;
+  }
+
+  List<GroupObject> _claimsGroupObjectBuilder(List<dynamic> claims, {Group group, bool notFromAGroup = false}){
+    List<GroupObject> claimsList = new List();
+    claims.forEach((claim){
+      Group claimGroup = groupBuilder(data : claim['claimingGroup']);
+      Group keepGroup = groupBuilder(data : claim['keeperGroup']);
+      User keepUser = userBuilder(data : claim['targetUser']);
+      GroupObjState state = new GroupObjState(
+        id: int.parse(claim['idClaim']),
+        state: StateOfObject.CLAIMED,
+       // amount: int.parse(claim['amount']),
+        msg: claim['claimMsg'],
+        actual: keepGroup != null ? keepGroup  : group,
+        next: claimGroup != null ? claimGroup  : group,
+        date: claim['claimDate'],
+        //actualUser:userBuilder(data : claim['user']) ,
+        actualUser: keepUser == null ? userBuilder(data : claim['keeper_user']) : keepUser,
+        notFromAGroup: notFromAGroup
+      );
+      claimsList.add(objectBuilder(data: claim['object'], objState: state, forUser: false));
+    });
+    return claimsList;
+  }
+
   List<UserObject> loansUserObjectBuilder({bool mine}){
     if(mine == null){
       List<UserObject> list = new List();
@@ -519,6 +565,50 @@ class ResponsePost{
     return loansList;
   }
   
+
+    List<GroupObject> loansGroupObjectBuilder(Group group,{bool mine = null}){
+    List<GroupObject> list = new List();
+    if(mine == null) {
+      list.addAll(_loansGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_loansGroupObjectBuilder(_data['fromOthersGroups'], group: group));
+      list.addAll(_loansGroupObjectBuilder(_data['toOthersGroups'], group: group));
+      list.addAll(_loansGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
+    }
+    if(mine) {
+      list.addAll(_loansGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_loansGroupObjectBuilder(_data['toOthersGroups'], group: group));
+      list.addAll(_loansGroupObjectBuilder(_data['toOthersUsers'], group: group, notFromAGroup: true));
+    
+    }
+    if(!mine) {
+      list.addAll(_loansGroupObjectBuilder(_data['fromOthersGroups'], group: group));
+
+    }
+    return list;
+  }
+
+  List<GroupObject> _loansGroupObjectBuilder(List<dynamic> claims, {Group group, bool notFromAGroup = false}){
+    List<GroupObject> loanssList = new List();
+    claims.forEach((loan){
+      Group ownerGroup = groupBuilder(data : loan['ownerGroup']);
+      Group keepGroup = groupBuilder(data : loan['keeperGroup']);
+      User keepUser = userBuilder(data : loan['targetUser']);
+      GroupObjState state = new GroupObjState(
+        id: int.parse(loan['idLoan']),
+        state: StateOfObject.LENDED,
+        amount: int.parse(loan['amount']),
+    
+        actual: keepGroup != null ? keepGroup  : group,
+        next: ownerGroup != null ? ownerGroup  : group,
+        date: loan['date'],
+        //actualUser:userBuilder(data : loan['user']) ,
+        actualUser: keepUser == null ? userBuilder(data : loan['keeper_user']) : keepUser,
+        notFromAGroup: notFromAGroup
+      );
+      loanssList.add(objectBuilder(data: loan['object'], objState: state, forUser: false));
+    });
+    return loanssList;
+  }
 
 
 

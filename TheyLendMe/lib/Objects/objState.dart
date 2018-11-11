@@ -65,11 +65,14 @@ class GroupObjState extends ObjState{
   User get actualUser => _actualUser;
   User get nextUser => _nextUser;
 
+
   set actualUser(User actualUser) => _actualUser = actualUser;
   set nextUser(User nextUser) => _nextUser = nextUser;
 
+  bool intraGroup(){return actual.idEntity == next.idEntity;}
+  bool notFromGroup(){return (_nextUser != null && next == null) || (_actualUser != null && actual == null);}
 }
 
 enum StateOfObject{
-  DEFAULT, LENDED, REQUESTED, LENT, BORROWED, CLAIMED, 
+  DEFAULT, LENDED, REQUESTED, CLAIMED, 
 }
