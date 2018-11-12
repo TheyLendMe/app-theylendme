@@ -7,6 +7,20 @@ import 'package:image_picker/image_picker.dart';
 //WIP: adaptar el diseño al formato que teníamos pensado
 */
 
+/*
+Widget displaySelectedFile(){
+  return new SizedBox(
+    height: 70.0,
+    width: 70.0,
+    child: new Container(
+      child: file == null
+        ? new Text('Nada seleccionado')
+        : new Image.file(file),
+    ),
+  );
+}
+*/
+
 class CreateObject extends StatefulWidget {
   CreateObject();
 
@@ -15,6 +29,22 @@ class CreateObject extends StatefulWidget {
 }
 
 class _CreateObjectState extends State<CreateObject> {
+  File file;
+  void galleryPicker() async{
+    print("GalleryPick llamado");
+    file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if(file != null){
+      setState(() {});
+    }
+  }
+  void cameraPicker() async{
+    print("CameraPick llamado");
+    file = await ImagePicker.pickImage(source: ImageSource.camera);
+    if(file != null){
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //return SizedOverflowBox( size: Size(300,100),
@@ -25,23 +55,25 @@ class _CreateObjectState extends State<CreateObject> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: new Icon(Icons.close),
+              icon: Icon(Icons.close),
               onPressed: () => Navigator.of(context).pop(null),
             ),
             Text('Crear un objeto', style: Theme.of(context).textTheme.title),
             SizedBox( width: 130, height: 130,
-              child: Container(
+              child: MaterialButton(
                 color: Theme.of(context).accentColor,
-                child: new Icon(Icons.camera_alt)
+                child: Icon(Icons.photo_camera),
+                onPressed: cameraPicker
               )
-            )
+            ),
+            //TODO: displaySelectedFile() //better to show the pic
           ]
         ), // end Row
-        new Container(
+        /*new Container(
           child: new Center(
             child: SaleONoLaImagen(),
           )
-        ),
+        ),*/
         new TextFormField(
           decoration: InputDecoration(
             hintText: 'Escribe el nombre del objeto'),
@@ -74,89 +106,18 @@ class _CreateObjectState extends State<CreateObject> {
   }
 }
 
-String _validateName(String value) {
-  try {
-    //Validate.isEmail(value);
-    //TODO: validar nombres
-  } catch (e) {
-    return 'Nombre no válido';
+/*
+class FormFieldValidator {
+  static String validate(String value, String message) {
+    return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(value) ? null : message;
   }
-  return '';
+}
+*/
+
+String _validateName(String value) {
+  return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(value) ? null : 'Nombre no válido';
 }
 
 String _validateDescription(String value) {
-  try {
-    //Validate.isEmail(value);
-    //TODO: validar descripciones
-  } catch (e) {
-    return 'Descripción no válida';
-  }
-  return '';
-}
-
-// Elegir imagen
- class SaleONoLaImagen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new CameraApp();
-  }
-}
-class CameraApp extends StatefulWidget{
-  @override
-  CameraAppState createState() => CameraAppState();
-}
- class CameraAppState extends State<CameraApp> {
-   File file;
-  void galleryPicker() async{
-    print("GalleryPick llamado");
-    file = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if(file != null){
-      setState(() {});
-    }
-  }
-  void cameraPicker() async{
-    print("CameraPick llamado");
-    file = await ImagePicker.pickImage(source: ImageSource.camera);
-    if(file != null){
-      setState(() {});
-    }
-  }
-  /*@override
-  Widget build(BuildContext context) {
-    return new FloatingActionButton(
-      child: new Icon(Icons.photo_camera),
-      onPressed: cameraPicker(),
-    );
-  }*/
-  @override
-  Widget build(BuildContext context){
-     return new Container(
-       child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            new RaisedButton(
-              child: new Text('Select Image from Gallery'),
-              onPressed: galleryPicker,
-            ),
-            new RaisedButton(
-              child: new Text('Select Image from Camera'),
-              onPressed: cameraPicker,
-            ),
-            displaySelectedFile(),
-          ],
-        ),
-      );
-  }
-   
-  Widget displaySelectedFile(){
-    return new SizedBox(
-      height: 70.0,
-      width: 70.0,
-      child: new Container(
-        child: file == null
-          ? new Text('Nada seleccionado')
-          : new Image.file(file),
-      ),
-    );
-  }
+  return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(value) ? null : 'Descripción no válida';
 }
