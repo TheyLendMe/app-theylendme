@@ -31,7 +31,7 @@ void pruebas(BuildContext context) async {
     //UserSingleton().refreshUser();
     // var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     // UserSingleton().user.addObject("Prueba de imagen", 1, img: image, info: "Esto es una prueba de imagen",context: context);
-    UserSingleton().user.getRequests(context: context);
+    //UserSingleton().user.getRequests(context: context);
 }
 
   // This widget is the root of your application.

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 /*
-//TODO: adaptar el diseño al formato que teníamos pensado
+//WIP: adaptar el diseño al formato que teníamos pensado
 */
 
 class CreateObject extends StatefulWidget {
@@ -15,37 +15,84 @@ class CreateObject extends StatefulWidget {
 }
 
 class _CreateObjectState extends State<CreateObject> {
-    @override
-    Widget build(BuildContext context) {
-      return SimpleDialog(
-        title: new Text('Crea tu objeto'),
-        children: <Widget>[
-          new TextField(
-            decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Nombre del objeto')),
-          new Container(
-            child: new Center(
-              child: SaleONoLaImagen(),
+  @override
+  Widget build(BuildContext context) {
+    //return SizedOverflowBox( size: Size(300,100),
+    return OverflowBox( minHeight: 300, minWidth: 100,
+    child:  SimpleDialog(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: new Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(null),
+            ),
+            Text('Crear un objeto', style: Theme.of(context).textTheme.title),
+            SizedBox( width: 130, height: 130,
+              child: Container(
+                color: Theme.of(context).accentColor,
+                child: new Icon(Icons.camera_alt)
+              )
             )
+          ]
+        ), // end Row
+        new Container(
+          child: new Center(
+            child: SaleONoLaImagen(),
+          )
+        ),
+        new TextFormField(
+          decoration: InputDecoration(
+            hintText: 'Escribe el nombre del objeto'),
+          style: Theme.of(context).textTheme.subtitle,
+          validator: _validateName,
+        ),
+        new TextFormField(
+          decoration: InputDecoration(
+            hintText: 'Escribe una descripción del objeto'),
+          style: Theme.of(context).textTheme.subtitle,
+          validator: _validateDescription,
+        ),
+        //TODO: opción: [-] cantidad [+]
+        new Container(
+          constraints: BoxConstraints.expand(
+            height: Theme.of(context).textTheme.display1.fontSize * 1.5,
           ),
-          new TextField(
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: 'Descripción del objeto'
-            )
-          ),
-          new SimpleDialogOption(
-            child: new Text('Crear'),
-          onPressed: (){
-            //Aqui mandamos cosas a la base de datos
-          Navigator.of(context).pushNamed('/MyObjectsPage');
-          })
-        ],
-      );
-    }
+          padding: const EdgeInsets.all(8.0),
+          child: MaterialButton(
+            height: 42.0,
+            onPressed:(){ //Aquí mandamos cosas a la base de datos
+              Navigator.of(context).pushNamed('/MyObjectsPage');
+            },
+            color: Theme.of(context).buttonColor,
+            child: Text('Crear', style: TextStyle(color: Theme.of(context).accentColor)),
+          )
+        )
+      ]
+    ));
+  }
 }
 
+String _validateName(String value) {
+  try {
+    //Validate.isEmail(value);
+    //TODO: validar nombres
+  } catch (e) {
+    return 'Nombre no válido';
+  }
+  return '';
+}
+
+String _validateDescription(String value) {
+  try {
+    //Validate.isEmail(value);
+    //TODO: validar descripciones
+  } catch (e) {
+    return 'Descripción no válida';
+  }
+  return '';
+}
 
 // Elegir imagen
  class SaleONoLaImagen extends StatelessWidget {
