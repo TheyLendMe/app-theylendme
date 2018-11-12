@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/loan_details.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/objState.dart';
+import 'package:TheyLendMe/Objects/entity.dart'; // provisional
+
+/*
+//TODO:
+* - Complete Dismissible behaviour
+*/
+
 
 class MyLoansPage extends StatefulWidget {
     @override
@@ -16,8 +26,8 @@ class _MyLoansPageState extends State<MyLoansPage> {
           title: const Text('Mis Préstamos'),
         ),
       body: ListView.builder( //ListView de ejemplo:
-        itemBuilder: (BuildContext context, int index) => LoanItem(loans[index]),
-        itemCount: loans.length
+        itemBuilder: (BuildContext context, int index) => LoanItem(loanObjects[index]),
+        itemCount: loanObjects.length
       )
     );
   }
@@ -26,8 +36,8 @@ class _MyLoansPageState extends State<MyLoansPage> {
 // Displays one Loan.
 class LoanItem extends StatelessWidget {
 
-  const LoanItem(this.loan);
-  final Loan loan;
+  const LoanItem(this.object);
+  final Obj object;
 
   @override
   Widget build(BuildContext context) {
@@ -36,29 +46,29 @@ class LoanItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return LoanDetails(loan.img);
+            return LoanDetails(object);
           }
         );
       },
       child: Dismissible(
-        key: new Key(loan.name),
+        key: new Key(object.name),
         background: new Container(
-          color: (loan.state=="Prestado"
+          color: (object.objState.state==StateOfObject.LENT
             ? Colors.green
             : Colors.blue
           ),
           child: new Row(
             children: [new Container(
-              child: (loan.state=="Prestado"
+              child: (object.objState.state==StateOfObject.LENT
                 ? new Text("Marcar\ncomo\nDevuelto")
                 : new Text("Descartar")
               ),
               padding: EdgeInsets.only(left: 4.0),
             )]
           ) //Row
-        ), //Container
+        ), //background Container
         secondaryBackground: new Container(
-          color: (loan.state=="Prestado"
+          color: (object.objState.state==StateOfObject.LENT
             ? Colors.red
             : Colors.blue
           ),
@@ -67,19 +77,19 @@ class LoanItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [new Container(
               //child: new Text("Solicitar"),
-              child: (loan.state=="Prestado"
+              child: (object.objState.state==StateOfObject.LENT
                 ? new Text("Solicitar")
                 : new Text("")
               ),
               padding: EdgeInsets.only(right: 4.0),
             )]
           ) //Row
-        ), //Container
+        ), //secondaryBackground Container
         child: new Container(
-          color: (loan.state=='Devuelto' ? Colors.grey : Colors.white), //TODO: just disable it
+          color: (object.objState.state==StateOfObject.DEFAULT ? Colors.grey : Colors.white), //TODO: just disable it
           child: new ListTile(
             leading: new Container(
-              child: new Text(loan.name[0]), //just the initial letter in a circle
+              child: new Text(object.name[0]), //just the initial letter in a circle
               decoration: BoxDecoration(
                 color: Colors.yellow,
                 borderRadius: BorderRadius.all(
@@ -87,30 +97,30 @@ class LoanItem extends StatelessWidget {
                 ),
               ),
               padding: EdgeInsets.all(16.0),
-            ), //Container
+            ), //leading Container
             title: new Container(
               //padding: new EdgeInsets.only(left: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(loan.name),
-                  xN(loan.amount),
-                  stateIcon(loan.state,loan.owner)
+                  Text(object.name),
+                  //xN(object.amount), //FIXME
+                  stateIcon(object.objState.state,object.owner)
                 ]
               ) //Row
-            ) //Container
+            ) //title Container
           ), //ListTile
         ), //Container
         //direction: DismissDirection.horizontal,
-        direction: (loan.state=="Prestado"
-          ? (loan.owner=="yo")
+        direction: (object.objState.state==StateOfObject.LENT
+          ? (object.owner==yo)
             ? DismissDirection.horizontal
             : DismissDirection.down //TODO: DismissDirection.none
           : DismissDirection.horizontal
         ),
         onDismissed: (direction) {
           //TODO: show SnackBars for a shorter time
-          if(loan.state=="Devuelto") {
+          if(object.objState.state==StateOfObject.DEFAULT) {
             Scaffold.of(context).showSnackBar(SnackBar(content: Text("Préstamo finalizado correctamente")));
           }
           else {
@@ -118,7 +128,7 @@ class LoanItem extends StatelessWidget {
               //TODO: don't remove the tile! get its initial position back
               Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Devolución solicitada!")));
             }
-            if(direction == DismissDirection.startToEnd) { //left: mark loan as RETURNED
+            if(direction == DismissDirection.startToEnd) { //left: mark object as RETURNED
               //TODO: don't remove the tile! just disable them
               Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Préstamo marcado como devuelto!")));
             }
@@ -137,43 +147,34 @@ Widget xN(amount) {
 }
 
 Widget stateIcon(state,owner) {
-  if (state=='Devuelto')
+  if (state==StateOfObject.DEFAULT)
     return Container(
       child: Icon(Icons.check),
     );
-  else if (state=='Prestado')
-    if (owner=='yo')
+  else if (state==StateOfObject.LENT)
+    if (owner==yo)
         return Container(
-          child: Icon(Icons.call_received), //TODO: icon: call_made = loan_received ??
+          child: Icon(Icons.call_received), //TODO: icon: call_made = object_received ??
           //color: Colors.red
         );
     else
         return Container(
-          child: Icon(Icons.call_made), // icon: call_received = loan_made ??
+          child: Icon(Icons.call_made), // icon: call_received = object_made ??
           //color: Colors.green
         );
 }
 
-class Loan {
-  Loan(
-    this.name,
-    this.amount,
-    this.state,
-    this.owner,
-    this.img
-  );
+final User usuario1 = User('1', 'Usuario 1',
+  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
+final User usuario2 = User('2', 'Usuario 2',
+  img: 'https://d1u5p3l4wpay3k.cloudfront.net/futuramaworldsoftomorrow_gamepedia_en/a/a9/Hattie_McDoogal_Find_a_Cat_Sitter.png');
+final User yo = User('3', 'Yo mismo',
+  img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAqvCudv9tguYJwMavtlmGM25jbivv_pZ5rdBxNM4a4EXXXT5j');
 
-  final String name;
-  final int amount;
-  final String state;
-  final String owner;
-  final Image img;
-}
-
-final List<Loan> loans = <Loan>[
-  Loan('Cosa',1,'Devuelto','yo',Image.network('https://http.cat/400')),
-  Loan('Pelota',1,'Prestado','OtroUsuario1',Image.network('https://http.cat/401')),
-  Loan('Mi Lápiz',3,'Prestado','yo',Image.network('https://http.cat/402')),
-  Loan('Caja',1,'Prestado','OtroUsuario2',Image.network('https://http.cat/403')),
-  Loan('Goma',1,'Devuelto','yo',Image.network('https://http.cat/404'))
+final List<UserObject> loanObjects = <UserObject>[
+  UserObject(1, usuario1, 'Cosa', image: 'https://http.cat/400', objState: ObjState()),
+  UserObject(2, usuario2, 'Pelota', image: 'https://http.cat/401', objState: ObjState()),
+  UserObject(3, yo, 'Mi Lápiz', image: 'https://http.cat/402', objState: ObjState()),
+  UserObject(4, usuario2, 'Caja', image: 'https://http.cat/403', objState: ObjState()),
+  UserObject(5, usuario1, 'Goma', image: 'https://http.cat/404', objState: ObjState())
 ];

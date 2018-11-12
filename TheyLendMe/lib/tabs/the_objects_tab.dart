@@ -37,7 +37,8 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
   }
 }
 
-final User propietario = User('1', 'Señor Propietario');
+final User propietario = User('1', 'Señora Propietaria',
+  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
 
 final List<UserObject> objects = <UserObject>[
   UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
