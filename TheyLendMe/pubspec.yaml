@@ -19,6 +19,7 @@ dependencies:
   validate: ^1.4.0
   path: ^1.6.2
   image_picker: ^0.4.10
+  fluttertoast: ^2.0.9
   font_awesome_flutter: ^8.0.0
 
   #PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (1º)

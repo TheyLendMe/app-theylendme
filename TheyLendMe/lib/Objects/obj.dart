@@ -8,8 +8,10 @@ import 'dart:io';
 abstract class Obj{
   final ObjType _type;
   final int _idObject;
+  int _amount;
   final Entity owner;
   ObjState _objState;
+  DateTime _date;
   
   ///TODO pensar mejor el tema de las imagenes. Deberia de ser una lista???
   String _name, _desc, _img;
@@ -19,11 +21,13 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState, int amount = 1, DateTime date}){
     this._name = name;
     this._desc = desc;
     this._img = image;
-    this._objState = objState;
+    this._amount = amount;
+    this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;
+    this._date = date;
   }
 
 
@@ -41,11 +45,16 @@ abstract class Obj{
   String get name => _name;
   String get desc => _desc;
   String get image => _img;
-  ObjState get objState => _objState;
+  DateTime get date => _date;
+  int get amount => _amount;
   int get idObject => _idObject;
+  ObjState get objState => _objState;
   ObjType get type => _type;
+  set date(DateTime date) => _date = date;
   set name(String name) => this._name = name;
   set desc(String desc) => this._desc = desc;
+  set amount(int amoun) => this._amount = amount;
+  set objState(ObjState objState) => _objState = objState;
   ///TODO pensar mejor este tema
   set image(String image) => this._name = image;
 
@@ -53,14 +62,16 @@ abstract class Obj{
   static Future<List<Obj>> getObjects({var context}) async{
     ResponsePost res = await new RequestPost("getObjects").dataBuilder(
     ).doRequest(context : context);
-    return res.objectsBuilder();
+    return res.objectsUserBuilder();
   }
+
+
 }
 
 class UserObject extends Obj{
   ///Constructor
-  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState})
-  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState);
+  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, DateTime date})
+  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount, date : date);
   @override
   Future lendObj({int idRequest, var context}) {
     new RequestPost("lendObject").dataBuilder(
@@ -121,12 +132,16 @@ class UserObject extends Obj{
 }
 
 class GroupObject extends Obj{
+  
   //Constructor
-  GroupObject(int idObject, Entity owner, String name, {String desc, ObjState objState}) 
-  : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState);
+  GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, DateTime date}) 
+  : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date);
   @override
-  void lend(int idRequest) {
-    // TODO: implement lend
+  Future lend(int idRequest,{var context}) async {
+    new RequestPost("lendGObject").dataBuilder(
+        userInfo: true,
+        idRequest: idRequest != null ? idRequest : _objState.idState
+    ).doRequest(context : context);
   }
   @override
   Future requestObj({int amount = 1, String msg, var context}) {
@@ -134,7 +149,11 @@ class GroupObject extends Obj{
   }
   @override
   Future claimObj({int idLoan ,String claimMsg, var context}) {
-    // TODO: implement claim
+     new RequestPost("claimGObject").dataBuilder(
+        userInfo: true,
+        idLoan: idLoan != null ? idLoan : _objState.idState,
+        claimMsg: claimMsg
+    ).doRequest(context : context);
   }
   @override
   Future delObj({var context}) {
@@ -149,7 +168,7 @@ class GroupObject extends Obj{
   }
   @override
   Future returnObj({int idLoan, var context}) {
-        new RequestPost("returnLendedObject").dataBuilder(
+      new RequestPost("returnLentGObject").dataBuilder(
       userInfo: true,
       idLoan: idLoan != null ? idLoan : _objState.idState
     ).doRequest(context : context);
@@ -173,6 +192,10 @@ class GroupObject extends Obj{
       amount: amount,
     ).doRequest(context : context);
   }
+  @override
+  GroupObjState get objState => _objState;
+
+
 }
 
   enum ObjType {
