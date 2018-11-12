@@ -30,8 +30,8 @@ static Future login({String email,String pass, bool google= false, bool facebook
   ///First we have to make sure that the user is loged in 
   if(UserSingleton().login){return;}
   try{
-    if(google){await googleAuth();}
-    if(email !=null){await emailAuth(email,pass);}
+    if(google){await _googleAuth();}
+    if(email !=null){await _emailAuth(email,pass);}
   }catch(e){
     return;
   }
@@ -39,12 +39,12 @@ static Future login({String email,String pass, bool google= false, bool facebook
   await UserSingleton().refreshUser();
   await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
   
-  if(await _checkFirstLogIn()){print("First Login"); firstSteps(google :google, pass: pass,facebook: facebook);}
+  if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
 
 
 }
 
-static Future googleAuth() async{
+static Future _googleAuth() async{
 
   GoogleSignInAccount googleUser;
   FirebaseAuth _auth= FirebaseAuth.instance;
@@ -67,7 +67,7 @@ static Future googleAuth() async{
 
 }
 
-static Future emailAuth(String email,String pass) async{
+static Future _emailAuth(String email,String pass) async{
   FirebaseAuth _auth= FirebaseAuth.instance;
   await _auth.signInWithEmailAndPassword(email:email,password:pass);
 }
@@ -93,7 +93,7 @@ static Future signOut() async{
   sh.clear();
  }
 
-static Future firstSteps({String email,String pass, bool google= false, bool facebook= false}) async{
+static Future _firstSteps({String email,String pass, bool google= false, bool facebook= false}) async{
   SharedPreferences sh = await SharedPreferences.getInstance();
   User u = UserSingleton().user;
   sh.setBool('wasLogged', true);
@@ -108,7 +108,7 @@ static Future firstSteps({String email,String pass, bool google= false, bool fac
 }
 ///When the user, has been logged in for the first time on the mobile phone (when he has sig in)
 ///it is going to be suscribed too all the groups that he belongs as and admin.
-static Future firstSubsCribe() async{
+static Future _firstSubsCribe() async{
   String uid = UserSingleton().user.idEntity;
   UserSingleton().notifications.firebaseMessaging.subscribeToTopic(uid);
   UserSingleton().user.getNotTopics();
