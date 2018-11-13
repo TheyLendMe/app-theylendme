@@ -552,7 +552,7 @@ class ResponsePost{
     List<UserObject> loansList= new List();
     loans.forEach((loan){
       ObjState state = new ObjState(
-        state: StateOfObject.LENDED,
+        state: StateOfObject.LENT,
         amount: int.parse(loan['amount']),
         //date: loan['date'],
         msg: loan['loanMsg'],
@@ -595,7 +595,7 @@ class ResponsePost{
       User keepUser = userBuilder(data : loan['targetUser']);
       GroupObjState state = new GroupObjState(
         id: int.parse(loan['idLoan']),
-        state: StateOfObject.LENDED,
+        state: StateOfObject.LENT,
         amount: int.parse(loan['amount']),
     
         actual: keepGroup != null ? keepGroup  : group,

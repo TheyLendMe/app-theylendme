@@ -22,12 +22,6 @@ dependencies:
   fluttertoast: ^2.0.9
   font_awesome_flutter: ^8.0.0
 
-  #PRUEBAS de AUTENTICACIÓN: '$ flutter run' y después descomentar (1º)
-  #firebase_auth: ^0.5.20
-  #firebase_core: ^0.2.5+1
-  #google_sign_in: ^3.2.1
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
