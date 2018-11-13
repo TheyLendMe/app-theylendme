@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/create_object.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
@@ -22,7 +23,18 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
       body: ListView.builder( //ListView de ejemplo:
         itemBuilder: (BuildContext context, int index) => ObjectItem(objects[index]),
         itemCount: objects.length
-      )
+      ),
+      floatingActionButton: new FloatingActionButton(
+        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
+        onPressed: (){
+          showDialog(
+            context: this.context,
+            builder: (BuildContext context){
+              return CreateObject();
+            }
+          );
+        },
+      ),
     );
   }
 }

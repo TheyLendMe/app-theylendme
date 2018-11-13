@@ -22,6 +22,21 @@ class ObjState{
     _amount = amount;
   }
 
+  StateOfObject get state => _state;
+  Entity get actual => _actual;
+
+  Entity get next => _next;
+  DateTime get date => _date;
+  int get idState => _idState;
+  int get amount => _amount;
+   int get fromID => _fromID;
+   set date(DateTime date) => _date = date;
+  set state (StateOfObject state) => _state = state;
+  set actual (Entity e) => _actual = e;
+  set idState (int i) => _idState = i;
+  set amount (int amount) => _amount = amount;
+  set fromID (int fromID) => _fromID = fromID;
+
   static StateOfObject getObjState(String stateType){
     Map<String, StateOfObject> m= new Map();
     m['requested'] = StateOfObject.REQUESTED;
@@ -29,6 +44,7 @@ class ObjState{
 
     return m[stateType];
   }
+}
 
 class GroupObjState extends ObjState{
   User _actualUser;
