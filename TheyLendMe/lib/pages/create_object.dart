@@ -41,13 +41,11 @@ class _CreateObjectState extends State<CreateObject> {
             initialIntegerValue: _currentAmount
           );
         }
-      );
-      //TODO: change xN
-      /*.then((int value)) {
+      ).then<void>((int value) {
         if (value != null) {
           setState(() => _currentAmount = value);
         }
-      }*/
+      });
     }
 
   void galleryPicker() async{
@@ -119,7 +117,7 @@ class _CreateObjectState extends State<CreateObject> {
                 right: 0.0,
                 bottom: 0.0,
                 child: new FloatingActionButton(
-                  child: Text('x1', style: Theme.of(context).textTheme.title),
+                  child: Text('x${_currentAmount}', style: Theme.of(context).textTheme.title),
                   backgroundColor: Theme.of(context).accentColor,
                   onPressed: _showNumberPicker
                 ),
