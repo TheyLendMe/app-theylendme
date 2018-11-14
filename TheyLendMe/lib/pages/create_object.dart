@@ -2,26 +2,24 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-
-/*
-//WIP: adaptar el diseño al formato que teníamos pensado
-*/
+import 'package:numberpicker/numberpicker.dart';
 
 /*
 Widget displaySelectedFile(){
-  return new SizedBox(
+  return SizedBox(
     height: 70.0,
     width: 70.0,
-    child: new Container(
+    child: Container(
       child: file == null
-        ? new Text('Nada seleccionado')
-        : new Image.file(file),
+        ? Text('Nada seleccionado')
+        : Image.file(file),
     ),
   );
 }
 */
 
 class CreateObject extends StatefulWidget {
+
   CreateObject();
 
   @override
@@ -30,6 +28,26 @@ class CreateObject extends StatefulWidget {
 
 class _CreateObjectState extends State<CreateObject> {
   File file;
+  int _currentAmount = 1;
+
+  void _showNumberPicker() {
+      showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return NumberPickerDialog.integer(
+            minValue: 1,
+            maxValue: 100,
+            title: Text("Elige una cantidad"),
+            initialIntegerValue: _currentAmount
+          );
+        }
+      ).then<void>((int value) {
+        if (value != null) {
+          setState(() => _currentAmount = value);
+        }
+      });
+    }
+
   void galleryPicker() async{
     print("GalleryPick llamado");
     file = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -47,72 +65,82 @@ class _CreateObjectState extends State<CreateObject> {
 
   @override
   Widget build(BuildContext context) {
-    //return SizedOverflowBox( size: Size(300,100),
-    return OverflowBox( minHeight: 300, minWidth: 100,
-    child:  SimpleDialog(
-      children: <Widget>[
+    return SimpleDialog(
+      children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Text('Crear un objeto', style: Theme.of(context).textTheme.title),
             IconButton(
-              icon: Icon(Icons.close),
+              icon: new Icon(Icons.close),
               onPressed: () => Navigator.of(context).pop(null),
             ),
-            Text('Crear un objeto', style: Theme.of(context).textTheme.title),
-            SizedBox( width: 130, height: 130,
-              child: MaterialButton(
-                color: Theme.of(context).accentColor,
-                child: Icon(Icons.photo_camera),
-                onPressed: cameraPicker
-              )
-            ),
-            //TODO: displaySelectedFile() //better to show the pic
           ]
-        ), // end Row
-        /*new Container(
-          child: new Center(
-            child: SaleONoLaImagen(),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Escribe el nombre del objeto'),
+                style: Theme.of(context).textTheme.subtitle,
+                validator: _validateName,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Escribe una descripción del objeto'),
+                style: Theme.of(context).textTheme.subtitle,
+                validator: _validateDescription,
+              ),
+            ]
           )
-        ),*/
-        new TextFormField(
-          decoration: InputDecoration(
-            hintText: 'Escribe el nombre del objeto'),
-          style: Theme.of(context).textTheme.subtitle,
-          validator: _validateName,
         ),
-        new TextFormField(
-          decoration: InputDecoration(
-            hintText: 'Escribe una descripción del objeto'),
-          style: Theme.of(context).textTheme.subtitle,
-          validator: _validateDescription,
+        Container(
+          constraints: BoxConstraints.expand(
+            height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
+          ),
+          alignment: Alignment.center,
+          child: Stack(
+            children:[
+              SizedBox( width: 180, height: 180,
+                child: MaterialButton(
+                  color: Colors.grey,
+                  child: Icon(Icons.photo_camera),
+                  onPressed: cameraPicker
+                )
+              ),
+              Positioned(
+                right: 0.0,
+                bottom: 0.0,
+                child: new FloatingActionButton(
+                  child: Text('x${_currentAmount}', style: Theme.of(context).textTheme.title),
+                  backgroundColor: Theme.of(context).accentColor,
+                  onPressed: _showNumberPicker
+                ),
+              ),
+            ]
+          )
         ),
-        //TODO: opción: [-] cantidad [+]
-        new Container(
+        Container(
           constraints: BoxConstraints.expand(
             height: Theme.of(context).textTheme.display1.fontSize * 1.5,
           ),
           padding: const EdgeInsets.all(8.0),
           child: MaterialButton(
             height: 42.0,
-            onPressed:(){ //Aquí mandamos cosas a la base de datos
-              Navigator.of(context).pushNamed('/MyObjectsPage');
-            },
+            onPressed:(){}, //TODO acción de crear objeto
             color: Theme.of(context).buttonColor,
-            child: Text('Crear', style: TextStyle(color: Theme.of(context).accentColor)),
+            child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
           )
         )
       ]
-    ));
+    );
   }
 }
-
-/*
-class FormFieldValidator {
-  static String validate(String value, String message) {
-    return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(value) ? null : message;
-  }
-}
-*/
 
 String _validateName(String value) {
   return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(value) ? null : 'Nombre no válido';
