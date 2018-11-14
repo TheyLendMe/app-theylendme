@@ -31,7 +31,7 @@ class UserSingleton{
   } 
   Future refreshUser() async{
     firebaseUser = await FirebaseAuth.instance.currentUser();
-    if(firebaseUser == null){throw new AuthException("Debes de logeartes","1");}
+    if(firebaseUser == null){throw Exception;}
     this.token = await firebaseUser.getIdToken();
     if(_user == null || _user.idEntity == ""){this._user = new User(firebaseUser.uid, firebaseUser.displayName); print("Me actaulizo");}
   }
