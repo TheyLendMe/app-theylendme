@@ -22,6 +22,7 @@ dependencies:
   fluttertoast: ^2.0.9
   font_awesome_flutter: ^8.0.0
   numberpicker: ^0.1.6
+  flutter_staggered_grid_view:
 
 dev_dependencies:
   flutter_test:
