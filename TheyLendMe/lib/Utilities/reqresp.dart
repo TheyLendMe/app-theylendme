@@ -89,7 +89,10 @@ class RequestPost{
     if(msg != null) _data['msg'] = msg;
     if(img != null) _data['image'] = new UploadFileInfo(img, basename(img.path));
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
-    if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];}
+    if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];} else{
+        _data['fieldName'] =['null'];
+        _data['fieldValue'] =['null'];
+    }
     if(info != null){_data['info'] = info;}
     if(email != null){_data['email']=email;}
     if(tfno != null){_data['tfno'] = tfno;}
@@ -132,6 +135,7 @@ String name, String groupName, bool private, bool autoloan}){
     if(email != null){fieldName.add('email');fieldValue.add(email);}
     if(info != null){fieldName.add('info');fieldValue.add(info);}
     if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
+    if(fieldName.length == 0){r.clear(); r.add(null); r.add(null);}
     return r;
 }
 class ResponsePost{

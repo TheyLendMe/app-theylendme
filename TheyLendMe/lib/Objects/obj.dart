@@ -113,6 +113,10 @@ class UserObject extends Obj{
     // TODO: implement objHistory
   }
 
+  Future<List<Group>> getGroups() async{
+
+  }
+
 
   @override
   Future returnObj({int idLoan, var context}) {

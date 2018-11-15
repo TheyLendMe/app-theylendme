@@ -12,22 +12,26 @@ class UserSingleton{
   Notifications notifications;
   String token;
 
-  factory UserSingleton(){
+  factory UserSingleton({FirebaseUser user}){
     if(_singleton == null){
-      _singleton = new UserSingleton._internal();
+      
+      _singleton = new UserSingleton._internal(user);
     }
     return _singleton;
     }
-  UserSingleton._internal(){
-    notifications = Notifications();
-    this.user = new User("", "");
-    FirebaseAuth.instance.currentUser().then((user){
-      if(user != null){
+  UserSingleton._internal(FirebaseUser user){
+    if(user == null){
+      FirebaseAuth.instance.currentUser().then((user){
         this._user = new User(user.uid, user.displayName,email: user.email);
         this.firebaseUser = user;
-      }
-    });
-  
+      });
+    }else{
+      notifications = Notifications();
+      this._user = new User(user.uid, user.displayName,email: user.email);
+      this.firebaseUser = user;
+    }
+ 
+
   } 
   Future refreshUser() async{
     firebaseUser = await FirebaseAuth.instance.currentUser();

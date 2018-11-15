@@ -17,8 +17,6 @@ class ErrorToast extends ErrorHandler{
     );
   }
 }
-
-
 class ErrorAuth extends ErrorHandler{
   ErrorAuth(BuildContext context) : super(context : context);
   @override
@@ -28,7 +26,5 @@ class ErrorAuth extends ErrorHandler{
      msg: "Tienes que logearte",
      toastLength: Toast.LENGTH_SHORT,
     );
-    
-
   }
 }
