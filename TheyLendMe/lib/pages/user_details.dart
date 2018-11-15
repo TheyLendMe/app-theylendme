@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/pages/contact_dialog.dart';
 
 class UserDetails extends StatefulWidget {
   final User _user;
@@ -46,7 +47,14 @@ class _UserDetailsState extends State<UserDetails> {
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
               height: 42.0,
-              onPressed:(){}, //TODO acción de contactar
+              onPressed:(){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return ContactDialog(widget._user);
+                  }
+                );
+              },
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )
