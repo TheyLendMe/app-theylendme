@@ -25,7 +25,6 @@ static void facebookAuth(){
 
 }
 
-
 static Future<bool> login({String email,String pass, bool google= false, bool facebook= false, BuildContext context}) async{
   ///First we have to make sure that the user is loged in 
   
@@ -37,16 +36,13 @@ static Future<bool> login({String email,String pass, bool google= false, bool fa
   }catch(e){
     return false;
   }
+
   if(user != null){
     UserSingleton(user: user);
     await UserSingleton().refreshUser();
     await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
-
     if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
-  
-  }else{
-    return false;
-  }
+    }else{ return false; }
 
 
 }

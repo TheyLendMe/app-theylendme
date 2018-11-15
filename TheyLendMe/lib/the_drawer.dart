@@ -94,7 +94,9 @@ class _TheDrawerState extends State<TheDrawer> {
     // A Navigator is a widget that manages routes
     if (widget.drawerItems[index].route=="/")
       Navigator.pop(context);
-    else
+    //else
+      // TODO: si esta registrado ya que no se haga lo del auth
+      //Navigator.of(context).pushNamed("/AuthPage");
       Navigator.of(context).pushNamed(widget.drawerItems[index].route);
   }
 
