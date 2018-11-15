@@ -76,12 +76,13 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             child: MaterialButton(
               height: 42.0,
               onPressed:(){
-                showDialog(
+                Navigator.of(context).pushNamed("/AuthPage");
+                /*showDialog(
                   context: context,
                   builder: (BuildContext context){
                     return ContactDialog(widget._object.owner);
                   }
-                );
+                );*/
               },
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
