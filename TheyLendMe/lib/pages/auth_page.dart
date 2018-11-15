@@ -105,6 +105,7 @@ Widget googleButton(BuildContext context) {
     color: Color(0Xffdb3236),
     onPressed: () async {
       await Auth.login(google: true);
+      await UserSingleton().refreshUser();
       Navigator.of(context).pop(null);
 
      // UserSingleton().refreshUser();
