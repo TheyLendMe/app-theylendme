@@ -45,8 +45,10 @@ static Future<bool> login({String email,String pass, bool google= false, bool fa
     if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
   }else{
     print("Esto no esta muy bien"); return false;
+  
   }
 
+  return true;
 
 }
 
@@ -84,6 +86,7 @@ static Future emailRegister(String email, String pass) async{
 
 static Future signOut() async{
   await FirebaseAuth.instance.signOut();
+  UserSingleton().refreshUser();
   SharedPreferences sh = await SharedPreferences.getInstance();
   sh.clear();
 
