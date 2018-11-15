@@ -30,8 +30,8 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
               tryAgainButton: _tryAgainButtonClick,
             );*/
           return snapshot.hasData
-            ? Center(child: CircularProgressIndicator())
-            : ObjectTile(objects: snapshot.data);
+            ? ObjectTile(objects: snapshot.data)
+            : Center(child: CircularProgressIndicator());
           }
       )
     );
