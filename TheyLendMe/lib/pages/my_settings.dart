@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
+import 'package:TheyLendMe/Utilities/auth.dart';
 
 /*
 //TODO:
@@ -57,6 +58,7 @@ class _SettingsPageState extends State<MySettingsPage> {
                 EntryItem(fields[index]),
             itemCount: fields.length,
           )
+        
           //TODO: Form.append(submit)
           // new Container(
           //   width: screenSize.width,
@@ -75,7 +77,25 @@ class _SettingsPageState extends State<MySettingsPage> {
           //   ),
           // )
         )
-      )
+      ),
+      floatingActionButton: 
+        new Row( 
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,       
+          children: <Widget>[
+            new FlatButton(
+              color: Colors.red,
+              onPressed: () async {
+                await Auth.signOut();
+                Navigator.of(context).pop(null);
+                },
+              child: new Text("Log out"),
+            )
+          ]
+        
+        )
+      
     );
   }
 }

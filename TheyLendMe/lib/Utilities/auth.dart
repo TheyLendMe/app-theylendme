@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter/material.dart';
 
 ///Responsetype 10:cuenta login, sin verificar email
 //////Responsetye: 11, login true,
@@ -26,7 +26,7 @@ static void facebookAuth(){
 }
 
 
-static Future login({String email,String pass, bool google= false, bool facebook= false}) async{
+static Future login({String email,String pass, bool google= false, bool facebook= false, BuildContext context}) async{
   ///First we have to make sure that the user is loged in 
   if(UserSingleton().login){return;}
   try{
@@ -35,7 +35,7 @@ static Future login({String email,String pass, bool google= false, bool facebook
   }catch(e){
     return;
   }
-  
+  if(context != null) {Navigator.of(context).pop(null);}
   await UserSingleton().refreshUser();
   await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
   
