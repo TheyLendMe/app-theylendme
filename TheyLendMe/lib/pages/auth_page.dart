@@ -83,7 +83,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                         padding: const EdgeInsets.only(top: 20.0),
                       ),
                       MaterialButton(
-                        child: googleButton()
+                        child: googleButton(context)
                       )
                     ],
                   ),
@@ -97,7 +97,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
   }
 }
 
-Widget googleButton() {
+Widget googleButton(BuildContext context) {
   return FlatButton(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(30.0),
@@ -105,7 +105,8 @@ Widget googleButton() {
     color: Color(0Xffdb3236),
     onPressed: () async {
       await Auth.login(google: true);
-      UserSingleton().refreshUser();
+      await UserSingleton().refreshUser();
+      Navigator.of(context).pop(null);
     },
     child: Container(
       height: 50.0,
