@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:TheyLendMe/Utilities/auth.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 /*
 //TODO:
@@ -19,6 +20,9 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
 
   Animation<double> _iconAnimation;
   AnimationController _iconAnimationController;
+
+  String _email="johndoe@ema.il";
+  String _password="p4ssw0rd";
 
   @override
   void initState() {
@@ -73,7 +77,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                         splashColor: Colors.teal,
                         textColor: Colors.white,
                         child: Text('Registrarme', style: TextStyle(color: Colors.white)),
-                        onPressed: () {},
+                        onPressed: () { Auth.emailRegister(_email,_password); },
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
@@ -99,7 +103,10 @@ Widget googleButton() {
       borderRadius: BorderRadius.circular(30.0),
     ),
     color: Color(0Xffdb3236),
-    onPressed: () {}, //TODO: login(context);
+    onPressed: () async {
+      await Auth.login(google: true);
+      UserSingleton().refreshUser();
+    },
     child: Container(
       height: 50.0,
       width: 215.0,

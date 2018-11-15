@@ -104,7 +104,6 @@ class LoanItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(object.name),
-                  //xN(object.amount), //FIXME
                   stateIcon(object.objState.state,object.owner)
                 ]
               ) //Row
@@ -165,11 +164,14 @@ Widget stateIcon(state,owner) {
 }
 
 final User usuario1 = User('1', 'Usuario 1',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
+  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
+  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
 final User usuario2 = User('2', 'Usuario 2',
-  img: 'https://d1u5p3l4wpay3k.cloudfront.net/futuramaworldsoftomorrow_gamepedia_en/a/a9/Hattie_McDoogal_Find_a_Cat_Sitter.png');
+  img: 'https://d1u5p3l4wpay3k.cloudfront.net/futuramaworldsoftomorrow_gamepedia_en/a/a9/Hattie_McDoogal_Find_a_Cat_Sitter.png',
+  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
 final User yo = User('3', 'Yo mismo',
-  img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAqvCudv9tguYJwMavtlmGM25jbivv_pZ5rdBxNM4a4EXXXT5j');
+  img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAqvCudv9tguYJwMavtlmGM25jbivv_pZ5rdBxNM4a4EXXXT5j',
+  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
 
 final List<UserObject> loanObjects = <UserObject>[
   UserObject(1, usuario1, 'Cosa', image: 'https://http.cat/400', objState: ObjState()),
