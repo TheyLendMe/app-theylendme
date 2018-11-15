@@ -4,10 +4,6 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-/*WIP: reading https://stackoverflow.com/questions/51988852/flutter-infinite-scroll-view-with-mysql
-* FIXME: ObjectTile.objects is null
-*/
-
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
     @override
@@ -21,7 +17,7 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<Obj>>(
-        future: Obj.getObjects(), //FIXME: endpoint/app/getObjects throws Fatal error
+        future: Obj.getObjects(),
         builder: (context, snapshot) {
           /*if (snapshot.hasError) //TODO: this is from https://github.com/CodingInfinite/FutureBuilderWithPagination
             return PlaceHolderContent(
@@ -62,15 +58,14 @@ class ObjectTile extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context){
-                  return ObjectDetails(objects[i%5]);
+                  return ObjectDetails(objects[i]);
                 }
               );
             },
             child: Hero(
-              tag: objects[i%5].image,
-              //child: Image.network(objects[i%5].image)
+              tag: objects[i].idObject,
               child: FadeInImage(
-                image: NetworkImage(objects[i%5].image),
+                image: NetworkImage(objects[i].image),
                 fit: BoxFit.cover,
                 placeholder: AssetImage('images/tlm.jpg'),
               )
