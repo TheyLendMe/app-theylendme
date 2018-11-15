@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/group_details.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
@@ -30,33 +32,31 @@ class GroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
-      leading: new CircleAvatar(
-          child: new Text(group.title[0]), //just the initial letter in a circle
-          backgroundColor: Colors.yellow
-        ),
-      title: Text(group.title),
-      subtitle: new Text(group.subtitle)
+    return new GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return GroupDetails(group);
+          }
+        );
+      },
+      child: ListTile(
+        leading: new CircleAvatar(
+            child: new Text(group.name[0]), //just the initial letter in a circle
+            backgroundColor: Colors.yellow
+          ),
+        title: Text(group.name),
+        subtitle: new Text(group.info)
+      )
     );
   }
 }
 
-class Group {
-  Group(
-    this.title,
-    this.subtitle,
-    //[this.children = const <Group>[]]
-  );
-
-  final String title;
-  final String subtitle;
-  //final List<Group> children; //TODO: expandable list maybe?
-}
-
 final List<Group> groups = <Group>[
-  Group('Asociación ASOC','una asociación'),
-  Group('Grupo GRP','un grupo'),
-  Group('Equipo C.D.EQUIPO','un equipo'),
-  Group('Organización ORGANIZ','una organización'),
-  Group('Clase CLAS1','una clase'),
+  Group(1,'Asociación ASOC', info: 'una asociación', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png'),
+  Group(2,'Grupo GRP', info: 'un grupo', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png'),
+  Group(3,'Equipo C.D: .EQUIPO', info:'un equipo', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png'),
+  Group(4,'Organización ORGANIZ', info: 'una organización', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png'),
+  Group(5,'Clase CLAS1', info: 'una clase', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png'),
 ];

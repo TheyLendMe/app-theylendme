@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:TheyLendMe/pages/create_object.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart'; // provisional
+import 'dart:math'; // provisional
 
 class MyObjectsPage extends StatefulWidget {
     @override
@@ -22,152 +24,66 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
         itemBuilder: (BuildContext context, int index) => ObjectItem(objects[index]),
         itemCount: objects.length
       ),
-
       floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add,color: Colors.white),
+        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
         onPressed: (){
           showDialog(
             context: this.context,
             builder: (BuildContext context){
-              return SimpleDialog(
-                title: new Text('Crea tu objeto'),
-                children: <Widget>[
-                  new TextField(
-                    decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Nombre del objeto')),
-                  //new Image.network('https://wakyma.com/blog/wp-content/uploads/2017/10/Tipos-de-diarrea-en-gatos-y-su-tratamiento-770x460.'),
-                  new SaleONoLaImagen(),
-                  new TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Descripción del objeto'
-                    )
-                  ),
-                  new FlatButton(
-                    child: new Text('Crear'),
-                  onPressed: (){
-                    //Aqui mandamos cosas a la base de datos
-                  Navigator.of(context).pushNamed('/MyObjectsPage');
-                  })             
-                ],
-                 
-              );
+              return CreateObject();
             }
-          );
-          
-        },
-      ),    
-    );
-  }
-}
-
-// Elegir imagen
-
-class SaleONoLaImagen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new CameraApp();
-  }
-}
-class CameraApp extends StatefulWidget{
-  @override
-  CameraAppState createState() => CameraAppState();
-}
-
-class CameraAppState extends State<CameraApp> {
-  //File galleryFile;
-  File cameraFile;
-
-  /*galleryPicker() async{
-    print("GalleryPick llamado");
-    galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if(galleryFile != null){
-      setState(() {});
-    }
-  }*/
-  void cameraPicker() async{
-    print("CameraPick llamado");
-    cameraFile = await ImagePicker.pickImage(source: ImageSource.camera);
-    displaySelectedFile(cameraFile);
-    if(cameraFile != null){
-      setState(() {});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new FloatingActionButton(
-      child: new Icon(Icons.photo_camera),
-      onPressed: cameraPicker,
-    );
-  }
-
-  /*@override
-  Widget build(BuildContext context){
-
-    return new Scaffold(
-      body: new Builder(
-        builder: (BuildContext context) {
-          return new Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              new RaisedButton(
-                child: new Text('Select Image from Gallery'),
-                onPressed: galleryPicker(),
-              ),
-              new RaisedButton(
-                child: new Text('Select Image from Camera'),
-                onPressed: cameraPicker(),
-              ),
-              displaySelectedFile(galleryFile),
-              displaySelectedFile(cameraFile)
-            ],
           );
         },
       ),
     );
-  }*/
-
-  Widget displaySelectedFile(File file){
-    return new SizedBox(
-      height: 70.0,
-      width: 70.0,
-      child: file == null
-          ? new Text('Nada seleccionado')
-          : new Image.file(file),
-    );
   }
 }
+
 // Displays one Object.
 class ObjectItem extends StatelessWidget {
 
   const ObjectItem(this.object);
-  final Object object;
+  final UserObject object;
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
-      leading: new CircleAvatar(
-          child: new Text(object.title[0]), //just the initial letter in a circle
-          backgroundColor: Colors.yellow
-        ),
-      title: new Container(
-        //padding: new EdgeInsets.only(left: 8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(object.title),
-            xN(object.amount),
-            Text(
-              object.state,
-              style: stateColor(object.state)
-            )
-          ]
-        )
-      )
-    );
+    return new GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return ObjectDetails(object);
+          }
+        );
+      },
+      child: ListTile(
+        leading: new Container(
+          child: new Text(object.name[0]), //just the initial letter in a circle
+          decoration: BoxDecoration(
+            color: Colors.yellow,
+            borderRadius: BorderRadius.all(
+              const Radius.circular(4.0),
+            ),
+          ),
+          padding: EdgeInsets.all(16.0),
+        ), //leading (Container)
+        title: new Container(
+          //padding: new EdgeInsets.only(left: 8.0),
+          child: Row(
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(object.name),
+              xN( Random().nextInt(20) ), //provisional
+              Text(
+                'Disponible', //provisional
+                style: stateColor('Disponible') //provisional
+              )
+            ]
+          )
+        ) //title (Container)
+      ) //ListTile
+    ); //GestureDetector
   }
 }
 
@@ -185,21 +101,13 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.red);
 }
 
-class Object {
-  Object(
-    this.title,
-    this.amount,
-    this.state,
-  );
+final User propietario = User('1', 'Señora Propietaria',
+  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
 
-  final String title;
-  final int amount;
-  final String state;
-}
-
-final List<Object> objects = <Object>[
-  Object('Cosa',1,'Disponible'),
-  Object('Bici',1,'Prestado'),
-  Object('Pelota',5,'Disponible'),
-  Object('Pelota',2,'Prestado')
+final List<UserObject> objects = <UserObject>[
+  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
+  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
+  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
+  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
+  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
 ];
