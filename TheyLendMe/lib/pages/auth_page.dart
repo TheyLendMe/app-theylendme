@@ -107,9 +107,6 @@ Widget googleButton(BuildContext context) {
       await Auth.login(google: true);
       await UserSingleton().refreshUser();
       Navigator.of(context).pop(null);
-
-     // UserSingleton().refreshUser();
-      
     },
     child: Container(
       height: 50.0,
