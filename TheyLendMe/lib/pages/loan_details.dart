@@ -74,7 +74,8 @@ class _LoanDetailsState extends State<LoanDetails> {
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
               height: 42.0,
-              onPressed:(){}, //TODO acción de contactar
+              onPressed:(){
+              }, //TODO acción de contactar
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )

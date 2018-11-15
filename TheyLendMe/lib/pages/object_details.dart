@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
+import 'package:TheyLendMe/pages/contact_dialog.dart';
 
 class ObjectDetails extends StatefulWidget {
   final Obj _object;
@@ -74,7 +75,15 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
               height: 42.0,
-              onPressed:(){}, //TODO acción de contactar
+              onPressed:(){
+                Navigator.of(context).pushNamed("/AuthPage");
+                /*showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return ContactDialog(widget._object.owner);
+                  }
+                );*/
+              },
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )

@@ -16,11 +16,14 @@ dependencies:
   dio: ^1.0.6
   firebase_messaging: ^2.0.2
   shared_preferences: ^0.4.3
-  image_picker:
   validate: ^1.4.0
   path: ^1.6.2
   image_picker: ^0.4.10
+  fluttertoast: ^2.0.9
   font_awesome_flutter: ^8.0.0
+  numberpicker: ^0.1.6
+  flutter_staggered_grid_view:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

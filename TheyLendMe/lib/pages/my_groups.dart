@@ -65,6 +65,6 @@ class GroupItem extends StatelessWidget {
 }
 
 final List<Group> groups = <Group>[
-  Group(1,'MiGrupo1', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', info: 'grupo1'),
-  Group(2,'MiGrupo2', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png', info: 'grupo2')
+  Group(1,'MiGrupo1', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', info: 'grupo1', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
+  Group(2,'MiGrupo2', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png', info: 'grupo2', tfno: '34606991934', email: 'sofia@adolfodominguez.com')
 ];
