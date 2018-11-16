@@ -95,6 +95,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.9"
+<<<<<<< Updated upstream
   font_awesome_flutter:
     dependency: "direct main"
     description:
