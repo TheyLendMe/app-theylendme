@@ -25,13 +25,8 @@ final secondColor = const Color(0xFFf3e2bb);
 
 class TheApp extends StatelessWidget {
 
-<<<<<<< Updated upstream
-void pruebas(BuildContext context) async {
-    //await Auth.googleAuth();
-=======
   void pruebas(BuildContext context) async{
     await Auth.emailRegister( "datinacontacto@gmail.com", "270897");
->>>>>>> Stashed changes
     //Navigator.of(context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));
     //UserSingleton().refreshUser();
     // var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -39,13 +34,6 @@ void pruebas(BuildContext context) async {
     //UserSingleton().user.getRequests(context: context);
 }
 
-=======
-    // entity.Group group = new entity.Group(7, "name");
-    // List l = await group.getObjects(context: context);
-    // // List l = await group.getMyLoans();
-    //  print("final ");
-  }
->>>>>>> Stashed changes
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -56,7 +44,6 @@ void pruebas(BuildContext context) async {
         accentColor: secondColor,
         buttonColor: firstColor,
       ),
-<<<<<<< Updated upstream
       home: TheHome(title: 'TheyLendMe'),
 
       //A Route is an abstraction for a "screen" or "page" of an app,
@@ -69,25 +56,5 @@ void pruebas(BuildContext context) async {
         "/AuthPage": (BuildContext context) => new AuthPage(),
       } // (a live example: https://youtu.be/RLyw-_MLLTo)
     );
-=======
-      home: new Scaffold(
-        floatingActionButton: new FloatingActionButton(
-          onPressed : ()=> pruebas(context),
-        ),
-      )
-    );
-    //   TheHome(title: 'TheyLendMe'),
-
-    //   //A Route is an abstraction for a “screen” or “page” of an app,
-    //   routes: <String, WidgetBuilder> {
-    //     "/MyObjectsPage": (BuildContext context) => new MyObjectsPage(),
-    //     "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
-    //     "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
-    //     "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
-
-    //     "/AuthPage": (BuildContext context) => new AuthPage(),
-    //   } // (a live example: https://youtu.be/RLyw-_MLLTo)
-    // );
->>>>>>> Stashed changes
   }
 }
