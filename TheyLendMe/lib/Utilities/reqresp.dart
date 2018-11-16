@@ -110,8 +110,8 @@ class RequestPost{
     m['idUser']= UserSingleton().user.idEntity;
     m['token'] = UserSingleton().token;
     m['nickname'] = UserSingleton().user.name;
-    m['email'] = UserSingleton().firebaseUser.email;
-    m['tfno'] = UserSingleton().firebaseUser.phoneNumber;
+    m['email'] = (await UserSingleton().firebaseUser).email;
+    m['tfno'] = (await UserSingleton().firebaseUser).phoneNumber;
     return m;
   }
 }
@@ -384,7 +384,7 @@ class ResponsePost{
       admin: admin);
   }
 
-  Group groupBuilder({Map<String, dynamic> data}){
+  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false}){
     if(data == null){return null;}
     data = data == null ? _data : data;
     return new Group(
@@ -395,9 +395,25 @@ class ResponsePost{
       info: data['info'],
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
+      imAdmin: true,
     );
   }
-  
+  List<Group> myGroupsBuilder(){
+    List<dynamic> listAdmin = _data['admin'];
+    List<dynamic> listMember = _data['admin'];
+    List<Group> listGroup = new List();
+    listAdmin.forEach((group){listGroup.add(groupBuilder(data : group, imAdmin: true));});
+    listMember.forEach((group){listGroup.add(groupBuilder(data : group));});
+    return listGroup;
+  }
+
+  List<Group> myRequestedGroupsBuilder(){
+    List<dynamic> listRequested = _data['request'];
+    List<Group> listGroup = new List();
+    listRequested.forEach((group){listGroup.add(groupBuilder(data : group));});
+    return listGroup;
+  }
+
   List<UserObject> requestsUserObjectBuilder({bool mine = null}){
     if(mine == null){
       List<UserObject> list = new List();
