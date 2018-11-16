@@ -22,8 +22,12 @@ class UserSingleton{
   UserSingleton._internal(FirebaseUser user){
     if(user == null){
       FirebaseAuth.instance.currentUser().then((user){
-        this._user = new User(user.uid, user.displayName,email: user.email);
-        this.firebaseUser = user;
+        ///FIX ESTO EN EL CASO DE ABRIR LA APP
+        if(user != null){
+          this._user = new User(user.uid, user.displayName,email: user.email);
+          this.firebaseUser = user;
+        }
+
       });
     }else{
       notifications = Notifications();
@@ -35,9 +39,11 @@ class UserSingleton{
   } 
   Future refreshUser() async{
     firebaseUser = await FirebaseAuth.instance.currentUser();
-    if(firebaseUser == null){throw Exception;}
-    this.token = await firebaseUser.getIdToken();
-    if(_user == null || _user.idEntity == ""){this._user = new User(firebaseUser.uid, firebaseUser.displayName); print("Me actaulizo");}
+    if(firebaseUser == null){this._user = null;}else{
+      this.token = await firebaseUser.getIdToken();
+       if(_user == null || _user.idEntity == ""){this._user = new User(firebaseUser.uid, firebaseUser.displayName); print("Me actaulizo");}
+    }
+   
   }
 
   set user(user) => _user = user;

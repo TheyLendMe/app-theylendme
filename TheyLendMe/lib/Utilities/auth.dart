@@ -31,43 +31,37 @@ static Future<bool> login({String email,String pass, bool google= false, bool fa
   FirebaseUser user;
   if(UserSingleton().login){return true;}
   try{
-    if(google){user =await _googleAuth();}
-    if(email !=null){user = await _emailAuth(email,pass);}
+    if(google){await _googleAuth();}
+    if(email !=null){await _emailAuth(email,pass);}
   }catch(e){
     return false;
   }
-
+  user = await FirebaseAuth.instance.currentUser();
+  
   if(user != null){
     UserSingleton(user: user);
     await UserSingleton().refreshUser();
     await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
     if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
-    }else{ return false; }
+  }else{
+    print("Esto no esta muy bien"); return false;
+  
+  }
 
+  return true;
 
 }
 
 static Future<FirebaseUser> _googleAuth() async{
-
-  GoogleSignInAccount googleUser;
-  FirebaseAuth _auth= FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
-  try{
-    googleUser = await _googleSignIn.signIn();
-  }catch (e) {
-    return null;
-  }
-
-  if(googleUser == null){return null;}
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-  final FirebaseUser user = await _auth.signInWithGoogle(
+ final GoogleSignIn _googleSignIn = GoogleSignIn();
+ final FirebaseAuth _auth = FirebaseAuth.instance;
+ GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+  GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+  FirebaseUser user = await _auth.signInWithGoogle(
     accessToken: googleAuth.accessToken,
     idToken: googleAuth.idToken,
-  ).catchError((e){
-    print("Error: there is another account using this email.");
-  });
+  );
   return user;
-
 }
 
 static Future<FirebaseUser> _emailAuth(String email,String pass) async{
@@ -92,6 +86,7 @@ static Future emailRegister(String email, String pass) async{
 
 static Future signOut() async{
   await FirebaseAuth.instance.signOut();
+  UserSingleton().refreshUser();
   SharedPreferences sh = await SharedPreferences.getInstance();
   sh.clear();
 
