@@ -99,12 +99,11 @@ static Future _firstSteps({String email,String pass, bool google= false, bool fa
   sh.setString("uid", u.idEntity);
   sh.setString("name", u.name);
   sh.setString("email",u.email);
-
   if(pass != null){sh.setString("pass", pass); sh.setString("logType", "email");}
   if(google){sh.setString("logType", "google");}
   if(facebook){sh.setString("logType", "facebook");}
-
 }
+
 ///When the user, has been logged in for the first time on the mobile phone (when he has sig in)
 ///it is going to be suscribed too all the groups that he belongs as and admin.
 static Future _firstSubsCribe() async{

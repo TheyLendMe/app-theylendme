@@ -37,6 +37,7 @@ class TheApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    UserSingleton();
     return MaterialApp(
       title: 'app de préstamos',
       theme: ThemeData(
