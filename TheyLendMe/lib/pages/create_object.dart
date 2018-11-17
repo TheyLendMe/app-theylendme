@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 /*
 Widget displaySelectedFile(){
@@ -27,7 +28,8 @@ class CreateObject extends StatefulWidget {
 }
 
 class _CreateObjectState extends State<CreateObject> {
-  File file;
+  File file, _image;
+  String _objectName, _objectDesc;
   int _currentAmount = 1;
 
   void _showNumberPicker() {
@@ -59,7 +61,9 @@ class _CreateObjectState extends State<CreateObject> {
     print("CameraPick llamado");
     file = await ImagePicker.pickImage(source: ImageSource.camera);
     if(file != null){
-      setState(() {});
+      setState(() {
+        return _image = file;
+      });
     }
   }
 
@@ -88,13 +92,17 @@ class _CreateObjectState extends State<CreateObject> {
                 decoration: InputDecoration(
                   hintText: 'Escribe el nombre del objeto'),
                 style: Theme.of(context).textTheme.subtitle,
-                validator: _validateName,
+                validator: (_validateName) {
+                  _objectName = _validateName;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(
                   hintText: 'Escribe una descripción del objeto'),
                 style: Theme.of(context).textTheme.subtitle,
-                validator: _validateDescription,
+                validator: (_validateDescription){
+                  _objectDesc = _validateDescription;
+                },
               ),
             ]
           )
@@ -110,7 +118,7 @@ class _CreateObjectState extends State<CreateObject> {
                 child: MaterialButton(
                   color: Colors.grey,
                   child: Icon(Icons.photo_camera),
-                  onPressed: cameraPicker
+                  onPressed:cameraPicker
                 )
               ),
               Positioned(
@@ -132,7 +140,10 @@ class _CreateObjectState extends State<CreateObject> {
           padding: const EdgeInsets.all(8.0),
           child: MaterialButton(
             height: 42.0,
-            onPressed:(){}, //TODO acción de crear objeto
+            onPressed:(){
+              UserSingleton().user.addObject(_objectName, _currentAmount,img: _image);
+              Navigator.of(context).pop(null);
+            }, //TODO acción de crear objeto
             color: Theme.of(context).buttonColor,
             child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
           )

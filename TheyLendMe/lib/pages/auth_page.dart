@@ -83,7 +83,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                         padding: const EdgeInsets.only(top: 20.0),
                       ),
                       MaterialButton(
-                        child: googleButton()
+                        child: googleButton(context)
                       )
                     ],
                   ),
@@ -104,9 +104,10 @@ Widget googleButton(BuildContext context) {
     ),
     color: Color(0Xffdb3236),
     onPressed: () async {
-      await Auth.login(google: true);
-      await UserSingleton().refreshUser();
-      Navigator.of(context).pop(null);
+      if(await Auth.login(google: true)){
+        Navigator.of(context).pop(null);
+      }
+      
     },
     child: Container(
       height: 50.0,

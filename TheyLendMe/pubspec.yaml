@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   firebase_auth: ^0.6.2+1
   firebase_core: ^0.2.5+1
-  google_sign_in: ^3.2.1
+  google_sign_in: ^3.2.4
   dio: ^1.0.6
   firebase_messaging: ^2.0.2
   shared_preferences: ^0.4.3

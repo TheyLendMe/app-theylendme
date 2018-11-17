@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
@@ -72,7 +73,11 @@ class _TheDrawerState extends State<TheDrawer> {
                 backgroundColor: Theme.of(context).accentColor,
                 child: Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor)
               ),
-              onTap: () => Navigator.of(context).pushNamed("/AuthPage")
+              onTap: () {
+                if(UserSingleton().login) {
+                  // TODO: ampliar foto/cambiar foto de perfil
+                } else Navigator.of(context).pushNamed("/AuthPage");
+              }
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -94,10 +99,12 @@ class _TheDrawerState extends State<TheDrawer> {
     // A Navigator is a widget that manages routes
     if (widget.drawerItems[index].route=="/")
       Navigator.pop(context);
-    else
+    else {
       // TODO: si esta registrado ya que no se haga lo del auth
-      Navigator.of(context).pushNamed("/AuthPage");
-      //Navigator.of(context).pushNamed(widget.drawerItems[index].route);
+      if (UserSingleton().login)
+      Navigator.of(context).pushNamed(widget.drawerItems[index].route);
+      else Navigator.of(context).pushNamed("/AuthPage");
+    }
   }
 
 }
