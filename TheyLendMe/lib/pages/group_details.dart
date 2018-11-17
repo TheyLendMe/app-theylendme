@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
@@ -49,13 +50,15 @@ class GroupDetailsState extends State<GroupDetails> {
             child: MaterialButton(
               height: 42.0,
               onPressed:(){
-                Navigator.of(context).pushNamed("/AuthPage");
-                /*showDialog(
+                if(!UserSingleton().login)
+                  Navigator.of(context).pushNamed("/AuthPage");
+                else {
+                  showDialog(
                   context: context,
                   builder: (BuildContext context){
                     return ContactDialog(widget._group);
                   }
-                );*/
+                );}
               },
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),

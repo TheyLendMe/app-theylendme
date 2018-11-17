@@ -5,6 +5,8 @@ import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 import 'dart:io';
 
+const String endpoint = "http://54.188.52.254/";
+
 abstract class Obj{
   final ObjType _type;
   final int _idObject;
@@ -24,7 +26,9 @@ abstract class Obj{
   Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState, int amount = 1, DateTime date}){
     this._name = name;
     this._desc = desc;
-    this._img = image;
+    if (image!=null) {
+      this._img = endpoint + image;
+    }
     this._amount = amount;
     this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;
     this._date = date;
@@ -56,7 +60,7 @@ abstract class Obj{
   set amount(int amoun) => this._amount = amount;
   set objState(ObjState objState) => _objState = objState;
   ///TODO pensar mejor este tema
-  set image(String image) => this._name = image;
+  set image(String image) => this._name = endpoint + image;
 
   ///Static Methods 
   static Future<List<Obj>> getObjects({var context}) async{
@@ -107,6 +111,10 @@ class UserObject extends Obj{
   @override
   Future objHistory({var context}) {
     // TODO: implement objHistory
+  }
+
+  Future<List<Group>> getGroups() async{
+
   }
 
 

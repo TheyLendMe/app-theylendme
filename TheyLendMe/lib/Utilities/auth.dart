@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter/material.dart';
 
 ///Responsetype 10:cuenta login, sin verificar email
 //////Responsetye: 11, login true,
@@ -25,51 +25,48 @@ static void facebookAuth(){
 
 }
 
-
-static Future login({String email,String pass, bool google= false, bool facebook= false}) async{
+static Future<bool> login({String email,String pass, bool google= false, bool facebook= false, BuildContext context}) async{
   ///First we have to make sure that the user is loged in 
-  if(UserSingleton().login){return;}
+  
+  FirebaseUser user;
+  if(UserSingleton().login){return true;}
   try{
     if(google){await _googleAuth();}
     if(email !=null){await _emailAuth(email,pass);}
   }catch(e){
-    return;
+    return false;
   }
+  user = await FirebaseAuth.instance.currentUser();
   
-  await UserSingleton().refreshUser();
-  await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
+  if(user != null){
+    UserSingleton(user: user);
+    await UserSingleton().refreshUser();
+    await new RequestPost('login').dataBuilder(userInfo: true).doRequest();
+    if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
+  }else{
+    print("Esto no esta muy bien"); return false;
   
-  if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
+  }
 
+  return true;
 
 }
 
-static Future _googleAuth() async{
-
-  GoogleSignInAccount googleUser;
-  FirebaseAuth _auth= FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
-  try{
-    googleUser = await _googleSignIn.signIn();
-  }catch (e) {
-    return null;
-  }
-
-  if(googleUser == null){return null;}
-
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-  final FirebaseUser user = await _auth.signInWithGoogle(
+static Future<FirebaseUser> _googleAuth() async{
+ final GoogleSignIn _googleSignIn = GoogleSignIn();
+ final FirebaseAuth _auth = FirebaseAuth.instance;
+ GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+  GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+  FirebaseUser user = await _auth.signInWithGoogle(
     accessToken: googleAuth.accessToken,
     idToken: googleAuth.idToken,
-  ).catchError((e){
-    print("Error: there is another account using this email.");
-  });
-
+  );
+  return user;
 }
 
-static Future _emailAuth(String email,String pass) async{
+static Future<FirebaseUser> _emailAuth(String email,String pass) async{
   FirebaseAuth _auth= FirebaseAuth.instance;
-  await _auth.signInWithEmailAndPassword(email:email,password:pass);
+  return await _auth.signInWithEmailAndPassword(email:email,password:pass);
 }
 
 
@@ -89,8 +86,10 @@ static Future emailRegister(String email, String pass) async{
 
 static Future signOut() async{
   await FirebaseAuth.instance.signOut();
+  UserSingleton().refreshUser();
   SharedPreferences sh = await SharedPreferences.getInstance();
   sh.clear();
+
  }
 
 static Future _firstSteps({String email,String pass, bool google= false, bool facebook= false}) async{
