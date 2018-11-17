@@ -58,7 +58,7 @@ class User extends Entity{
   @override
   Future addObject(String name, int amount,{String info,File img, var context}) async{
      await new RequestPost("createObject").dataBuilder(
-        //userInfo: true,
+        userInfo: true,
         name: name,
         info: info,
         img: img,
@@ -97,8 +97,14 @@ class User extends Entity{
       img: img
     ).doRequest(context: context);
   }
-  Future joinGroup(Group group, {var context}) async{
+  Future applyGroup(Group group, {var context}) async{
     ResponsePost res = await new RequestPost("joinRequest").dataBuilder(
+      userInfo: true,
+      idGroup: group.idEntity,
+    ).doRequest(context: context);
+  }
+  Future joinGroup(Group group, {var context, String privateCode}) async{
+    ResponsePost res = await new RequestPost(group.private ? "joinByPrivateCode" : "joinRequest").dataBuilder(
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest(context: context);
@@ -227,7 +233,7 @@ class Group extends Entity{
     ).doRequest(context: context);
   }
 
-  Future<List<JoinRequest>> getJoinRequest({var context})async {
+  Future<List<JoinRequest>> getJoinRequests({var context})async {
     ResponsePost response = await new RequestPost("getJoinRequests").dataBuilder(
         idGroup: this.idEntity,
         userInfo: true,
@@ -303,6 +309,33 @@ class Group extends Entity{
     ).doRequest(context:context);
     return res.claimsGroupObjectBuilder(this,mine : false);
   }
+  Future kickUser(User user, {var context}) async{
+    ResponsePost res = await new RequestPost("kickUser").dataBuilder(
+      userInfo: true,
+      idMemeber: user.idEntity,
+      idGroup: this._idEntity,
+    ).doRequest(context:context);
+  }
+  Future  leaveGroup(User user, {var context}) async{
+    ResponsePost res = await new RequestPost("leaveGroup").dataBuilder(
+      userInfo: true,
+      idMemeber: user.idEntity,
+      idGroup: this._idEntity,
+    ).doRequest(context:context);
+  }
+
+  Future<String> getPrivateCode({var context}) async{
+    ResponsePost res = await new RequestPost("getPrivateCode").dataBuilder(
+      userInfo: true,
+      idGroup: this._idEntity,
+    ).doRequest(context:  context);
+    return res.data['code'];
+  }
+  
+
+
+
+
 
   Future<List<User>> getMembers()async{}
   Future addUser(Entity newUser) async{}

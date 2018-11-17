@@ -54,9 +54,12 @@ class RequestPost{
       return null;
     }on AuthException catch(e){
       new ErrorAuth(context).handleError();
-
+    
     }on ServerException catch(e){
       errorHandler.handleError(msg : e.errMsg);
+      return null;
+    }on Exception catch(e){
+      new ErrorToast().handleError(msg : e.toString());
       return null;
     }
     
@@ -71,7 +74,7 @@ class RequestPost{
 
   int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
   String oUser, String msg, File img, String claimMsg, String groupName, bool autoLoan,
-  bool private, int idMemeber, String requestMsg, bool userInfo = false//add more fields if they are necessary
+  bool private, int idMemeber, String requestMsg, bool userInfo = false, String privateCode//add more fields if they are necessary
   }){
     this.userInfo = userInfo;
     if(idUser != null && !userInfo)_data['idGroup'] = idGroup.toString();
@@ -84,6 +87,7 @@ class RequestPost{
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
     if(requestMsg != null) _data['request'] = requestMsg;
+    if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
@@ -105,13 +109,15 @@ class RequestPost{
   }
 
   Future<Map<String,dynamic>> authInfo() async{
-    await UserSingleton().refreshUser();
+    FirebaseUser firebaseUser = await UserSingleton().firebaseUser;
+    if(firebaseUser == null){throw new AuthException("1", "not loged");}
+    UserSingleton user = await UserSingleton();
     Map<String,dynamic> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
-    m['token'] = UserSingleton().token;
+    m['token'] = await firebaseUser.getIdToken();
     m['nickname'] = UserSingleton().user.name;
-    m['email'] = (await UserSingleton().firebaseUser).email;
-    m['tfno'] = (await UserSingleton().firebaseUser).phoneNumber;
+    m['email'] = firebaseUser.email;
+    m['tfno'] = firebaseUser.phoneNumber;
     return m;
   }
 }
@@ -163,7 +169,6 @@ class ResponsePost{
   }
   dynamic get data => _data;
 ////-----------Objects builders------------//////////
-
 
 
 
@@ -285,6 +290,7 @@ class ResponsePost{
       });
       return list;
   }
+
 
     
   List<Obj> myClaimstObjects(Map<String,dynamic> request){
