@@ -30,8 +30,8 @@ class RequestPost{
     _url = fun;
 
     dio.options.baseUrl=endpoint;
-    dio.options.connectTimeout = 10000; //5s
-    dio.options.receiveTimeout=3000;  
+    dio.options.connectTimeout = 500000; //5s
+    dio.options.receiveTimeout=15000;  
 
     _data = new Map();
   

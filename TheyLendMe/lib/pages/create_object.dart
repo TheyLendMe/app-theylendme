@@ -67,6 +67,15 @@ class _CreateObjectState extends State<CreateObject> {
     }
   }
 
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    myController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
@@ -92,17 +101,14 @@ class _CreateObjectState extends State<CreateObject> {
                 decoration: InputDecoration(
                   hintText: 'Escribe el nombre del objeto'),
                 style: Theme.of(context).textTheme.subtitle,
-                validator: (_validateName) {
-                  _objectName = _validateName;
-                },
+                validator:  _validateName,
+                controller: myController,
               ),
               TextFormField(
                 decoration: InputDecoration(
                   hintText: 'Escribe una descripción del objeto'),
                 style: Theme.of(context).textTheme.subtitle,
-                validator: (_validateDescription){
-                  _objectDesc = _validateDescription;
-                },
+                validator: _validateDescription,
               ),
             ]
           )
@@ -141,7 +147,7 @@ class _CreateObjectState extends State<CreateObject> {
           child: MaterialButton(
             height: 42.0,
             onPressed:(){
-              UserSingleton().user.addObject(_objectName, _currentAmount,img: _image);
+              UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
               Navigator.of(context).pop(null);
             }, //TODO acción de crear objeto
             color: Theme.of(context).buttonColor,
