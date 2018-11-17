@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'Utilities/auth.dart';
 import 'Utilities/reqresp.dart';
-import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/Objects/entity.dart' as entity;
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
@@ -25,8 +25,8 @@ final secondColor = const Color(0xFFf3e2bb);
 
 class TheApp extends StatelessWidget {
 
-void pruebas(BuildContext context) async {
-    //await Auth.googleAuth();
+  void pruebas(BuildContext context) async{
+    await Auth.emailRegister( "datinacontacto@gmail.com", "270897");
     //Navigator.of(context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));
     //UserSingleton().refreshUser();
     // var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -37,6 +37,7 @@ void pruebas(BuildContext context) async {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    UserSingleton();
     return MaterialApp(
       title: 'app de préstamos',
       theme: ThemeData(
