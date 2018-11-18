@@ -56,11 +56,11 @@ class User extends Entity{
   User(String idEntity, String name, {this.idMember,String email,String tfno,String info, String img, this.admin}) : 
   super(EntityType.USER, idEntity, name, tfno : tfno, info : info, img : img, email : email,);
   @override
-  Future addObject(String name, int amount,{String info,File img, var context}) async{
+  Future addObject(String name, int amount,{String desc,File img, var context}) async{
      await new RequestPost("createObject").dataBuilder(
         userInfo: true,
         name: name,
-        info: info,
+        desc: desc,
         img: img,
     ).doRequest(context: context, errorHandler: new ErrorToast());
     
@@ -198,11 +198,13 @@ class Group extends Entity{
 
 
   @override
-  Future addObject(String name, int amount,{var context}) async{
+  Future addObject(String name, int amount,{var context, String desc, File img}) async{
     await new RequestPost("createGObject").dataBuilder(
         idGroup: this.idEntity,
         userInfo: true,
-        name: name 
+        name: name, 
+        desc: desc,
+        img: img
     ).doRequest(context: context);
   }
 
