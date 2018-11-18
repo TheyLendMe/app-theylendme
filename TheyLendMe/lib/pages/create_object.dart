@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/Utilities/pickImage.dart';
 
 /*
 Widget displaySelectedFile(){
@@ -27,7 +29,7 @@ class CreateObject extends StatefulWidget {
 }
 
 class _CreateObjectState extends State<CreateObject> {
-  File file;
+  File _image;
   int _currentAmount = 1;
 
   void _showNumberPicker() {
@@ -43,25 +45,31 @@ class _CreateObjectState extends State<CreateObject> {
         }
       ).then<void>((int value) {
         if (value != null) {
-          setState(() => _currentAmount = value);
+          setState(() { _currentAmount = value;});
         }
       });
     }
-
+/*
   void galleryPicker() async{
-    print("GalleryPick llamado");
-    file = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if(file != null){
-      setState(() {});
-    }
+   
   }
+
+ 
   void cameraPicker() async{
-    print("CameraPick llamado");
-    file = await ImagePicker.pickImage(source: ImageSource.camera);
-    if(file != null){
-      setState(() {});
-    }
+    _image = (await PickImage.getImageFromCamera());
   }
+*/
+  final myController = TextEditingController();
+  final myController2 = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    myController.dispose();
+    myController2.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,13 +96,15 @@ class _CreateObjectState extends State<CreateObject> {
                 decoration: InputDecoration(
                   hintText: 'Escribe el nombre del objeto'),
                 style: Theme.of(context).textTheme.subtitle,
-                validator: _validateName,
+                validator:  _validateName,
+                controller: myController,
               ),
               TextFormField(
                 decoration: InputDecoration(
                   hintText: 'Escribe una descripción del objeto'),
                 style: Theme.of(context).textTheme.subtitle,
                 validator: _validateDescription,
+                controller: myController2,
               ),
             ]
           )
@@ -110,7 +120,7 @@ class _CreateObjectState extends State<CreateObject> {
                 child: MaterialButton(
                   color: Colors.grey,
                   child: Icon(Icons.photo_camera),
-                  onPressed: cameraPicker
+                  onPressed: () async {_image = (await PickImage.getImageFromCamera());}
                 )
               ),
               Positioned(
@@ -132,7 +142,18 @@ class _CreateObjectState extends State<CreateObject> {
           padding: const EdgeInsets.all(8.0),
           child: MaterialButton(
             height: 42.0,
-            onPressed:(){}, //TODO acción de crear objeto
+            onPressed:() async {
+              if(_image == null && myController2.text == null){
+                await UserSingleton().user.addObject(myController.text, _currentAmount);
+              } else if(myController2.text == null && _image != null){
+                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
+              } else if (myController2.text != null && _image == null){
+                await UserSingleton().user.addObject(myController.text, _currentAmount,desc: myController2.text);
+              } else if(myController2.text != null && _image != null){
+                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
+                }
+              Navigator.of(context).pop(null);
+            }, //TODO acción de crear objeto
             color: Theme.of(context).buttonColor,
             child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
           )

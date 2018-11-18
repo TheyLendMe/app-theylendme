@@ -16,7 +16,7 @@ abstract class Entity{
   ///COnstructor, you may need info and the url of the image
   Entity(this._type,this._idEntity,this._name,{String info,String img,String tfno, String email}){
     _info = info;
-    _img = img;
+    if(img != null) {_img = endpoint + img;} else{_img = "https://img.icons8.com/color/1600/circled-user-male-skin-type-1-2.png";}
     _tfno = tfno;
     _email = email;
   }
@@ -34,7 +34,7 @@ abstract class Entity{
   get tfno => _tfno;
   set tfno(String tfno) => _tfno = tfno;
   get img => _img;
-  set img(String img) => _img = img;
+  set img(String img) => _img = endpoint + img;
   ///Add an object to a group or to a user.
   Future addObject(String name, int amount,{var context});
   ///Update info for the user ----> only for the actual user UserSingleton.user!!
