@@ -16,7 +16,7 @@ abstract class Entity{
   ///COnstructor, you may need info and the url of the image
   Entity(this._type,this._idEntity,this._name,{String info,String img,String tfno, String email}){
     _info = info;
-    if(img != null) {_img = endpoint + img;}
+    if(img != null) {_img = endpoint + img;} else{_img = "https://img.icons8.com/color/1600/circled-user-male-skin-type-1-2.png";}
     _tfno = tfno;
     _email = email;
   }
