@@ -20,7 +20,7 @@ class PickImage{
     String ext = extension(file.absolute.path);
     DateFormat dateFormat = new DateFormat("yMMMMdHms");
     return await FlutterImageCompress.compressAndGetFile(
-          file.absolute.path, '$path/'+"last"+ext+dateFormat.format(DateTime.now()),
+          file.absolute.path, '$path/'+"last"+dateFormat.format(DateTime.now())+ext,
           quality: 80,
           minWidth: 800,
       );
