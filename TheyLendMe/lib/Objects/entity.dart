@@ -62,6 +62,7 @@ class User extends Entity{
         name: name,
         desc: desc,
         img: img,
+        amount: amount
     ).doRequest(context: context, errorHandler: new ErrorToast());
     
   }
@@ -204,7 +205,8 @@ class Group extends Entity{
         userInfo: true,
         name: name, 
         desc: desc,
-        img: img
+        img: img,
+        amount: amount
     ).doRequest(context: context);
   }
 
