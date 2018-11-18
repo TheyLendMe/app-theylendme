@@ -29,9 +29,11 @@ class RequestPost{
   RequestPost(String fun){
     _url = fun;
 
+
     dio.options.baseUrl=endpoint + "/app/";
     dio.options.connectTimeout = 10000; //5s
     dio.options.receiveTimeout=3000;  
+
 
     _data = new Map();
   
