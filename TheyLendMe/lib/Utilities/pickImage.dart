@@ -8,11 +8,11 @@ import 'package:intl/intl.dart';
 
 class PickImage{
   static Future<File> getImageFromCamera() async{
-    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.gallery));
+    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.camera));
   }
 
   static Future<File> getImageFromGallery() async{
-    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.camera));
+    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.gallery));
   }
 
   static Future<File> _changeAndSave(File file)async {
@@ -20,7 +20,7 @@ class PickImage{
     String ext = extension(file.absolute.path);
     DateFormat dateFormat = new DateFormat("yMMMMdHms");
     return await FlutterImageCompress.compressAndGetFile(
-          file.absolute.path, '$path/'+"last"+ext+dateFormat.format(DateTime.now()),
+          file.absolute.path, '$path/'+"last"+dateFormat.format(DateTime.now())+ext,
           quality: 80,
           minWidth: 800,
       );
