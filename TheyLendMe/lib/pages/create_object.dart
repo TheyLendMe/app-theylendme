@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:TheyLendMe/Utilities/pickImage.dart';
 
 /*
 Widget displaySelectedFile(){
@@ -53,7 +53,7 @@ class _CreateObjectState extends State<CreateObject> {
       });
     }
 
-  void galleryPicker() async{
+  /*void galleryPicker() async{
     print("GalleryPick llamado");
     file = await ImagePicker.pickImage(source: ImageSource.gallery);
     if(file != null){
@@ -72,7 +72,7 @@ class _CreateObjectState extends State<CreateObject> {
         _image = file;
       });
     }
-  }
+  }*/
 
   final myController = TextEditingController();
   final myController2 = TextEditingController();
@@ -135,7 +135,7 @@ class _CreateObjectState extends State<CreateObject> {
                 child: MaterialButton(
                   color: Colors.grey,
                   child: Icon(Icons.photo_camera),
-                  onPressed:cameraPicker
+                  onPressed: PickImage.getImageFromCamera
                 )
               ),
               Positioned(
@@ -163,9 +163,9 @@ class _CreateObjectState extends State<CreateObject> {
               } else if(myController2.text == null && _image != null){
                 UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image);
               } else if (myController2.text != null && _image == null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,info: myController2.text);
+                UserSingleton().user.addObject(myController.text, _newCurrentAmount,desc: myController2.text);
               } else if(myController2.text != null && _image != null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image,info: myController2.text);
+                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image,desc: myController2.text);
                 }
               Navigator.of(context).pop(null);
             }, //TODO acción de crear objeto
