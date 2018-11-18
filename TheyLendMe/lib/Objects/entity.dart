@@ -16,7 +16,7 @@ abstract class Entity{
   ///COnstructor, you may need info and the url of the image
   Entity(this._type,this._idEntity,this._name,{String info,String img,String tfno, String email}){
     _info = info;
-    _img = endpoint + img;
+    if(img != null) {_img = endpoint + img;}
     _tfno = tfno;
     _email = email;
   }
