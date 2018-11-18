@@ -6,6 +6,7 @@ import 'package:TheyLendMe/Objects/objState.dart';
 import 'dart:io';
 
 
+
 abstract class Obj{
   final ObjType _type;
   final int _idObject;

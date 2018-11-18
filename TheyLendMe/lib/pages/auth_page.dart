@@ -77,7 +77,10 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                         splashColor: Colors.teal,
                         textColor: Colors.white,
                         child: Text('Registrarme', style: TextStyle(color: Colors.white)),
-                        onPressed: () { Auth.emailRegister(_email,_password); },
+                        onPressed: () { 
+                          Auth.emailRegister(_email,_password);
+                          Navigator.of(context).pop(null);
+                         },
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
