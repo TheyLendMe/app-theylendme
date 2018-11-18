@@ -5,7 +5,7 @@ import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 import 'dart:io';
 
-const String endpoint = "http://54.188.52.254/";
+const String endpoint = "http://18.234.140.97/";
 
 abstract class Obj{
   final ObjType _type;
