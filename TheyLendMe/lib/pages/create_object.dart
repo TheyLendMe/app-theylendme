@@ -31,7 +31,6 @@ class CreateObject extends StatefulWidget {
 class _CreateObjectState extends State<CreateObject> {
   File file, _image;
   int _currentAmount = 1;
-  int _newCurrentAmount;
 
   void _showNumberPicker() {
       showDialog<int>(
@@ -46,9 +45,7 @@ class _CreateObjectState extends State<CreateObject> {
         }
       ).then<void>((int value) {
         if (value != null) {
-          setState(() { _currentAmount = value;
-            _newCurrentAmount  = value;
-            });
+          setState(() { _currentAmount = value;});
         }
       });
     }
@@ -159,13 +156,13 @@ class _CreateObjectState extends State<CreateObject> {
             height: 42.0,
             onPressed:(){
               if(_image == null && myController2.text == null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount);
+                UserSingleton().user.addObject(myController.text, _currentAmount);
               } else if(myController2.text == null && _image != null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image);
+                UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
               } else if (myController2.text != null && _image == null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,desc: myController2.text);
+                UserSingleton().user.addObject(myController.text, _currentAmount,desc: myController2.text);
               } else if(myController2.text != null && _image != null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image,desc: myController2.text);
+                UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
                 }
               Navigator.of(context).pop(null);
             }, //TODO acción de crear objeto
