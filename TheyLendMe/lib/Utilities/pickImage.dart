@@ -8,11 +8,11 @@ import 'package:intl/intl.dart';
 
 class PickImage{
   static Future<File> getImageFromCamera() async{
-    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.gallery));
+    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.camera));
   }
 
   static Future<File> getImageFromGallery() async{
-    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.camera));
+    return await _changeAndSave(await ImagePicker.pickImage(source: ImageSource.gallery));
   }
 
   static Future<File> _changeAndSave(File file)async {
