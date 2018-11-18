@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'object_details.dart';
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
@@ -71,14 +72,19 @@ class GroupDetailsState extends State<GroupDetails> {
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
               height: 42.0,
-              onPressed:(){}, //TODO acción de ver miembros
+              onPressed:(){
+                  
+              }, //TODO acción de ver miembros
               color: Theme.of(context).buttonColor,
               child: Text('Ver Miembros', style: TextStyle(color: Theme.of(context).accentColor)),
             )
           ),
           MaterialButton(
             height: 42.0, //TODO: pegar al borde inferior
-            onPressed:(){},
+            onPressed:(){
+              // TODO: sacar inventario == lista de objetos mis objetos
+              Navigator.of(context).pushNamed("/");
+            },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
           )

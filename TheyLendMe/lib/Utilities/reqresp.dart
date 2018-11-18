@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
-const String endpoint = "http://18.234.140.97/app/";
+const String endpoint = "http://18.234.140.97/";
 //const String endpoint ="http://10.0.2.2/";
 
 
@@ -29,9 +29,11 @@ class RequestPost{
   RequestPost(String fun){
     _url = fun;
 
-    dio.options.baseUrl=endpoint;
+
+    dio.options.baseUrl=endpoint + "/app/";
     dio.options.connectTimeout = 10000; //5s
     dio.options.receiveTimeout=3000;  
+
 
     _data = new Map();
   

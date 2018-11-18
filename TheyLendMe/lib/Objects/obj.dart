@@ -5,7 +5,7 @@ import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 import 'dart:io';
 
-const String endpoint = "http://54.188.52.254/";
+
 
 abstract class Obj{
   final ObjType _type;
@@ -28,6 +28,8 @@ abstract class Obj{
     this._desc = desc;
     if (image!=null) {
       this._img = endpoint + image;
+    }else{
+      _img = "http://www.hoynohaycole.com/wp-content/uploads/2015/04/taza-450x450.jpg";
     }
     this._amount = amount;
     this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;
