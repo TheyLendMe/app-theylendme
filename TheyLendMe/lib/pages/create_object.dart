@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:path_provider/path_provider.dart';
 
 /*
 Widget displaySelectedFile(){
@@ -29,8 +30,8 @@ class CreateObject extends StatefulWidget {
 
 class _CreateObjectState extends State<CreateObject> {
   File file, _image;
-  String _objectName, _objectDesc;
   int _currentAmount = 1;
+  int _newCurrentAmount;
 
   void _showNumberPicker() {
       showDialog<int>(
@@ -45,7 +46,9 @@ class _CreateObjectState extends State<CreateObject> {
         }
       ).then<void>((int value) {
         if (value != null) {
-          setState(() => _currentAmount = value);
+          setState(() { _currentAmount = value;
+            _newCurrentAmount  = value;
+            });
         }
       });
     }
@@ -54,27 +57,34 @@ class _CreateObjectState extends State<CreateObject> {
     print("GalleryPick llamado");
     file = await ImagePicker.pickImage(source: ImageSource.gallery);
     if(file != null){
-      setState(() {});
+      setState(() {
+        _image = file;
+      });
     }
   }
+
+ 
   void cameraPicker() async{
     print("CameraPick llamado");
     file = await ImagePicker.pickImage(source: ImageSource.camera);
     if(file != null){
       setState(() {
-        return _image = file;
+        _image = file;
       });
     }
   }
 
   final myController = TextEditingController();
+  final myController2 = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
     myController.dispose();
+    myController2.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +119,7 @@ class _CreateObjectState extends State<CreateObject> {
                   hintText: 'Escribe una descripción del objeto'),
                 style: Theme.of(context).textTheme.subtitle,
                 validator: _validateDescription,
+                controller: myController2,
               ),
             ]
           )
@@ -147,7 +158,15 @@ class _CreateObjectState extends State<CreateObject> {
           child: MaterialButton(
             height: 42.0,
             onPressed:(){
-              UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
+              if(_image == null && myController2.text == null){
+                UserSingleton().user.addObject(myController.text, _newCurrentAmount);
+              } else if(myController2.text == null && _image != null){
+                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image);
+              } else if (myController2.text != null && _image == null){
+                UserSingleton().user.addObject(myController.text, _newCurrentAmount,info: myController2.text);
+              } else if(myController2.text != null && _image != null){
+                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image,info: myController2.text);
+                }
               Navigator.of(context).pop(null);
             }, //TODO acción de crear objeto
             color: Theme.of(context).buttonColor,
