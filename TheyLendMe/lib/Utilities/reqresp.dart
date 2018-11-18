@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
-const String endpoint = "http://54.188.52.254/app/";
+const String endpoint = "http://18.234.140.97/app/";
 //const String endpoint ="http://10.0.2.2/";
 
 
@@ -77,6 +77,7 @@ class RequestPost{
   bool private, int idMemeber, String requestMsg, bool userInfo = false, String privateCode//add more fields if they are necessary
   }){
     this.userInfo = userInfo;
+    if(img != null){ _data['image'] = new UploadFileInfo(img, basename(img.path));}
     if(idUser != null && !userInfo)_data['idGroup'] = idGroup.toString();
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
@@ -91,7 +92,6 @@ class RequestPost{
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['oUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
-    if(img != null) _data['image'] = new UploadFileInfo(img, basename(img.path));
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
     if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];} else{
         _data['fieldName'] =['null'];

@@ -25,6 +25,12 @@ dependencies:
   flutter_staggered_grid_view:
   url_launcher:
   font_awesome_flutter: ^8.2.0
+  flutter_image_compress: ^0.2.1
+  path_provider: ^0.4.1
+  intl: ^0.15.7
+
+
+
 
 dev_dependencies:
   flutter_test:
