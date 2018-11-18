@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
@@ -29,9 +29,8 @@ class CreateObject extends StatefulWidget {
 }
 
 class _CreateObjectState extends State<CreateObject> {
-  File file, _image;
+  File _image;
   int _currentAmount = 1;
-  int _newCurrentAmount;
 
   void _showNumberPicker() {
       showDialog<int>(
@@ -46,34 +45,20 @@ class _CreateObjectState extends State<CreateObject> {
         }
       ).then<void>((int value) {
         if (value != null) {
-          setState(() { _currentAmount = value;
-            _newCurrentAmount  = value;
-            });
+          setState(() { _currentAmount = value;});
         }
       });
     }
-
-  /*void galleryPicker() async{
-    print("GalleryPick llamado");
-    file = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if(file != null){
-      setState(() {
-        _image = file;
-      });
-    }
+/*
+  void galleryPicker() async{
+   
   }
 
  
   void cameraPicker() async{
-    print("CameraPick llamado");
-    file = await ImagePicker.pickImage(source: ImageSource.camera);
-    if(file != null){
-      setState(() {
-        _image = file;
-      });
-    }
-  }*/
-
+    _image = (await PickImage.getImageFromCamera());
+  }
+*/
   final myController = TextEditingController();
   final myController2 = TextEditingController();
 
@@ -135,7 +120,7 @@ class _CreateObjectState extends State<CreateObject> {
                 child: MaterialButton(
                   color: Colors.grey,
                   child: Icon(Icons.photo_camera),
-                  onPressed: PickImage.getImageFromCamera
+                  onPressed: () async {_image = (await PickImage.getImageFromCamera());}
                 )
               ),
               Positioned(
@@ -157,15 +142,15 @@ class _CreateObjectState extends State<CreateObject> {
           padding: const EdgeInsets.all(8.0),
           child: MaterialButton(
             height: 42.0,
-            onPressed:(){
+            onPressed:() async {
               if(_image == null && myController2.text == null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount);
+                await UserSingleton().user.addObject(myController.text, _currentAmount);
               } else if(myController2.text == null && _image != null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image);
+                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
               } else if (myController2.text != null && _image == null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,desc: myController2.text);
+                await UserSingleton().user.addObject(myController.text, _currentAmount,desc: myController2.text);
               } else if(myController2.text != null && _image != null){
-                UserSingleton().user.addObject(myController.text, _newCurrentAmount,img: _image,desc: myController2.text);
+                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
                 }
               Navigator.of(context).pop(null);
             }, //TODO acción de crear objeto
