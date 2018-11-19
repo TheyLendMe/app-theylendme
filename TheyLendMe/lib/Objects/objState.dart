@@ -24,13 +24,15 @@ class ObjState{
 
   StateOfObject get state => _state;
   Entity get actual => _actual;
-
+  
   Entity get next => _next;
   DateTime get date => _date;
   int get idState => _idState;
   int get amount => _amount;
-   int get fromID => _fromID;
-   set date(DateTime date) => _date = date;
+  int get fromID => _fromID;
+  get msg => _msg;
+  set msg (String msg) => _msg = msg;
+  set date(DateTime date) => _date = date;
   set state (StateOfObject state) => _state = state;
   set actual (Entity e) => _actual = e;
   set idState (int i) => _idState = i;

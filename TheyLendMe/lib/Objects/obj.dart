@@ -144,19 +144,12 @@ class GroupObject extends Obj{
   GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, DateTime date}) 
   : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date);
   @override
-  Future lend(int idRequest,{var context}) async {
-    new RequestPost("lendGObject").dataBuilder(
-        userInfo: true,
-        idRequest: idRequest != null ? idRequest : _objState.idState
-    ).doRequest(context : context);
-  }
-  @override
-  Future requestObj({int amount = 1, String msg, var context}) async{
+  Future requestObj({Group group,int amount = 1, String msg, var context}) async{
     await new RequestPost("RequestAsGroup").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg,
-        idGroup: this.owner.idEntity
+        idGroup: group
     ).doRequest(context : context);
   }
   Future requestAsMember({int amount = 1, String msg, var context}) async{
@@ -220,13 +213,13 @@ class GroupObject extends Obj{
     ).doRequest(context : context);
   }
 
-  Future groupObjectRequest({int amount =1, var context}) async{
+  /*Future groupObjectRequest({int amount =1, var context}) async{
     ResponsePost res = await new RequestPost("intraRequest").dataBuilder(
       userInfo: true,
       idObject: this.idObject,
       amount: amount,
     ).doRequest(context : context);
-  }
+  }*/
   @override
   GroupObjState get objState => _objState;
 
