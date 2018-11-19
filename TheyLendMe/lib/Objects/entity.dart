@@ -197,7 +197,10 @@ class Group extends Entity{
   get imAdmin => _imAdmin;
   set imAdmon(bool imAdmin) => _imAdmin = imAdmin;
 
-
+  static Future<List<Group>>getGroups() async{
+    ResponsePost res = await new RequestPost("getGroups").dataBuilder().doRequest();
+    return res.groupsBuilder();
+  }
   @override
   Future addObject(String name, int amount,{var context, String desc, File img}) async{
     await new RequestPost("createGObject").dataBuilder(
