@@ -389,6 +389,7 @@ class ResponsePost{
       tfno: data['tfno'],
       info: data['info'],
       idMember: idMember,
+      img: data['imagen'],
       admin: admin);
   }
 
@@ -401,6 +402,7 @@ class ResponsePost{
       email: data['email'],
       tfno: data['tfno'],
       info: data['info'],
+      img: data['imagen'],
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
       imAdmin: true,
