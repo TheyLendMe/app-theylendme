@@ -60,12 +60,15 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                             labelText: "Introduce tu e-mail", fillColor: Colors.white),
                         keyboardType: TextInputType.emailAddress,
                       ),
-                      TextFormField(
+                      GestureDetector(
+                        child: TextFormField(
                         decoration: InputDecoration(
                           labelText: "Introduce tu contraseña",
                         ),
-                        obscureText: true, //TODO: showPassword button
+                        obscureText: true,
                         keyboardType: TextInputType.text,
+                        ),
+                        //onTap: () => (obscureText ? false : true) //TODO: showPassword button
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),

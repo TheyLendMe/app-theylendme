@@ -204,7 +204,7 @@ class ResponsePost{
       ///Pedir a victor que incluyaa nombres de los owners
         new UserObject(
           int.parse(object['idObject']),
-          new User(object['idUser'], "prueba"),
+          userBuilder(data :object['owner']),
           object['name'],
           image : object['imagen'],
           amount :int.parse(object['amount']),
@@ -212,7 +212,7 @@ class ResponsePost{
         ) : 
         new GroupObject(
           int.parse(object['idObject']),
-          new Group(int.parse(object['idGroup']), "pruebaGrupo"),
+          groupBuilder(data: object['owner']),
           object['name'],
           image : object['imagen'],
           amount : int.parse(object['amount']),
@@ -389,6 +389,7 @@ class ResponsePost{
       tfno: data['tfno'],
       info: data['info'],
       idMember: idMember,
+      img: data['imagen'],
       admin: admin);
   }
 
@@ -401,6 +402,7 @@ class ResponsePost{
       email: data['email'],
       tfno: data['tfno'],
       info: data['info'],
+      img: data['imagen'],
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
       imAdmin: true,
