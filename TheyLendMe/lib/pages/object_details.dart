@@ -39,7 +39,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                   right: 0.0,
                   bottom: 0.0,
                   child: new FloatingActionButton(
-                    child: Text('x2', style: Theme.of(context).textTheme.title),
+                    child: Text("x"+widget._object.amount.toString(), style: Theme.of(context).textTheme.title),
                     backgroundColor: Theme.of(context).accentColor,
                   ),
                 ),

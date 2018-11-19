@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'dart:io';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
+import 'dart:io';
 
 /*
 Widget displaySelectedFile(){
@@ -153,7 +152,7 @@ class _CreateObjectState extends State<CreateObject> {
                 await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
                 }
               Navigator.of(context).pop(null);
-            }, //TODO acción de crear objeto
+            },
             color: Theme.of(context).buttonColor,
             child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
           )

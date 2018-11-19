@@ -4,28 +4,30 @@ import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'dart:math'; // provisional
-import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-class MyObjectsPage extends StatefulWidget {
+
+class MyGroupObjectsPage extends StatefulWidget {
+
+    final Group _group;
+    
+    MyGroupObjectsPage(this._group);
 
     @override
-    _MyObjectsPageState createState() => _MyObjectsPageState();
+    _MyGroupObjectsPageState createState() => _MyGroupObjectsPageState();
 }
 
-class _MyObjectsPageState extends State<MyObjectsPage> {
-
+class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
+  
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Mis Objetos'),
+          title: const Text('Inventario'),
           //TODO: searchBar
         ),
-      
-      body:
-      FutureBuilder<List<Obj>>(
-          future: UserSingleton().user.getObjects(),
+      body: FutureBuilder<List<Obj>>(
+          future: widget._group.getObjects(),
           builder: (context,snapshot){
             return (snapshot.hasData
             ?
@@ -35,8 +37,6 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
             : Center(child: CircularProgressIndicator()));
           }
       ),
-
-      
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
         onPressed: (){
@@ -87,12 +87,10 @@ class ObjectItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(object.name),
-              xN( object.amount ), //provisional
+              xN( Random().nextInt(20) ), //provisional
               Text(
                 object.objState.toString(),
-                style: stateColor(object.objState.toString()),
-                /*'Disponible', //provisional
-                style: stateColor('Disponible') //provisional*/
+                style: stateColor(object.objState.toString()) //provisional
               )
             ]
           )
@@ -114,14 +112,20 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.green);
   else if (state=='Prestado')
     return TextStyle(color: Colors.red);
-  else
-    return TextStyle(color: Colors.yellow);
 }
 
-/*final User propietario = User('1', 'Señora Propietaria',
+final User propietario = User('1', 'Señora Propietaria',
   img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
   tfno: '34606991934', email: 'sofia@adolfodominguez.com');
-final List<UserObject> objects = <UserObject>[
+
+
+//Group grupo = new Group(idEntity, name);
+
+//List<Obj> objects;
+
+
+
+/*final List<UserObject> objects = <UserObject>[
   UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
   UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
   UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),

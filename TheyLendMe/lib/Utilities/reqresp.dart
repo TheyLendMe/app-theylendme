@@ -390,6 +390,7 @@ class ResponsePost{
       tfno: data['tfno'],
       info: data['info'],
       idMember: idMember,
+      img: data['imagen'],
       admin: admin);
   }
 
@@ -403,6 +404,7 @@ class ResponsePost{
       tfno: data['tfno'],
       img: data['imagen'],
       info: data['info'],
+      img: data['imagen'],
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
       imAdmin: true,
@@ -410,7 +412,7 @@ class ResponsePost{
   }
   List<Group> myGroupsBuilder(){
     List<dynamic> listAdmin = _data['admin'];
-    List<dynamic> listMember = _data['admin'];
+    List<dynamic> listMember = _data['member'];
     List<Group> listGroup = new List();
     listAdmin.forEach((group){listGroup.add(groupBuilder(data : group, imAdmin: true));});
     listMember.forEach((group){listGroup.add(groupBuilder(data : group));});
