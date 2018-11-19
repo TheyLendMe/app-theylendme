@@ -195,7 +195,14 @@ class ResponsePost{
     }
     return obj;
   }
+  List<Group> groupsBuilder(){
+    List l = _data['publicGroups'];
 
+    List<Group> groups = new List();
+    l.forEach((group){groups.add(groupBuilder(data: group));});
+    return groups;
+
+  }
   List<Obj> defaultObjects(List<dynamic> objects, ObjType objType){
     List<Obj> objs = new List();
     objects.forEach((object){
@@ -386,10 +393,10 @@ class ResponsePost{
       data['idUser'], 
       data['nickname'],
       email: data['email'],
+      img: data['imagen'],
       tfno: data['tfno'],
       info: data['info'],
       idMember: idMember,
-      img: data['imagen'],
       admin: admin);
   }
 
@@ -401,8 +408,8 @@ class ResponsePost{
       data['groupName'],
       email: data['email'],
       tfno: data['tfno'],
-      info: data['info'],
       img: data['imagen'],
+      info: data['info'],
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
       imAdmin: true,

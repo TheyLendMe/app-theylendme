@@ -43,6 +43,7 @@ flutter:
   assets:
     - images/tlm.jpg
     - images/def_user_pic.png
+    - images/def_group_pic.png
   #
   # For details:
   # https://flutter.io/assets-and-images

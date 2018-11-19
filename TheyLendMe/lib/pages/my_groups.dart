@@ -22,7 +22,6 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
       body: FutureBuilder<List<Group>>(
         future: UserSingleton().user.getGroupsImMember(),
         builder: (context, snapshot) {
-          (snapshot.hasData ? print(snapshot.data.length) : print(''));
           return (snapshot.hasData
             ? ListView.builder(
                 itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),

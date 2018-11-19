@@ -32,15 +32,16 @@ class GroupDetailsState extends State<GroupDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            //child: Image.network(widget._group.img) //TODO: circular //FIXME: Failed decoding image. Data is either invalid, or it is encoded using an unsupported format
-            child: Image.network('https://static.simpsonswiki.com/images/2/24/Simpson_Family.png')
+            child: (widget._group.img!=null
+            ? Image.network(widget._group.img) //TODO: circular
+            : Image.asset('images/def_group_pic.png'))
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 Text(widget._group.name, style: Theme.of(context).textTheme.title),
-                Text(widget._group.info, style: Theme.of(context).textTheme.subtitle)
+                (widget._group.info!=null) ? Text(widget._group.info, style: Theme.of(context).textTheme.subtitle) : Text('')
               ]
             )
           ),
@@ -84,7 +85,6 @@ class GroupDetailsState extends State<GroupDetails> {
             height: 60.0,
             onPressed:(){
               // TODO: sacar inventario == lista de objetos mis objetos
-              Navigator.of(context).pushNamed("/");
             },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
