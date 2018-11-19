@@ -15,6 +15,7 @@ class _UserDetailsState extends State<UserDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
+        contentPadding: const EdgeInsets.all(0.0),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -30,7 +31,9 @@ class _UserDetailsState extends State<UserDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: Image.network(widget._user.img) //TODO: circular
+            child: (widget._user.img!=null
+              ? Image.network(widget._user.img) //TODO: circular
+              : Image.asset('images/def_user_pic.png'))
           ),
           Container(
             constraints: BoxConstraints.expand(
@@ -60,7 +63,7 @@ class _UserDetailsState extends State<UserDetails> {
             )
           ),
           MaterialButton(
-            height: 42.0, //TODO: pegar al borde inferior
+            height: 60.0,
             onPressed:(){},
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
