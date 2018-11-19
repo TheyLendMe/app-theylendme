@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/pages/create_group.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 class MyGroupsPage extends StatefulWidget {
   @override
@@ -17,9 +19,28 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
           title: const Text('Mis Grupos'),
           //TODO: searchBar
         ),
-      body: ListView.builder( //ListView de ejemplo:
-        itemBuilder: (BuildContext context, int index) => GroupItem(groups[index]),
-        itemCount: groups.length
+      body: FutureBuilder<List<Group>>(
+        future: UserSingleton().user.getGroupsImMember(),
+        builder: (context, snapshot) {
+          (snapshot.hasData ? print(snapshot.data.length) : print(''));
+          return (snapshot.hasData
+            ? ListView.builder(
+                itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
+                itemCount: (snapshot.data.length/2).round() //FIXME: dirty fix
+              )
+            : Center(child: CircularProgressIndicator()));
+        }
+      ),
+      floatingActionButton: new FloatingActionButton(
+        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
+        onPressed: (){
+          showDialog(
+            context: this.context,
+            builder: (BuildContext context){
+              return CreateGroup();
+            }
+          );
+        },
       )
     );
   }
@@ -63,10 +84,3 @@ class GroupItem extends StatelessWidget {
     );
   }
 }
-
-final List<Group> groups = <Group>[
-  Group(1,'MiGrupo1', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png',
-    info: 'grupo1', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
-  Group(2,'MiGrupo2', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png',
-    info: 'grupo2', tfno: '34606991934', email: 'sofia@adolfodominguez.com')
-];
