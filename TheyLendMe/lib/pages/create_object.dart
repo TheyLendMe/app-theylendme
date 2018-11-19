@@ -3,6 +3,7 @@ import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
+import 'dart:io';
 
 /*
 Widget displaySelectedFile(){

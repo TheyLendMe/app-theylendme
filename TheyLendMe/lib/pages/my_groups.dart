@@ -26,7 +26,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
           return (snapshot.hasData
             ? ListView.builder(
                 itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
-                itemCount: (snapshot.data.length/2).round() //FIXME: dirty fix
+                itemCount: snapshot.data.length
               )
             : Center(child: CircularProgressIndicator()));
         }
