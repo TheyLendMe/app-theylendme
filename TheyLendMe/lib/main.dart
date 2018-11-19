@@ -17,11 +17,14 @@ import 'package:TheyLendMe/pages/my_settings.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/auth_page.dart';
+import 'package:TheyLendMe/pages/group_objects.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 
 void main() => runApp(TheApp());
 
 final firstColor = const Color(0xFF35504d);
 final secondColor = const Color(0xFFf3e2bb);
+Group _group;
 
 class TheApp extends StatelessWidget {
 
@@ -53,6 +56,7 @@ class TheApp extends StatelessWidget {
         "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
         "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
         "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
+        "/Inventario": (BuildContext context) => new MyGroupObjectsPage(_group),
 
         "/AuthPage": (BuildContext context) => new AuthPage(),
       } // (a live example: https://youtu.be/RLyw-_MLLTo)

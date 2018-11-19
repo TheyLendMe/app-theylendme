@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/pages/group_objects.dart';
+
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
@@ -84,7 +86,7 @@ class GroupDetailsState extends State<GroupDetails> {
             height: 60.0,
             onPressed:(){
               // TODO: sacar inventario == lista de objetos mis objetos
-              Navigator.of(context).pushNamed("/");
+              Navigator.push(context,new MaterialPageRoute(builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)));
             },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
