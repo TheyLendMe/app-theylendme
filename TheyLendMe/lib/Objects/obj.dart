@@ -23,7 +23,7 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image ="",ObjState objState, int amount = 1, DateTime date}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image,ObjState objState, int amount = 1, DateTime date}){
     this._name = name;
     this._desc = desc;
     if (image!=null) {
