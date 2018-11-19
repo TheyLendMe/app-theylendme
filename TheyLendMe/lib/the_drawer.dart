@@ -6,6 +6,7 @@ import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
+import 'package:TheyLendMe/pages/user_details.dart';
 
 class TheDrawer extends StatefulWidget {
 
@@ -23,19 +24,6 @@ class TheDrawer extends StatefulWidget {
 
 class _TheDrawerState extends State<TheDrawer> {
   bool showUserDetails = false;
-
-    /*Widget _buildUserDetail() {
-      return Container(
-        child: ListView(
-          children: [
-            ListTile(
-              title: Text("User details"),
-              leading: Icon(Icons.info_outline),
-            )
-          ],
-        ),
-      );
-    }*/ //TODO: UserDetail needed?
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +59,20 @@ class _TheDrawerState extends State<TheDrawer> {
             currentAccountPicture: GestureDetector(
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
-                child: Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor)
+                child: (UserSingleton().login
+                    ? (UserSingleton().user.img!=null
+                      ? Image.network(UserSingleton().user.img) //TODO: circular
+                      : Image.asset('images/def_user_pic.png'))
+                  : Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor))
               ),
               onTap: () {
                 if(UserSingleton().login) {
-                  // TODO: ampliar foto/cambiar foto de perfil
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      return UserDetails(UserSingleton().user); //TODO: since it's UserDetails(me), should it be different?
+                    }
+                  );
                 } else Navigator.of(context).pushNamed("/AuthPage");
               }
             ),
@@ -85,7 +82,6 @@ class _TheDrawerState extends State<TheDrawer> {
               ),
             )
           ),
-          //Expanded(child: showUserDetails ? _buildUserDetail() : Column(children: drawerOptions)), //TODO: UserDetail needed?
           Column(children: drawerOptions)
         ],
       ),

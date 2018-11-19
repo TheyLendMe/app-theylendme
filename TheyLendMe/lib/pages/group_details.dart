@@ -16,6 +16,7 @@ class GroupDetailsState extends State<GroupDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
+        contentPadding: const EdgeInsets.all(0.0),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -31,7 +32,8 @@ class GroupDetailsState extends State<GroupDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: Image.network(widget._group.img) //TODO: circular
+            //child: Image.network(widget._group.img) //TODO: circular //FIXME: alguna url da null..
+            child: Image.network('https://static.simpsonswiki.com/images/2/24/Simpson_Family.png')
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -79,7 +81,7 @@ class GroupDetailsState extends State<GroupDetails> {
             )
           ),
           MaterialButton(
-            height: 42.0, //TODO: pegar al borde inferior
+            height: 60.0,
             onPressed:(){
               // TODO: sacar inventario == lista de objetos mis objetos
               Navigator.of(context).pushNamed("/MyObjectsPage");
