@@ -4,6 +4,7 @@ import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'dart:math'; // provisional
+import 'package:TheyLendMe/pages/create_group_object.dart';
 
 
 class MyGroupObjectsPage extends StatefulWidget {
@@ -43,7 +44,7 @@ class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
           showDialog(
             context: this.context,
             builder: (BuildContext context){
-              return CreateObject();
+              return CreateGroupObject(widget._group);
             }
           );
         },

@@ -4,6 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'dart:io';
+import 'package:TheyLendMe/Objects/entity.dart';
 
 /*
 Widget displaySelectedFile(){
@@ -19,15 +20,17 @@ Widget displaySelectedFile(){
 }
 */
 
-class CreateObject extends StatefulWidget {
+class CreateGroupObject extends StatefulWidget {
 
-  CreateObject();
+  final Group _group;
+
+  CreateGroupObject(this._group);
 
   @override
-    _CreateObjectState createState() => _CreateObjectState();
+    _CreateGroupObjectState createState() => _CreateGroupObjectState();
 }
 
-class _CreateObjectState extends State<CreateObject> {
+class _CreateGroupObjectState extends State<CreateGroupObject> {
   File _image;
   int _currentAmount = 1;
 
@@ -143,13 +146,13 @@ class _CreateObjectState extends State<CreateObject> {
             height: 42.0,
             onPressed:() async {
               if(_image == null && myController2.text == null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount);
+                await widget._group.addObject(myController.text, _currentAmount);
               } else if(myController2.text == null && _image != null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
+                await widget._group.addObject(myController.text, _currentAmount,img: _image);
               } else if (myController2.text != null && _image == null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount,desc: myController2.text);
+                await widget._group.addObject(myController.text, _currentAmount,desc: myController2.text);
               } else if(myController2.text != null && _image != null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
+                await widget._group.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
                 }
               Navigator.of(context).pop(null);
             },
