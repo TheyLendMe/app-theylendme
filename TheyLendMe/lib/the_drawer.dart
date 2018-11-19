@@ -6,6 +6,7 @@ import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
+import 'package:TheyLendMe/pages/user_details.dart';
 
 class TheDrawer extends StatefulWidget {
 
@@ -23,19 +24,6 @@ class TheDrawer extends StatefulWidget {
 
 class _TheDrawerState extends State<TheDrawer> {
   bool showUserDetails = false;
-
-    /*Widget _buildUserDetail() {
-      return Container(
-        child: ListView(
-          children: [
-            ListTile(
-              title: Text("User details"),
-              leading: Icon(Icons.info_outline),
-            )
-          ],
-        ),
-      );
-    }*/ //TODO: UserDetail needed?
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +67,12 @@ class _TheDrawerState extends State<TheDrawer> {
               ),
               onTap: () {
                 if(UserSingleton().login) {
-                  // TODO: ampliar foto/cambiar foto de perfil
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      return UserDetails(UserSingleton().user); //TODO: since it's UserDetails(me), should it be different?
+                    }
+                  );
                 } else Navigator.of(context).pushNamed("/AuthPage");
               }
             ),
@@ -89,7 +82,6 @@ class _TheDrawerState extends State<TheDrawer> {
               ),
             )
           ),
-          //Expanded(child: showUserDetails ? _buildUserDetail() : Column(children: drawerOptions)), //TODO: UserDetail needed?
           Column(children: drawerOptions)
         ],
       ),
@@ -104,7 +96,6 @@ class _TheDrawerState extends State<TheDrawer> {
     if (widget.drawerItems[index].route=="/")
       Navigator.pop(context);
     else {
-      // TODO: si esta registrado ya que no se haga lo del auth
       if (UserSingleton().login)
       Navigator.of(context).pushNamed(widget.drawerItems[index].route);
       else Navigator.of(context).pushNamed("/AuthPage");
