@@ -100,7 +100,6 @@ class _TheDrawerState extends State<TheDrawer> {
     if (widget.drawerItems[index].route=="/")
       Navigator.pop(context);
     else {
-      // TODO: si esta registrado ya que no se haga lo del auth
       if (UserSingleton().login)
       Navigator.of(context).pushNamed(widget.drawerItems[index].route);
       else Navigator.of(context).pushNamed("/AuthPage");
