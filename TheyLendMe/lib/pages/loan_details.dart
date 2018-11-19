@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
+import 'package:TheyLendMe/pages/contact_dialog.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 class LoanDetails extends StatefulWidget {
   final Obj _object;
@@ -75,7 +77,16 @@ class _LoanDetailsState extends State<LoanDetails> {
             child: MaterialButton(
               height: 42.0,
               onPressed:(){
-              }, //TODO acción de contactar
+                if(!UserSingleton().login)
+                  Navigator.of(context).pushNamed("/AuthPage");
+                else {
+                  showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return ContactDialog(widget._object.owner);
+                  }
+                );}
+              },
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )

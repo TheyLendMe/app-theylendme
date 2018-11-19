@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'object_details.dart';
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
@@ -33,7 +32,7 @@ class GroupDetailsState extends State<GroupDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            //child: Image.network(widget._group.img) //TODO: circular //FIXME: alguna url da null..
+            //child: Image.network(widget._group.img) //TODO: circular //FIXME: Failed decoding image. Data is either invalid, or it is encoded using an unsupported format
             child: Image.network('https://static.simpsonswiki.com/images/2/24/Simpson_Family.png')
           ),
           Padding(

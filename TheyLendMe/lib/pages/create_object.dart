@@ -153,7 +153,7 @@ class _CreateObjectState extends State<CreateObject> {
                 await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
                 }
               Navigator.of(context).pop(null);
-            }, //TODO acción de crear objeto
+            },
             color: Theme.of(context).buttonColor,
             child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
           )

@@ -48,14 +48,16 @@ class _TheDrawerState extends State<TheDrawer> {
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            // Aquí habrá que meter los datos de cada usuario
-            accountName: Text("John Doe"), accountEmail: Text("john.doe@gmail.com"),
-            /*onDetailsPressed: () { //TODO: UserDetail needed?
-              setState(() {
-                showUserDetails = !showUserDetails;
-              });
-            },*/
-            // Metiendo imagen de user
+            accountName: (UserSingleton().login
+              ? (UserSingleton().user.name!=null
+                ? Text(UserSingleton().user.name)
+                : Text("NombreUsuario"))
+              : Text("NombreUsuario")),
+            accountEmail: (UserSingleton().login
+              ? (UserSingleton().user.email!=null
+                ? Text(UserSingleton().user.email)
+                : Text("sample@ma.il"))
+              : Text("sample@ma.il")),
             currentAccountPicture: GestureDetector(
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
