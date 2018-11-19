@@ -410,7 +410,7 @@ class ResponsePost{
   }
   List<Group> myGroupsBuilder(){
     List<dynamic> listAdmin = _data['admin'];
-    List<dynamic> listMember = _data['admin'];
+    List<dynamic> listMember = _data['member'];
     List<Group> listGroup = new List();
     listAdmin.forEach((group){listGroup.add(groupBuilder(data : group, imAdmin: true));});
     listMember.forEach((group){listGroup.add(groupBuilder(data : group));});
