@@ -3,7 +3,7 @@ import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/loan_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
-import 'package:TheyLendMe/Objects/entity.dart'; // provisional
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 /*
 //TODO:
@@ -25,11 +25,17 @@ class _MyLoansPageState extends State<MyLoansPage> {
       appBar: AppBar(
           title: const Text('Mis Préstamos'),
         ),
-      body: ListView.builder( //ListView de ejemplo:
-        itemBuilder: (BuildContext context, int index) => LoanItem(loanObjects[index]),
-        itemCount: loanObjects.length
-      )
-    );
+      body: FutureBuilder<List<Obj>>(
+        future: UserSingleton().user.getClaimsOthersToMe(), //TODO: getLoansOthersToMe also needed
+        builder: (context, snapshot) {
+          return (snapshot.hasData
+            ? ListView.builder( //ListView de ejemplo:
+                itemBuilder: (BuildContext context, int index) => LoanItem(snapshot.data[index]),
+                itemCount: snapshot.data.length
+              )
+            : Center(child: CircularProgressIndicator()));
+          }
+    ));
   }
 }
 
@@ -112,7 +118,7 @@ class LoanItem extends StatelessWidget {
         ), //Container
         //direction: DismissDirection.horizontal,
         direction: (object.objState.state==StateOfObject.LENT
-          ? (object.owner==yo)
+          ? (object.owner==UserSingleton().user)
             ? DismissDirection.horizontal
             : DismissDirection.down //TODO: DismissDirection.none
           : DismissDirection.horizontal
@@ -151,7 +157,7 @@ Widget stateIcon(state,owner) {
       child: Icon(Icons.check),
     );
   else if (state==StateOfObject.LENT)
-    if (owner==yo)
+    if (owner==UserSingleton().user)
         return Container(
           child: Icon(Icons.call_received), //TODO: icon: call_made = object_received ??
           //color: Colors.red
@@ -163,7 +169,7 @@ Widget stateIcon(state,owner) {
         );
 }
 
-final User usuario1 = User('1', 'Usuario 1',
+/*final User usuario1 = User('1', 'Usuario 1',
   img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
   tfno: '34606991934', email: 'sofia@adolfodominguez.com');
 final User usuario2 = User('2', 'Usuario 2',
@@ -179,5 +185,5 @@ final List<UserObject> loanObjects = <UserObject>[
   UserObject(3, yo, 'Mi Lápiz', image: 'https://http.cat/402', objState: ObjState()),
   UserObject(4, usuario2, 'Caja', image: 'https://http.cat/403', objState: ObjState()),
   UserObject(5, usuario1, 'Goma', image: 'https://http.cat/404', objState: ObjState())
-];
+];*/
 
