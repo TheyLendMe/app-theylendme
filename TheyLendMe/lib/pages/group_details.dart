@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/pages/group_objects.dart';
+
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
