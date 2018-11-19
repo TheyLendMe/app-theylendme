@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'dart:io';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';

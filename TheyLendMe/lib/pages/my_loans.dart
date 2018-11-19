@@ -29,7 +29,7 @@ class _MyLoansPageState extends State<MyLoansPage> {
         future: UserSingleton().user.getClaimsOthersToMe(), //TODO: getLoansOthersToMe also needed
         builder: (context, snapshot) {
           return (snapshot.hasData
-            ? ListView.builder( //ListView de ejemplo:
+            ? ListView.builder(
                 itemBuilder: (BuildContext context, int index) => LoanItem(snapshot.data[index]),
                 itemCount: snapshot.data.length
               )
@@ -168,22 +168,3 @@ Widget stateIcon(state,owner) {
           //color: Colors.green
         );
 }
-
-/*final User usuario1 = User('1', 'Usuario 1',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
-  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
-final User usuario2 = User('2', 'Usuario 2',
-  img: 'https://d1u5p3l4wpay3k.cloudfront.net/futuramaworldsoftomorrow_gamepedia_en/a/a9/Hattie_McDoogal_Find_a_Cat_Sitter.png',
-  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
-final User yo = User('3', 'Yo mismo',
-  img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAqvCudv9tguYJwMavtlmGM25jbivv_pZ5rdBxNM4a4EXXXT5j',
-  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
-
-final List<UserObject> loanObjects = <UserObject>[
-  UserObject(1, usuario1, 'Cosa', image: 'https://http.cat/400', objState: ObjState()),
-  UserObject(2, usuario2, 'Pelota', image: 'https://http.cat/401', objState: ObjState()),
-  UserObject(3, yo, 'Mi Lápiz', image: 'https://http.cat/402', objState: ObjState()),
-  UserObject(4, usuario2, 'Caja', image: 'https://http.cat/403', objState: ObjState()),
-  UserObject(5, usuario1, 'Goma', image: 'https://http.cat/404', objState: ObjState())
-];*/
-
