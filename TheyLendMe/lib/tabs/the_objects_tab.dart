@@ -4,6 +4,8 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+//TODO: refresh
+
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
     @override
