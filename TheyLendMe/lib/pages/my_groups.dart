@@ -66,8 +66,9 @@ class GroupItem extends StatelessWidget {
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
           leading: new CircleAvatar(
-              child: new Text(group.name[0]), //just the initial letter in a circle
-              backgroundColor: Colors.yellow
+              child: ((group.img !=null)
+              ? Image.asset(group.img)
+              : Image.asset('images/def_group_pic.png')), //just the initial letter in a circle
             ),
           title: new Container(
             child: Row(
@@ -75,6 +76,7 @@ class GroupItem extends StatelessWidget {
               //mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(group.name),
+                
               ]
             )
           )

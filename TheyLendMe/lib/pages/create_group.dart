@@ -99,10 +99,14 @@ class _CreateGroupState extends State<CreateGroup> {
             height: 42.0,
             onPressed:() async {
               if(myController.text.isNotEmpty){
-                if(myController2.text == null){
+                if(myController2.text == null && _image == null){
                   await UserSingleton().user.createGroup(groupName: myController.text);
-                } else {
+                } else if (myController2.text != null && _image == null) {
                   await UserSingleton().user.createGroup(groupName: myController.text, info: myController2.text);
+                } else if(myController2.text == null && _image != null){
+                  await UserSingleton().user.createGroup(groupName: myController.text, img: _image);
+                } else {
+                  await UserSingleton().user.createGroup(groupName: myController.text, info: myController2.text,img: _image);
                 }
                 Navigator.of(context).pop(null);
               } else {
