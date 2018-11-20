@@ -87,6 +87,9 @@ class GroupDetailsState extends State<GroupDetails> {
             height: 60.0,
             onPressed:(){
               // TODO: sacar inventario == lista de objetos mis objetos
+              Navigator.push(context, new MaterialPageRoute(
+                builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
+              ));
             },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),

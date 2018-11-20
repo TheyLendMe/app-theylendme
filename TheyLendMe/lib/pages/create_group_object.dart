@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'dart:io';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:TheyLendMe/pages/group_objects.dart';
 
 /*
 Widget displaySelectedFile(){
@@ -100,6 +101,7 @@ class _CreateGroupObjectState extends State<CreateGroupObject> {
                 style: Theme.of(context).textTheme.subtitle,
                 validator:  _validateName,
                 controller: myController,
+                //TODO limitar nombre en el interfaz
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -145,17 +147,27 @@ class _CreateGroupObjectState extends State<CreateGroupObject> {
           child: MaterialButton(
             height: 42.0,
             onPressed:() async {
-              if(_image == null && myController2.text == null){
-                await widget._group.addObject(myController.text, _currentAmount);
-              } else if(myController2.text == null && _image != null){
-                await widget._group.addObject(myController.text, _currentAmount,img: _image);
-              } else if (myController2.text != null && _image == null){
-                await widget._group.addObject(myController.text, _currentAmount,desc: myController2.text);
-              } else if(myController2.text != null && _image != null){
-                await widget._group.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
-                }
-              Navigator.of(context).pop(null);
-            },
+              if(myController.text.isNotEmpty){
+                if(_image == null && myController2.text == null){
+                  await widget._group.addObject(myController.text, _currentAmount);
+                } else if(myController2.text == null && _image != null){
+                  await widget._group.addObject(myController.text, _currentAmount,img: _image);
+                } else if (myController2.text != null && _image == null){
+                  await widget._group.addObject(myController.text, _currentAmount,desc: myController2.text);
+                } else if(myController2.text != null && _image != null){
+                  await widget._group.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
+                  }
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                  builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
+                ),
+                ModalRoute.withName('/'));
+                // TODO: evitar que se vuelva a crear objeto al echar atrás
+                /*push(context, MaterialPageRoute(
+                  builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
+                ));*/
+            } else {
+              Fluttertoast.showToast(msg: "Rellena el nombre",toastLength: Toast.LENGTH_SHORT);
+            }},
             color: Theme.of(context).buttonColor,
             child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
           )

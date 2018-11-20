@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/Utilities/pickImage.dart';
+import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //TODO: TextFormField email (mandatory), phone
 
@@ -15,6 +18,7 @@ class _CreateGroupState extends State<CreateGroup> {
 
   final myController = TextEditingController();
   final myController2 = TextEditingController();
+  File _image;
 
   @override
   void dispose() {
@@ -53,6 +57,28 @@ class _CreateGroupState extends State<CreateGroup> {
                 validator:  _validateName,
                 controller: myController,
               ),
+              Container(
+                  constraints: BoxConstraints.expand(
+                    height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
+                  ),
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children:[
+                      Container(
+                        constraints: BoxConstraints.expand(
+                          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
+                        ),
+                        alignment: Alignment.center,
+                        child: MaterialButton(
+                        onPressed: () async {_image = (await PickImage.getImageFromGallery());},
+                        child: ((_image!=null)
+                          ? Image.file(_image) //TODO: circular
+                          : Image.asset('images/def_group_pic.png'))
+                        )
+                      ),
+                    ]
+                  ),
+              ),
               TextFormField(
                 decoration: InputDecoration(
                   hintText: 'Escribe una descripción del grupo'),
@@ -60,6 +86,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 validator: _validateDescription,
                 controller: myController2,
               ),
+              // TODO añadir miembros?
             ]
           )
         ),
@@ -71,12 +98,16 @@ class _CreateGroupState extends State<CreateGroup> {
           child: MaterialButton(
             height: 42.0,
             onPressed:() async {
-              if(myController2.text == null){
-                await UserSingleton().user.createGroup(groupName: myController.text);
+              if(myController.text.isNotEmpty){
+                if(myController2.text == null){
+                  await UserSingleton().user.createGroup(groupName: myController.text);
+                } else {
+                  await UserSingleton().user.createGroup(groupName: myController.text, info: myController2.text);
+                }
+                Navigator.of(context).pop(null);
               } else {
-                await UserSingleton().user.createGroup(groupName: myController.text, info: myController2.text);
+                Fluttertoast.showToast(msg: "Rellena el nombre del grupo",toastLength: Toast.LENGTH_SHORT);
               }
-              Navigator.of(context).pop(null);
             },
             color: Theme.of(context).buttonColor,
             child: Text('Crear grupo', style: TextStyle(color: Theme.of(context).accentColor)),

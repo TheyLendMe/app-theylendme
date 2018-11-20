@@ -4,16 +4,16 @@ import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-class  ObjectDetails extends StatefulWidget {
+class GroupObjectDetails extends StatefulWidget {
   final Obj _object;
 
-  ObjectDetails(this._object);
+  GroupObjectDetails(this._object);
 
   @override
-    _ObjectDetailsState createState() => _ObjectDetailsState();
+    _GroupObjectDetailsState createState() => _GroupObjectDetailsState();
 }
 
-class _ObjectDetailsState extends State<ObjectDetails> {
+class _GroupObjectDetailsState extends State<GroupObjectDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
@@ -77,18 +77,31 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             child: MaterialButton(
               height: 42.0,
               onPressed:(){
-                if(UserSingleton().login){
                   showDialog(
                   context: context,
                   builder: (BuildContext context){
                     return ContactDialog(widget._object.owner);
                   }
-                );} else{
-                  Navigator.of(context).pushNamed("/AuthPage");
-                }
+                );
               },
               color: Theme.of(context).buttonColor,
               child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+            )
+          ),
+           Container(
+            constraints: BoxConstraints.expand(
+              height: Theme.of(context).textTheme.display1.fontSize * 1.5,
+            ),
+            padding: const EdgeInsets.all(8.0),
+            child: MaterialButton(
+              height: 42.0,
+              onPressed:(){
+                  // TODO: Eliminamos el objeto en cuestión
+                  widget._object.delObj();
+                  Navigator.of(context).reassemble();
+              },
+              color: Colors.red,
+              child: Text('Eliminar objeto', style: TextStyle(color: Theme.of(context).accentColor)),
             )
           )
         ]

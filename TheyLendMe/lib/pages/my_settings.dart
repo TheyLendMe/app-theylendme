@@ -78,6 +78,7 @@ class _SettingsPageState extends State<MySettingsPage> {
           // )
         )
       ),
+      // TODO: añadirse a un grupo?/administrar grupos?
       floatingActionButton: 
         new Row( 
           mainAxisSize: MainAxisSize.max,
