@@ -4,13 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:TheyLendMe/Utilities/auth.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-/*
-//TODO:
-* - use googleAuth, emailAuth, facebookAuth from Utilities/auth.dart
-*/
-
 class AuthPage extends StatefulWidget {
-	// this source is better: https://youtu.be/iYH2jzUM1Nc
 
   @override
   _AuthPageState createState() => _AuthPageState();
@@ -21,11 +15,21 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
   Animation<double> _iconAnimation;
   AnimationController _iconAnimationController;
 
-  String _email="johndoe@ema.il";
-  String _password="p4ssw0rd";
+  final controllerEmail = TextEditingController();
+  final controllerPassword = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    controllerEmail.dispose();
+    controllerPassword.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() { // Animation:
     super.initState();
     _iconAnimationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 500));
@@ -36,6 +40,18 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
     _iconAnimation.addListener(() => this.setState(() {}));
     _iconAnimationController.forward();
   }
+
+  void _submit() {
+    final form = formKey.currentState;
+
+    if (form.validate()) {
+      form.save();
+      Auth.emailRegister(controllerEmail.text,controllerPassword.text);
+      //TODO: sync-await return Center(child: CircularProgressIndicator()));
+      Navigator.of(context).pop(null);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +67,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
               Container(
                 padding: const EdgeInsets.all(20.0),
                 child: Form(
-                  autovalidate: true,
+                  key: formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -59,14 +75,18 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                         decoration: InputDecoration(
                             labelText: "Introduce tu e-mail", fillColor: Colors.white),
                         keyboardType: TextInputType.emailAddress,
+                        validator: _validateEmail,
+                        controller: controllerEmail,
                       ),
                       GestureDetector(
                         child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Introduce tu contraseña",
-                        ),
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            labelText: "Introduce tu contraseña",
+                          ),
+                          obscureText: true,
+                          keyboardType: TextInputType.text,
+                          validator: _validatePassword,
+                          controller: controllerPassword,
                         ),
                         //onTap: () => (obscureText ? false : true) //TODO: showPassword button
                       ),
@@ -80,10 +100,9 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                         splashColor: Colors.teal,
                         textColor: Colors.white,
                         child: Text('Registrarme', style: TextStyle(color: Colors.white)),
-                        onPressed: () { 
-                          Auth.emailRegister(_email,_password);
-                          Navigator.of(context).pop(null);
-                         },
+                        onPressed:() {
+                          _submit();
+                        }
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
@@ -111,6 +130,7 @@ Widget googleButton(BuildContext context) {
     color: Color(0Xffdb3236),
     onPressed: () async {
       if(await Auth.login(google: true)){
+        //TODO: sync-await return Center(child: CircularProgressIndicator()));
         Navigator.of(context).pop(null);
       }
       
@@ -152,4 +172,18 @@ Widget googleButton(BuildContext context) {
       ),
     ),
   );
+}
+
+// https://github.com/MikeMitterer/dart-validate/blob/master/lib/validate.dart#L57
+String _validateEmail(String value) {
+  return (value.isEmpty ? 'Por favor, introduce un email'
+    : (!RegExp("^([0-9a-zA-Z]([-.+\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})\$").hasMatch(value) ? 'Email no válido'
+      : null));
+}
+
+// https://iirokrankka.com/2017/10/17/validating-forms-in-flutter/
+String _validatePassword(String value) {
+  return (value.isEmpty ? 'Por favor, introduce una contraseña'
+    : (value.length<6 ? 'La contraseña tiene que tener al menos 6 caracteres'
+      : null));
 }

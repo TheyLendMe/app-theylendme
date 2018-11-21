@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 
+//TODO: refresh
+
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
     @override

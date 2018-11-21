@@ -34,7 +34,9 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             alignment: Alignment.center,
             child: Stack(
               children:[
-                Image.network(widget._object.image),
+                (widget._object.image!=null
+                  ? Image.network(widget._object.image)
+                  : Image.asset('images/def_obj_pic.png')),
                 Positioned(
                   right: 0.0,
                   bottom: 0.0,

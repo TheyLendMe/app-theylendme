@@ -52,12 +52,12 @@ class _TheDrawerState extends State<TheDrawer> {
               ? (UserSingleton().user.name!=null
                 ? Text(UserSingleton().user.name)
                 : Text("NombreUsuario"))
-              : Text("NombreUsuario")),
+              : Text("UsuarioSinRegistrar")),
             accountEmail: (UserSingleton().login
               ? (UserSingleton().user.email!=null
                 ? Text(UserSingleton().user.email)
                 : Text("sample@ma.il"))
-              : Text("sample@ma.il")),
+              : Text('')),
             currentAccountPicture: GestureDetector(
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
