@@ -100,6 +100,7 @@ class Auth {
         case "auth/user-not-found" : {msg = "This user doesn't exist"; break;}
         case "auth/invalid-credential" : {msg = "Email or Password are Incorrect"; break;}
       }
+      await signOut();
       ErrorToast().handleError(msg: msg, id: e.code);
   }
   static Future<bool> _checkFirstLogIn() async{
