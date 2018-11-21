@@ -93,7 +93,7 @@ class Auth {
     UserSingleton().notifications.firebaseMessaging.subscribeToTopic(uid);
     UserSingleton().user.getNotTopics();
   }
-  static void _onError(PlatformException e){
+  static void _onError(PlatformException e) async{
     String msg = e.message;
       switch (e.code){
         case "auth/email-already-exists" : {msg = "A user with this email already exists"; break;}
