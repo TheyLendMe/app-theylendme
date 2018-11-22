@@ -4,8 +4,6 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-//WIP: refresh
-
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
     @override
@@ -19,10 +17,9 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
       new GlobalKey<RefreshIndicatorState>();
 
   Future<Null> _refresh() {
-    //TODO
-    /*return getUser().then((_user) {
-      setState(() => user = _user);
-    });*/
+    //FIXME: no da error, pero no recarga objetos nuevos
+    // (por ejemplo, si mientras está en esta pestaña otro usuario crea un nuevo objeto)
+    return Obj.getObjects().then((_objects) { ObjectTile(objects: _objects); });
   }
 
   @override
@@ -49,7 +46,7 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
     );
   }
 
-  _tryAgainButtonClick(bool _) => setState(() {});
+  //_tryAgainButtonClick(bool _) => setState(() {});
 
 }
 
@@ -100,14 +97,3 @@ class ObjectTile extends StatelessWidget {
     );
   }
 }
-
-/*final User propietario = User('1', 'Señora Propietaria',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
-
-final List<UserObject> objects = <UserObject>[
-  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
-  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
-  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
-  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
-  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
-];*/

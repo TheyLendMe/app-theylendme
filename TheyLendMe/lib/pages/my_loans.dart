@@ -6,7 +6,7 @@ import 'package:TheyLendMe/Objects/objState.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 /*
-//WIP2:
+//WIP:
 * - Complete Dismissible behaviour
 */
 

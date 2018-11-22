@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 
-//WIP: refresh
-
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
     @override
@@ -17,10 +15,14 @@ class _TheGroupsTabState extends State<TheGroupsTab> {
       new GlobalKey<RefreshIndicatorState>();
 
   Future<Null> _refresh() {
-    //TODO
-    /*return getUser().then((_user) {
-      setState(() => user = _user);
-    });*/
+    //FIXME: no da error, pero no recarga grupos nuevos
+    // (por ejemplo, si mientras está en esta pestaña otro usuario crea un nuevo grupo)
+    return Group.getGroups().then((_groups) {
+      ListView.builder(
+        itemBuilder: (BuildContext context, int index) => GroupItem(_groups[index]),
+        itemCount: _groups.length
+      );
+    });
   }
 
   @override
@@ -77,11 +79,3 @@ class GroupItem extends StatelessWidget {
     );
   }
 }
-
-/*final List<Group> groups = <Group>[
-  Group(1,'Asociación ASOC', info: 'una asociación', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
-  Group(2,'Grupo GRP', info: 'un grupo', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png', email: 'sofia@adolfodominguez.com'),
-  Group(3,'Equipo C.D: .EQUIPO', info:'un equipo', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
-  Group(4,'Organización ORGANIZ', info: 'una organización', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png', email: 'sofia@adolfodominguez.com'),
-  Group(5,'Clase CLAS1', info: 'una clase', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
-];*/
