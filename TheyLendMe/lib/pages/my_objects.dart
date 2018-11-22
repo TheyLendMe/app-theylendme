@@ -30,12 +30,12 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
           future: UserSingleton().user.getObjects(),
           builder: (context,snapshot){
             return (snapshot.hasData
-            ?/*
+            /*
             ListView.builder(
               itemBuilder: (BuildContext context, int index) => ObjectItem(snapshot.data[index]),
               itemCount: snapshot.data.length
             )*/
-            ObjectTile(objects: snapshot.data)
+            ? ObjectTile(objects: snapshot.data)
             : Center(child: CircularProgressIndicator()));
           }
       ),

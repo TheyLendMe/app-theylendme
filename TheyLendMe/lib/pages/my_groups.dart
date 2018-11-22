@@ -67,7 +67,7 @@ class GroupItem extends StatelessWidget {
         child: ListTile(
           leading: new CircleAvatar(
               child: ((group.img !=null)
-              ? Image.asset(group.img)
+              ? Image.network(group.img)
               : Image.asset('images/def_group_pic.png')), //just the initial letter in a circle
             ),
           title: new Container(
