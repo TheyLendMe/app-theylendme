@@ -4,6 +4,8 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+//TODO: refresh
+
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
     @override
@@ -63,9 +65,13 @@ class ObjectTile extends StatelessWidget {
               );
             },
             child: Hero(
-              tag: objects[i].idObject,
+              tag: objects[i].idObject.toString()+objects[i].name[0],
+              //tag: idObject+first_name_lettter because it could happen
+              // that groupObject.idObject=userObject.idObject -> black screen
               child: FadeInImage(
-                image: NetworkImage(objects[i].image),
+                image: (objects[i].image!=null
+                  ? NetworkImage(objects[i].image)
+                  : AssetImage('images/def_obj_pic.png')),
                 fit: BoxFit.cover,
                 placeholder: AssetImage('images/tlm.jpg'),
               )

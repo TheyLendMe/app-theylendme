@@ -4,5 +4,5 @@ directorio para la app
 ## último screencast
 
 <p align="center">
-  <img src="https://github.com/TheyLendMe/app-theylendme/raw/interfaz_javi/screenshots/app12.gif">
+  <img src="https://raw.githubusercontent.com/TheyLendMe/app-theylendme/master/screenshots/app13.gif">
 </p>

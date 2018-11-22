@@ -13,8 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
-const String endpoint = "http://18.234.140.97/";
-//const String endpoint ="http://10.0.2.2/";
+const String endpoint = "http://52.47.177.107/";
 
 
 

@@ -41,7 +41,9 @@ class _UserDetailsState extends State<UserDetails> {
               ),
             padding: const EdgeInsets.all(8.0),
             alignment: Alignment.center,
-            child: Text(widget._user.name, style: Theme.of(context).textTheme.title)
+            child: (widget._user.img!=null
+              ? Text(widget._user.name, style: Theme.of(context).textTheme.title)
+              : Text(''))
           ),
           Container(
             constraints: BoxConstraints.expand(
