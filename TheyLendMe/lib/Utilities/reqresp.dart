@@ -171,7 +171,15 @@ class ResponsePost{
   dynamic get data => _data;
 ////-----------Objects builders------------//////////
 
-
+  List<UserObject> getMyObjects(){
+    List objects = _data['BYproperty'];
+    List <UserObject> userObjects = new List();
+    objects.forEach((object){
+      
+      userObjects.add(objectBuilder(data : object,forUser: true));
+    });
+    return userObjects;
+  }
 
   List<Obj> objectsUserBuilder({Entity entity,String stateType, bool mine = false}){
     List<Obj> obj = new List();
@@ -343,6 +351,7 @@ class ResponsePost{
           data['name'],
           amount: int.parse(data['amount']),
           image : data['imagen'],
+          desc: data['descr'],
           objState: objState
           ) 
           : 
@@ -352,6 +361,7 @@ class ResponsePost{
            //TODO decirle a victor que me incluya todo el grupo
           data['name'],
           image : data['imagen'],
+          desc: data['descr'],
           amount: int.parse(data['amount']),
           objState: objState
         );
