@@ -4,7 +4,7 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-//TODO: refresh
+//WIP: refresh
 
 // Pestaña OBJETOS
 class TheObjectsTab extends StatefulWidget {
@@ -15,10 +15,23 @@ class TheObjectsTab extends StatefulWidget {
 // CONTENIDO de la pestaña OBJETOS.
 class _TheObjectsTabState extends State<TheObjectsTab> {
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+
+  Future<Null> _refresh() {
+    //TODO
+    /*return getUser().then((_user) {
+      setState(() => user = _user);
+    });*/
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Obj>>(
+      body: RefreshIndicator( //example: https://github.com/sharmadhiraj/flutter_examples/blob/master/lib/pages/refresh_indicator.dart
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: FutureBuilder<List<Obj>>(
         future: Obj.getObjects(),
         builder: (context, snapshot) {
           /*if (snapshot.hasError) //TODO: this is from https://github.com/CodingInfinite/FutureBuilderWithPagination
@@ -31,6 +44,7 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
             ? ObjectTile(objects: snapshot.data)
             : Center(child: CircularProgressIndicator());
           }
+        )
       )
     );
   }

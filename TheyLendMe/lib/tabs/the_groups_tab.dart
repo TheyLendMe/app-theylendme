@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 
-//TODO: refresh
+//WIP: refresh
 
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
@@ -13,19 +13,33 @@ class TheGroupsTab extends StatefulWidget {
 // CONTENIDO de la pestaña GRUPOS
 class _TheGroupsTabState extends State<TheGroupsTab> {
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+
+  Future<Null> _refresh() {
+    //TODO
+    /*return getUser().then((_user) {
+      setState(() => user = _user);
+    });*/
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Group>>(
-        future: Group.getGroups(),
-        builder: (context, snapshot) {
-          return (snapshot.hasData
-            ? ListView.builder(
-                itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
-                itemCount: snapshot.data.length
-              )
-            : Center(child: CircularProgressIndicator()));
-        }
+      body: RefreshIndicator( //example: https://github.com/sharmadhiraj/flutter_examples/blob/master/lib/pages/refresh_indicator.dart
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: FutureBuilder<List<Group>>(
+          future: Group.getGroups(),
+          builder: (context, snapshot) {
+            return (snapshot.hasData
+              ? ListView.builder(
+                  itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
+                  itemCount: snapshot.data.length
+                )
+              : Center(child: CircularProgressIndicator()));
+          }
+        )
       )
     );
   }
