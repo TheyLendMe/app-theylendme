@@ -71,7 +71,7 @@ class ObjectItem extends StatelessWidget {
       },
       child: ListTile(
         leading: new Container(
-          child: new Text(object.name[0]), //just the initial letter in a circle
+          child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
           decoration: BoxDecoration(
             color: Theme.of(context).accentColor,
             borderRadius: BorderRadius.all(
@@ -101,6 +101,12 @@ class ObjectItem extends StatelessWidget {
     ); //GestureDetector
   }
 }
+
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}
 
 Widget xN(amount) {
   if (amount>1)
