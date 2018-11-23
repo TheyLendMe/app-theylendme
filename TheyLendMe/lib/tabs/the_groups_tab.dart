@@ -69,7 +69,7 @@ class GroupItem extends StatelessWidget {
       child: ListTile(
         leading: new CircleAvatar(
             child: new Text(group.name[0]), //just the initial letter in a circle
-            backgroundColor: Colors.yellow
+            backgroundColor: Theme.of(context).accentColor
           ),
         title: Text(group.name),
         subtitle: (group.info!=null

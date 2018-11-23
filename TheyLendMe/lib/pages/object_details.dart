@@ -79,7 +79,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             height: Theme.of(context).textTheme.display1.fontSize * 1.5,
           ),
           padding: const EdgeInsets.all(8.0),
-          child: MaterialButton(
+          child: MaterialButton( //TODO: improve "Contact" button design
             height: 42.0,
             onPressed:(){
               if(UserSingleton().login){
@@ -101,7 +101,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             height: Theme.of(context).textTheme.display1.fontSize * 1.5,
           ),
           padding: const EdgeInsets.all(8.0),
-          child: MaterialButton(
+          child: MaterialButton( //TODO: improve "Request" button design
             height: 42.0,
             onPressed:(){
               if(UserSingleton().login){

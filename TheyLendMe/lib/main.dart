@@ -24,8 +24,9 @@ import 'package:TheyLendMe/Objects/entity.dart';
 
 void main() => runApp(TheApp());
 
-final firstColor = const Color(0xFF35504d);
-final secondColor = const Color(0xFFf3e2bb);
+//WIP: choosing main colors ( i'm using https://randoma11y.com )
+final firstColor = const Color(0xFF060b3e);
+final secondColor = const Color(0xFFfe9b28);
 Group _group;
 
 class TheApp extends StatelessWidget {

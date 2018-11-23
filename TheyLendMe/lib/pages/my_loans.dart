@@ -97,7 +97,7 @@ class LoanItem extends StatelessWidget {
             leading: new Container(
               child: new Text(object.name[0]), //just the initial letter in a circle
               decoration: BoxDecoration(
-                color: Colors.yellow,
+                color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.all(
                   const Radius.circular(4.0),
                 ),
