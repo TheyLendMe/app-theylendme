@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
+import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -59,13 +61,17 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(widget._object.name, style: Theme.of(context).textTheme.title),
-              Text(' de ', style: Theme.of(context).textTheme.subtitle),
+              Text(' de ', style: Theme.of(context).textTheme.subtitle), //WIP: hacerlo más clickable
               GestureDetector(
                 onTap: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context){
-                      return UserDetails(widget._object.owner);
+                      if (widget._object.owner is User) {
+                        return UserDetails(widget._object.owner);
+                      } else if (widget._object.owner is Group) {
+                        return GroupDetails(widget._object.owner);
+                      }
                     }
                   );
                 },
