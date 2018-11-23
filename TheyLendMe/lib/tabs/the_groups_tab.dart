@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 
-//TODO: refresh
-
 // Pestaña GRUPOS
 class TheGroupsTab extends StatefulWidget {
     @override
@@ -13,19 +11,37 @@ class TheGroupsTab extends StatefulWidget {
 // CONTENIDO de la pestaña GRUPOS
 class _TheGroupsTabState extends State<TheGroupsTab> {
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+
+  Future<Null> _refresh() {
+    //FIXME: no da error, pero no recarga grupos nuevos
+    // (por ejemplo, si mientras está en esta pestaña otro usuario crea un nuevo grupo)
+    return Group.getGroups().then((_groups) {
+      ListView.builder(
+        itemBuilder: (BuildContext context, int index) => GroupItem(_groups[index]),
+        itemCount: _groups.length
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Group>>(
-        future: Group.getGroups(),
-        builder: (context, snapshot) {
-          return (snapshot.hasData
-            ? ListView.builder(
-                itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
-                itemCount: snapshot.data.length
-              )
-            : Center(child: CircularProgressIndicator()));
-        }
+      body: RefreshIndicator( //example: https://github.com/sharmadhiraj/flutter_examples/blob/master/lib/pages/refresh_indicator.dart
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: FutureBuilder<List<Group>>(
+          future: Group.getGroups(),
+          builder: (context, snapshot) {
+            return (snapshot.hasData
+              ? ListView.builder(
+                  itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
+                  itemCount: snapshot.data.length
+                )
+              : Center(child: CircularProgressIndicator()));
+          }
+        )
       )
     );
   }
@@ -53,7 +69,7 @@ class GroupItem extends StatelessWidget {
       child: ListTile(
         leading: new CircleAvatar(
             child: new Text(group.name[0]), //just the initial letter in a circle
-            backgroundColor: Colors.yellow
+            backgroundColor: Theme.of(context).accentColor
           ),
         title: Text(group.name),
         subtitle: (group.info!=null
@@ -63,11 +79,3 @@ class GroupItem extends StatelessWidget {
     );
   }
 }
-
-/*final List<Group> groups = <Group>[
-  Group(1,'Asociación ASOC', info: 'una asociación', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
-  Group(2,'Grupo GRP', info: 'un grupo', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png', email: 'sofia@adolfodominguez.com'),
-  Group(3,'Equipo C.D: .EQUIPO', info:'un equipo', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
-  Group(4,'Organización ORGANIZ', info: 'una organización', img: 'https://static.simpsonswiki.com/images/1/1b/Flanders_Family.png', email: 'sofia@adolfodominguez.com'),
-  Group(5,'Clase CLAS1', info: 'una clase', img: 'https://static.simpsonswiki.com/images/2/24/Simpson_Family.png', tfno: '34606991934', email: 'sofia@adolfodominguez.com'),
-];*/

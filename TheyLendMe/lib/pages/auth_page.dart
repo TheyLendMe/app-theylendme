@@ -61,8 +61,9 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FlutterLogo( //TODO: CIRCLEAvatar?
-                size: _iconAnimation.value * 140.0,
+              Image(
+                height: _iconAnimation.value*200, width: _iconAnimation.value*200,
+                image: AssetImage('images/icon.png')
               ),
               Container(
                 padding: const EdgeInsets.all(20.0),
@@ -96,7 +97,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                       MaterialButton(
                         height: 50.0,
                         minWidth: 240.0,
-                        color: Colors.green,
+                        color: Theme.of(context).primaryColor,
                         splashColor: Colors.teal,
                         textColor: Colors.white,
                         child: Text('Registrarme', style: TextStyle(color: Colors.white)),
@@ -127,7 +128,7 @@ Widget googleButton(BuildContext context) {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(30.0),
     ),
-    color: Color(0Xffdb3236),
+    color: Theme.of(context).accentColor,
     onPressed: () async {
       if(await Auth.login(google: true)){
         //TODO: sync-await return Center(child: CircularProgressIndicator()));
