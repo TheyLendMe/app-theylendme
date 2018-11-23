@@ -63,6 +63,9 @@ class _TheDrawerState extends State<TheDrawer> {
                 backgroundColor: Theme.of(context).accentColor,
                 backgroundImage: (UserSingleton().login
                   ? (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png'))
+                  : null),
+                child: (UserSingleton().login
+                  ? null
                   : Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor))
               ),
               onTap: () {

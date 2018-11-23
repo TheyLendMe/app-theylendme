@@ -99,7 +99,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
               }
             },
             color: Theme.of(context).buttonColor,
-            child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+            child: Text('Contactar', style: TextStyle(color: Colors.white)),
           )
         ),
         Container(
@@ -139,7 +139,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
               }
             },
             color: Theme.of(context).buttonColor,
-            child: Text('Pedir prestado', style: TextStyle(color: Theme.of(context).accentColor)),
+            child: Text('Pedir prestado', style: TextStyle(color: Colors.white)),
           )
         )
       ]
