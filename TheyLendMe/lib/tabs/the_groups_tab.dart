@@ -12,7 +12,7 @@ class TheGroupsTab extends StatefulWidget {
 class _TheGroupsTabState extends State<TheGroupsTab> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
+      GlobalKey<RefreshIndicatorState>();
 
   Future<Null> _refresh() {
     //FIXME: no da error, pero no recarga grupos nuevos
@@ -57,7 +57,7 @@ class GroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return GestureDetector(
       onTap: () {
         showDialog(
           context: context,
@@ -67,8 +67,9 @@ class GroupItem extends StatelessWidget {
         );
       },
       child: ListTile(
-        leading: new CircleAvatar(
-            child: new Text(group.name[0]), //just the initial letter in a circle
+        leading: CircleAvatar(
+            child: (group.img!=null ? Text('') : Text(group.name[0])),
+            backgroundImage: (group.img!=null ? NetworkImage(group.img) : null),
             backgroundColor: Theme.of(context).accentColor
           ),
         title: Text(group.name),

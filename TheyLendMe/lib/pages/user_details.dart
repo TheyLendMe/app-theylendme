@@ -31,9 +31,11 @@ class _UserDetailsState extends State<UserDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: (widget._user.img!=null
-              ? Image.network(widget._user.img) //TODO: circular
-              : Image.asset('images/def_user_pic.png'))
+            child: CircleAvatar(
+              radius: 120.0,
+              backgroundImage: (widget._user.img!=null ? NetworkImage(widget._user.img) : AssetImage('images/def_user_pic.png')),
+              backgroundColor: Theme.of(context).accentColor
+            )
           ),
           Container(
             constraints: BoxConstraints.expand(
@@ -41,7 +43,7 @@ class _UserDetailsState extends State<UserDetails> {
               ),
             padding: const EdgeInsets.all(8.0),
             alignment: Alignment.center,
-            child: (widget._user.img!=null
+            child: (widget._user.name!=null
               ? Text(widget._user.name, style: Theme.of(context).textTheme.title)
               : Text(''))
           ),

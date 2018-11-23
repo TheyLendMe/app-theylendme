@@ -61,10 +61,8 @@ class _TheDrawerState extends State<TheDrawer> {
             currentAccountPicture: GestureDetector(
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
-                child: (UserSingleton().login
-                    ? (UserSingleton().user.img!=null
-                      ? Image.network(UserSingleton().user.img) //TODO: circular
-                      : Image.asset('images/def_user_pic.png'))
+                backgroundImage: (UserSingleton().login
+                  ? (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png'))
                   : Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor))
               ),
               onTap: () {
