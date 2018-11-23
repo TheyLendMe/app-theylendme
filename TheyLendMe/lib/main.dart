@@ -20,10 +20,13 @@ import 'package:TheyLendMe/pages/auth_page.dart';
 import 'package:TheyLendMe/pages/group_objects.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 
+//TODO: (last) https://flutter.io/docs/deployment/android
+
 void main() => runApp(TheApp());
 
-final firstColor = const Color(0xFF35504d);
-final secondColor = const Color(0xFFf3e2bb);
+//WIP: choosing main colors ( i'm using https://randoma11y.com )
+final firstColor = const Color(0xFF060b3e);
+final secondColor = const Color(0xFFfe9b28);
 Group _group;
 
 class TheApp extends StatelessWidget {
@@ -42,7 +45,8 @@ class TheApp extends StatelessWidget {
   Widget build(BuildContext context) {
     UserSingleton();
     return MaterialApp(
-      title: 'app de préstamos',
+      title: 'TheyLendMe',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: firstColor,
         accentColor: secondColor,

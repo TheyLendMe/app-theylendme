@@ -22,7 +22,6 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
       body: FutureBuilder<List<Group>>(
         future: UserSingleton().user.getGroupsImMember(),
         builder: (context, snapshot) {
-          (snapshot.hasData ? print(snapshot.data.length) : print(''));
           return (snapshot.hasData
             ? ListView.builder(
                 itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
@@ -68,7 +67,7 @@ class GroupItem extends StatelessWidget {
         child: ListTile(
           leading: new CircleAvatar(
               child: new Text(group.name[0]), //just the initial letter in a circle
-              backgroundColor: Colors.yellow
+              backgroundColor: Theme.of(context).accentColor
             ),
           title: new Container(
             child: Row(

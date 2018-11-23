@@ -71,9 +71,9 @@ class ObjectItem extends StatelessWidget {
       },
       child: ListTile(
         leading: new Container(
-          child: new Text(object.name[0]), //just the initial letter in a circle
+          child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
           decoration: BoxDecoration(
-            color: Colors.yellow,
+            color: Theme.of(context).accentColor,
             borderRadius: BorderRadius.all(
               const Radius.circular(4.0),
             ),
@@ -102,6 +102,12 @@ class ObjectItem extends StatelessWidget {
   }
 }
 
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}
+
 Widget xN(amount) {
   if (amount>1)
     return Text('x'+amount.toString());
@@ -117,14 +123,3 @@ TextStyle stateColor(state) {
   else
     return TextStyle(color: Colors.yellow);
 }
-
-/*final User propietario = User('1', 'Señora Propietaria',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
-  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
-final List<UserObject> objects = <UserObject>[
-  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
-  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
-  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
-  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
-  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
-];*/

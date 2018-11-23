@@ -1,8 +1,8 @@
 # flutter_app
 directorio para la app
 
-## último screencast
+## último screenshot
 
 <p align="center">
-  <img src="https://github.com/TheyLendMe/app-theylendme/raw/interfaz_javi/screenshots/app12.gif">
+  <img src="https://raw.githubusercontent.com/TheyLendMe/app-theylendme/master/screenshots/app14.jpg">
 </p>

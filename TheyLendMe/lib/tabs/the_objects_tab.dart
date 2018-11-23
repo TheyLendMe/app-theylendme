@@ -13,10 +13,22 @@ class TheObjectsTab extends StatefulWidget {
 // CONTENIDO de la pestaña OBJETOS.
 class _TheObjectsTabState extends State<TheObjectsTab> {
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+
+  Future<Null> _refresh() {
+    //FIXME: no da error, pero no recarga objetos nuevos
+    // (por ejemplo, si mientras está en esta pestaña otro usuario crea un nuevo objeto)
+    return Obj.getObjects().then((_objects) { ObjectTile(objects: _objects); });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Obj>>(
+      body: RefreshIndicator( //example: https://github.com/sharmadhiraj/flutter_examples/blob/master/lib/pages/refresh_indicator.dart
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: FutureBuilder<List<Obj>>(
         future: Obj.getObjects(),
         builder: (context, snapshot) {
           /*if (snapshot.hasError) //TODO: this is from https://github.com/CodingInfinite/FutureBuilderWithPagination
@@ -29,11 +41,12 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
             ? ObjectTile(objects: snapshot.data)
             : Center(child: CircularProgressIndicator());
           }
+        )
       )
     );
   }
 
-  _tryAgainButtonClick(bool _) => setState(() {});
+  //_tryAgainButtonClick(bool _) => setState(() {});
 
 }
 
@@ -63,9 +76,13 @@ class ObjectTile extends StatelessWidget {
               );
             },
             child: Hero(
-              tag: objects[i].idObject,
+              tag: objects[i].idObject.toString()+objects[i].name[0],
+              //tag: idObject+first_name_lettter because it could happen
+              // that groupObject.idObject=userObject.idObject -> black screen
               child: FadeInImage(
-                image: NetworkImage(objects[i].image),
+                image: (objects[i].image!=null
+                  ? NetworkImage(objects[i].image)
+                  : AssetImage('images/def_obj_pic.png')),
                 fit: BoxFit.cover,
                 placeholder: AssetImage('images/tlm.jpg'),
               )
@@ -80,14 +97,3 @@ class ObjectTile extends StatelessWidget {
     );
   }
 }
-
-/*final User propietario = User('1', 'Señora Propietaria',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png');
-
-final List<UserObject> objects = <UserObject>[
-  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
-  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
-  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
-  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
-  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
-];*/

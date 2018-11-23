@@ -29,7 +29,7 @@ abstract class Obj{
     if (image!=null) {
       this._img = endpoint + image;
     }else{
-      _img = "http://www.hoynohaycole.com/wp-content/uploads/2015/04/taza-450x450.jpg";
+      _img = null;
     }
     this._amount = amount;
     this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;

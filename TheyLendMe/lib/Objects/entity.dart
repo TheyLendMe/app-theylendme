@@ -72,8 +72,7 @@ class User extends Entity{
     ResponsePost res = await new RequestPost("getObjectsByUser_v2").dataBuilder(
         userInfo: true,
     ).doRequest(context: context);
-    //return res.objectsBuilder(entity: this);
-    return null;
+    return res.getMyObjects();
   }
   @override 
   Future updateInfo({String nickName , String info,String email, String tfno, File img, var context}) async {
