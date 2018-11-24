@@ -27,6 +27,7 @@ dependencies:
   flutter_image_compress: ^0.2.1
   path_provider: ^0.4.1
   intl: ^0.15.7
+  flutter_colorpicker: any
 
 
 
@@ -41,6 +42,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - images/icon.png
     - images/tlm.jpg
     - images/def_obj_pic.png
     - images/def_user_pic.png

@@ -24,34 +24,52 @@ import 'package:TheyLendMe/Objects/entity.dart';
 
 void main() => runApp(TheApp());
 
-final firstColor = const Color(0xFF35504d);
-final secondColor = const Color(0xFFf3e2bb);
+//WIP: choosing main colors ( i'm using https://randoma11y.com )
+Color firstColor; //64b5f6
+Color  secondColor; //#ffa000
+
+
 Group _group;
 
-class TheApp extends StatelessWidget {
+class TheApp extends StatefulWidget{
 
   void pruebas(BuildContext context) async{
-    await Auth.emailRegister( "datinacontacto@gmail.com", "270897");
-    //Navigator.of(context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));
-    //UserSingleton().refreshUser();
-    // var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    // UserSingleton().user.addObject("Prueba de imagen", 1, img: image, info: "Esto es una prueba de imagen",context: context);
-    //UserSingleton().user.getRequests(context: context);
+      await Auth.emailRegister( "datinacontacto@gmail.com", "270897");
+      //Navigator.of(context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));
+      //UserSingleton().refreshUser();
+      // var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      // UserSingleton().user.addObject("Prueba de imagen", 1, img: image, info: "Esto es una prueba de imagen",context: context);
+      //UserSingleton().user.getRequests(context: context);
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return TheAppState();
+  }
 }
 
+class TheAppState extends State<TheApp>{
   // This widget is the root of your application.
+
+
+  ThemeData themeData(){
+
+    var primaryColors = firstColor;
+    var secondColors = secondColor;
+  return new ThemeData(
+      primaryColor: firstColor == null ? Color(0xFF64b5f6) : firstColor,
+      accentColor: secondColor == null ? Color(0xFFf9a825) : secondColor,
+      buttonColor: firstColor == null ? Color(0xFF64b5f6) : firstColor,
+  );
+}
   @override
   Widget build(BuildContext context) {
     UserSingleton();
     return MaterialApp(
       title: 'TheyLendMe',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: firstColor,
-        accentColor: secondColor,
-        buttonColor: firstColor,
-      ),
-      home: TheHome(title: 'TheyLendMe'),
+      theme: themeData(),
+      home: TheHome(this, title: 'TheyLendMe'),
 
       //A Route is an abstraction for a "screen" or "page" of an app,
       routes: <String, WidgetBuilder> {
@@ -64,4 +82,6 @@ class TheApp extends StatelessWidget {
       } // (a live example: https://youtu.be/RLyw-_MLLTo)
     );
   }
+
+  
 }

@@ -160,11 +160,9 @@ class _CreateGroupObjectState extends State<CreateGroupObject> {
                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                   builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
                 ),
-                ModalRoute.withName('/'));
-                // TODO: evitar que se vuelva a crear objeto al echar atrás
-                /*push(context, MaterialPageRoute(
+                ModalRoute.of(context).push(context, MaterialPageRoute(
                   builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
-                ));*/
+                )));
             } else {
               Fluttertoast.showToast(msg: "Rellena el nombre",toastLength: Toast.LENGTH_SHORT);
             }},

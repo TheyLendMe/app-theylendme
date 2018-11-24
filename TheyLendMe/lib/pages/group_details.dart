@@ -34,9 +34,11 @@ class GroupDetailsState extends State<GroupDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: (widget._group.img!=null
-            ? Image.network(widget._group.img) //TODO: circular
-            : Image.asset('images/def_group_pic.png'))
+            child: CircleAvatar(
+              radius: 120.0,
+              backgroundImage: (widget._group.img!=null ? NetworkImage(widget._group.img) : AssetImage('images/def_group_pic.png')),
+              backgroundColor: Theme.of(context).accentColor
+            )
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

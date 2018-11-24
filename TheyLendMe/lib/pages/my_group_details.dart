@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/pages/group_objects.dart';
 
-class UserDetails extends StatefulWidget {
-  final User _user;
 
-  UserDetails(this._user);
+class GroupDetails extends StatefulWidget {
+  final Group _group;
+
+  GroupDetails(this._group);
 
   @override
-    _UserDetailsState createState() => _UserDetailsState();
+    GroupDetailsState createState() => GroupDetailsState();
 }
 
-class _UserDetailsState extends State<UserDetails> {
+class GroupDetailsState extends State<GroupDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
@@ -31,22 +34,41 @@ class _UserDetailsState extends State<UserDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: CircleAvatar(
-              radius: 120.0,
-              backgroundImage: (widget._user.img!=null ? NetworkImage(widget._user.img) : AssetImage('images/def_user_pic.png')),
-              backgroundColor: Theme.of(context).accentColor
+            child: (widget._group.img!=null
+            ? Image.network(widget._group.img) //TODO: circular
+            : Image.asset('images/def_group_pic.png'))
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Text(widget._group.name, style: Theme.of(context).textTheme.title),
+                (widget._group.info!=null) ? Text(widget._group.info, style: Theme.of(context).textTheme.subtitle) : Text('')
+              ]
             )
           ),
-          Container(
+          /*Container(
             constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.5,
-              ),
+              height: Theme.of(context).textTheme.display1.fontSize * 1.5,
+            ),
             padding: const EdgeInsets.all(8.0),
-            alignment: Alignment.center,
-            child: (widget._user.name!=null
-              ? Text(widget._user.name, style: Theme.of(context).textTheme.title)
-              : Text(''))
-          ),
+            child: MaterialButton(
+              height: 42.0,
+              onPressed:(){
+                if(!UserSingleton().login)
+                  Navigator.of(context).pushNamed("/AuthPage");
+                else {
+                  showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return ContactDialog(widget._group);
+                  }
+                );}
+              },
+              color: Theme.of(context).buttonColor,
+              child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+            )
+          ),*/
           Container(
             constraints: BoxConstraints.expand(
               height: Theme.of(context).textTheme.display1.fontSize * 1.5,
@@ -55,24 +77,18 @@ class _UserDetailsState extends State<UserDetails> {
             child: MaterialButton(
               height: 42.0,
               onPressed:(){
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return ContactDialog(widget._user);
-                  }
-                );
-              },
+                  
+              }, //TODO acción de ver miembros
               color: Theme.of(context).buttonColor,
-              child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+              child: Text('Ver Miembros', style: TextStyle(color: Theme.of(context).accentColor)),
             )
           ),
           MaterialButton(
             height: 60.0,
             onPressed:(){
+              // TODO: sacar inventario == lista de objetos mis objetos
               Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) {
-                  
-                },
+                builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
               ));
             },
             color: Theme.of(context).indicatorColor,
