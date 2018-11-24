@@ -92,8 +92,9 @@ class LentItem extends StatelessWidget {
                   child: Text('Pedir devolución', style: TextStyle(color: Colors.black)),
                   height: 42.0,
                   onPressed:() async {
-                    await lentObject.claimObj(); //TODO: claimObj({String claimMsg})
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud de devolución enviada")));
+                    await lentObject.claimObj().then((error){ //TODO: claimObj({String claimMsg})
+                    if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud de devolución enviada")));}
+                    });
                   }
                 ),
                 Padding(
@@ -104,8 +105,10 @@ class LentItem extends StatelessWidget {
                   child: Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)),
                   height: 42.0,
                   onPressed:() async {
-                    await lentObject.returnObj(); //FIXME: "permission error"
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Préstamo finalizado!")));
+                    lentObject.returnObj().then((error){
+                      if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Préstamo finalizado!")));}
+                    });//FIXME: "permission error"
+                    
                   }
                 )
               ]
