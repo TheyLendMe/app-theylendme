@@ -47,7 +47,7 @@ class RequestPost{
           Map<String,dynamic> m = await authInfo();
           this._data.addAll(m);
       }
-      return await ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
+      return ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
     }on StatusException catch(e){
       new ErrorToast().handleError(msg :"Connection Error", id: e.id);
       return null;
@@ -121,10 +121,6 @@ class RequestPost{
     return m;
   }
 }
- /* if(nickName != null){fieldName[i] = 'nickname'; fieldValue[i]=nickName; i++;}
-  if(email != null){fieldName[i]='email';fieldValue[i]= (email); i++;}
-  if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
-  if(tfno != null){fieldName[i]=('tfno');fieldValue[i]=(tfno);i++;}*/
 List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
 String name, String groupName, bool private, bool autoloan}){
     List fieldName = new List();
@@ -147,7 +143,7 @@ String name, String groupName, bool private, bool autoloan}){
 class ResponsePost{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
-  static Future<ResponsePost> responseBuilder(Response response) async{
+  static ResponsePost responseBuilder(Response response){
     ///In case of server error like 404 not found... this 
     print(response.request.baseUrl+response.request.path);
     print(response.data);
@@ -156,10 +152,12 @@ class ResponsePost{
   }
   dynamic _data;
   int _responseType;
+  bool _error =  false;
   ResponsePost(data){
   ///Server error
     if(data['error'] != null && data['error'] ) { 
       int errorCode  = data['errorCode'];
+      _error = true;
       ///Private errors
       if(errorCode <=22){
         ///Email not verify
@@ -177,6 +175,8 @@ class ResponsePost{
     this._responseType = data['responseType'];
   }
   dynamic get data => _data;
+  
+  bool get hasError => _error;
 ////-----------Objects builders------------//////////
 
   List<UserObject> getMyObjects(){
