@@ -61,7 +61,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(widget._object.name, overflow :TextOverflow.ellipsis, style: Theme.of(context).textTheme.title),
-              Text(' de ', style: Theme.of(context).textTheme.subtitle), //WIP: hacerlo más clickable
+              Text(' de ', style: Theme.of(context).textTheme.subtitle),
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -75,7 +75,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                     }
                   );
                 },
-                child: Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle)
+                child: Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle) //WIP: hacerlo más clickable
               )
             ]
           )
@@ -126,13 +126,13 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                   ).then<void>((int value) async{
                     if (value != null) {
                       setState(() { _currentAmount = value;});
-                      print("requestObj"); //TODO: widget._object_requestObj(amount)
+                      print("requestObj");
                       await widget._object.requestObj(amount: value);
                       Navigator.pop(context);
                     }
                   });
                 } else {
-                  await widget._object.requestObj(); //TODO: widget._object_requestObj(1)
+                  await widget._object.requestObj();
                   Navigator.pop(context);
                 }
               } else{
