@@ -63,7 +63,7 @@ class User extends Entity{
         desc: desc,
         img: img,
         amount: amount
-    ).doRequest(context: context, errorHandler: new ErrorToast());
+    ).doRequest(context: context);
     
   }
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!

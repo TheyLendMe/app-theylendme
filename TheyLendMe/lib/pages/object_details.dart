@@ -60,7 +60,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(widget._object.name, style: Theme.of(context).textTheme.title),
+              Text(widget._object.name, overflow :TextOverflow.ellipsis, style: Theme.of(context).textTheme.title),
               Text(' de ', style: Theme.of(context).textTheme.subtitle), //WIP: hacerlo más clickable
               GestureDetector(
                 onTap: () {
@@ -109,7 +109,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
           padding: const EdgeInsets.all(8.0),
           child: MaterialButton( //TODO: improve "Request" button design
             height: 42.0,
-            onPressed:(){
+            onPressed:() async{
               if(UserSingleton().login){
                 if(widget._object.amount>1) {
                   // choose amount to requestObj
@@ -123,15 +123,16 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                         initialIntegerValue: _currentAmount
                       );
                     }
-                  ).then<void>((int value) {
+                  ).then<void>((int value) async{
                     if (value != null) {
                       setState(() { _currentAmount = value;});
                       print("requestObj"); //TODO: widget._object_requestObj(amount)
+                      await widget._object.requestObj(amount: value);
                       Navigator.pop(context);
                     }
                   });
                 } else {
-                  print("requestObj"); //TODO: widget._object_requestObj(1)
+                  await widget._object.requestObj(); //TODO: widget._object_requestObj(1)
                   Navigator.pop(context);
                 }
               } else{
