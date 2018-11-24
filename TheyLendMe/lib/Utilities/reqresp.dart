@@ -463,6 +463,7 @@ class ResponsePost{
       list.addAll(mine ? _requestsUserObjectBuilder(_data['byUser']) : _requestsUserObjectBuilder(_data['toUser']));
     }
     _orderObjeList(list);
+    return list;
   }
 
   List<UserObject> _requestsUserObjectBuilder(List<dynamic> requests){
