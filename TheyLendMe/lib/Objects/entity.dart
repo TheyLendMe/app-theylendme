@@ -56,14 +56,14 @@ class User extends Entity{
   User(String idEntity, String name, {this.idMember,String email,String tfno,String info, String img, this.admin}) : 
   super(EntityType.USER, idEntity, name, tfno : tfno, info : info, img : img, email : email,);
   @override
-  Future addObject(String name, int amount,{String desc,File img, var context}) async{
-     await new RequestPost("createObject").dataBuilder(
+  Future<bool> addObject(String name, int amount,{String desc,File img, var context}) async{
+     return (await new RequestPost("createObject").dataBuilder(
         userInfo: true,
         name: name,
         desc: desc,
         img: img,
         amount: amount
-    ).doRequest(context: context, errorHandler: new ErrorToast());
+    ).doRequest(context: context)).hasError;
     
   }
   ///This is a Future<List<Obj>> , to get the list must use await otherwise it will return a Future!
@@ -75,7 +75,7 @@ class User extends Entity{
     return res.getMyObjects();
   }
   @override 
-  Future updateInfo({String nickName , String info,String email, String tfno, File img, var context}) async {
+  Future<bool> updateInfo({String nickName , String info,String email, String tfno, File img, var context}) async {
     var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
     ResponsePost res = await new RequestPost("updateUser").dataBuilder(
       userInfo: true,
@@ -84,8 +84,9 @@ class User extends Entity{
       img: img
 
     ).doRequest(context: context);
+    return res.hasError;
   }
-  Future createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
+  Future<bool> createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
     ResponsePost res = await new RequestPost("createGroup").dataBuilder(
       userInfo: true,
       groupName: groupName,
@@ -96,18 +97,21 @@ class User extends Entity{
       tfno: tfno,
       img: img
     ).doRequest(context: context);
+    return res.hasError;
   }
-  Future applyGroup(Group group, {var context}) async{
+  Future<bool> applyGroup(Group group, {var context}) async{
     ResponsePost res = await new RequestPost("joinRequest").dataBuilder(
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest(context: context);
+    return res.hasError;
   }
-  Future joinGroup(Group group, {var context, String privateCode}) async{
+  Future<bool> joinGroup(Group group, {var context, String privateCode}) async{
     ResponsePost res = await new RequestPost(group.private ? "joinByPrivateCode" : "joinRequest").dataBuilder(
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest(context: context);
+    return res.hasError;
   }
   Future<List<String>> getNotTopics({var context}) async{
     ResponsePost res = await new RequestPost("getAsociatedGroups").dataBuilder(
@@ -201,34 +205,36 @@ class Group extends Entity{
     return res.groupsBuilder();
   }
   @override
-  Future addObject(String name, int amount,{var context, String desc, File img}) async{
-    await new RequestPost("createGObject").dataBuilder(
+  Future<bool> addObject(String name, int amount,{var context, String desc, File img}) async{
+    (await new RequestPost("createGObject").dataBuilder(
         idGroup: this.idEntity,
         userInfo: true,
         name: name, 
         desc: desc,
         img: img,
         amount: amount
-    ).doRequest(context: context);
+    ).doRequest(context: context)).hasError;
   }
 
-  Future addAdmin(User u,{var context}) async{
+  Future<bool> addAdmin(User u,{var context}) async{
     ResponsePost res = await new RequestPost("upgradeToAdmin").dataBuilder(
       userInfo: true,
       idMemeber: u.idMember,
       idGroup: this.idEntity,
     ).doRequest(context: context);
+    return res.hasError;
   }
 
-  Future delGroup({var context}) async{
+  Future<bool> delGroup({var context}) async{
     ResponsePost res = await new RequestPost("deleteGroup").dataBuilder(
       userInfo: true,
       idGroup: this.idEntity,
     ).doRequest(context: context);
+    return res.hasError;
   }
 
   @override
-  Future updateInfo({String groupName, bool private, bool autoloan, String email, String tfno, String info, File img, var context}) async {
+  Future<bool> updateInfo({String groupName, bool private, bool autoloan, String email, String tfno, String info, File img, var context}) async {
     var l = fieldNameFieldValue(groupName: groupName,autoloan: autoloan,private: private, email: email, tfno: tfno, info: info);
     ResponsePost res = await new RequestPost("updateGroup").dataBuilder(
       userInfo: true,
@@ -237,6 +243,7 @@ class Group extends Entity{
       fieldValue: l[1],
       img: img
     ).doRequest(context: context);
+    return res.hasError;
   }
 
   Future<List<JoinRequest>> getJoinRequests({var context})async {
@@ -262,7 +269,7 @@ class Group extends Entity{
   Future<List<Obj>> getObjects({var context}) async{
     ResponsePost res = await new RequestPost("getGroupObjects").dataBuilder(
         idGroup: this.idEntity,
-        userInfo: true
+        userInfo: true,
     ).doRequest(context: context);
     return res.groupObjectsBuilder(group: this);
   }
@@ -315,19 +322,21 @@ class Group extends Entity{
     ).doRequest(context:context);
     return res.claimsGroupObjectBuilder(this,mine : false);
   }
-  Future kickUser(User user, {var context}) async{
+  Future<bool> kickUser(User user, {var context}) async{
     ResponsePost res = await new RequestPost("kickUser").dataBuilder(
       userInfo: true,
       idMemeber: user.idEntity,
       idGroup: this._idEntity,
     ).doRequest(context:context);
+    return res.hasError;
   }
-  Future  leaveGroup(User user, {var context}) async{
+  Future<bool>  leaveGroup(User user, {var context}) async{
     ResponsePost res = await new RequestPost("leaveGroup").dataBuilder(
       userInfo: true,
       idMemeber: user.idEntity,
       idGroup: this._idEntity,
     ).doRequest(context:context);
+    return res.hasError;
   }
 
   Future<String> getPrivateCode({var context}) async{
@@ -339,11 +348,6 @@ class Group extends Entity{
   }
   
 
-
-
-
-
-  Future<List<User>> getMembers()async{}
   Future addUser(Entity newUser) async{}
   Future delUser({User u}) async{}
 

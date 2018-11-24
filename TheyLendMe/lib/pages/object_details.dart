@@ -6,6 +6,7 @@ import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ObjectDetails extends StatefulWidget {
   final Obj _object;
@@ -60,7 +61,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(widget._object.name, style: Theme.of(context).textTheme.title),
+              Text(widget._object.name, overflow :TextOverflow.ellipsis, style: Theme.of(context).textTheme.title),
               Text(' de ', style: Theme.of(context).textTheme.subtitle), //WIP: hacerlo más clickable
               GestureDetector(
                 onTap: () {
@@ -109,30 +110,34 @@ class _ObjectDetailsState extends State<ObjectDetails> {
           padding: const EdgeInsets.all(8.0),
           child: MaterialButton( //TODO: improve "Request" button design
             height: 42.0,
-            onPressed:(){
+            onPressed:() async{
               if(UserSingleton().login){
                 if(widget._object.amount>1) {
                   // choose amount to requestObj
                   showDialog<int>(
                     context: context,
                     builder: (BuildContext context) {
-                      return NumberPickerDialog.integer(
+                      return new NumberPickerDialog.integer(
                         minValue: 1,
                         maxValue: widget._object.amount,
                         title: Text("Elige una cantidad"),
                         initialIntegerValue: _currentAmount
                       );
                     }
-                  ).then<void>((int value) {
+                  ).then<void>((int value) async{
                     if (value != null) {
                       setState(() { _currentAmount = value;});
-                      print("requestObj"); //TODO: widget._object_requestObj(amount)
-                      Navigator.pop(context);
+                      widget._object.requestObj(amount: value).then((enviado){
+                        if(!enviado){Fluttertoast.showToast(msg: "Solicitud enviada", toastLength: Toast.LENGTH_SHORT,);}
+                        Navigator.pop(context);
+                      });
                     }
                   });
                 } else {
-                  print("requestObj"); //TODO: widget._object_requestObj(1)
-                  Navigator.pop(context);
+                  widget._object.requestObj().then((enviado){
+                    if(!enviado){Fluttertoast.showToast(msg: "Solicitud enviada", toastLength: Toast.LENGTH_SHORT,);}
+                    Navigator.pop(context);
+                  });
                 }
               } else{
                 Navigator.of(context).pushNamed("/AuthPage");
