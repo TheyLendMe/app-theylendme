@@ -26,7 +26,7 @@ void main() => runApp(TheApp());
 
 //WIP: choosing main colors ( i'm using https://randoma11y.com )
 final firstColor = const Color(0xFF060b3e);
-final secondColor = const Color(0xFFfe9b28);
+final secondColor = const Color(0xFFff9900);
 Group _group;
 
 class TheApp extends StatelessWidget {
