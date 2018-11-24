@@ -6,6 +6,7 @@ import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ObjectDetails extends StatefulWidget {
   final Obj _object;
@@ -116,7 +117,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                   showDialog<int>(
                     context: context,
                     builder: (BuildContext context) {
-                      return NumberPickerDialog.integer(
+                      return new NumberPickerDialog.integer(
                         minValue: 1,
                         maxValue: widget._object.amount,
                         title: Text("Elige una cantidad"),
@@ -126,14 +127,17 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                   ).then<void>((int value) async{
                     if (value != null) {
                       setState(() { _currentAmount = value;});
-                      print("requestObj");
-                      await widget._object.requestObj(amount: value);
-                      Navigator.pop(context);
+                      widget._object.requestObj(amount: value).then((enviado){
+                        if(!enviado){Fluttertoast.showToast(msg: "Solicitud enviada", toastLength: Toast.LENGTH_SHORT,);}
+                        Navigator.pop(context);
+                      });
                     }
                   });
                 } else {
-                  await widget._object.requestObj();
-                  Navigator.pop(context);
+                  widget._object.requestObj().then((enviado){
+                    if(!enviado){Fluttertoast.showToast(msg: "Solicitud enviada", toastLength: Toast.LENGTH_SHORT,);}
+                    Navigator.pop(context);
+                  });
                 }
               } else{
                 Navigator.of(context).pushNamed("/AuthPage");
