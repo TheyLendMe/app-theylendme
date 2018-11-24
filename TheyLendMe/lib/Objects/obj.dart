@@ -23,7 +23,7 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image,ObjState objState, int amount = 1, DateTime date}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image,ObjState objState, int amount = 1, String date}){
     this._name = name;
     this._desc = desc;
     if (image!=null) {
@@ -33,7 +33,7 @@ abstract class Obj{
     }
     this._amount = amount;
     this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;
-    this._date = date;
+    this._date = dateFormat.parse(date);
   }
 
 
@@ -76,7 +76,7 @@ abstract class Obj{
 
 class UserObject extends Obj{
   ///Constructor
-  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, DateTime date})
+  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, String date})
   : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount, date : date);
   @override
   Future lendObj({int idRequest, var context}) async {
@@ -141,7 +141,7 @@ class UserObject extends Obj{
 class GroupObject extends Obj{
   
   //Constructor
-  GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, DateTime date}) 
+  GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, String date}) 
   : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date);
   @override
   Future<bool> requestObj({Group group,int amount = 1, String msg, var context}) async{
