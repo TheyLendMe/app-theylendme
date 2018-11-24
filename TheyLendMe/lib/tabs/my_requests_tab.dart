@@ -6,24 +6,24 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 
-// Pestaña PRESTADOS
-class TheLoansTab extends StatefulWidget {
+// Pestaña SOLICITUDES
+class MyRequestsTab extends StatefulWidget {
     @override
-    _TheLoansTabState createState() => _TheLoansTabState();
+    _MyRequestsTabState createState() => _MyRequestsTabState();
 }
 
-// CONTENIDO de la pestaña PRESTADOS
-class _TheLoansTabState extends State<TheLoansTab> {
+// CONTENIDO de la pestaña SOLICITUDES
+class _MyRequestsTabState extends State<MyRequestsTab> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: getLoansOthersToMe()
+    //TODO: getRequestsMeToOthers()
     return FutureBuilder<List<Obj>>(
-      future: UserSingleton().user.getLoansMeToOthers(),
+      future: UserSingleton().user.getRequestsOthersToMe(),
       builder: (context, snapshot) {
         return (snapshot.hasData
           ? ListView.builder(
-              itemBuilder: (BuildContext context, int index) => LentItem(snapshot.data[index]),
+              itemBuilder: (BuildContext context, int index) => RequestedItem(snapshot.data[index]),
               itemCount: snapshot.data.length
             )
           : Center(child: CircularProgressIndicator()));
@@ -32,11 +32,11 @@ class _TheLoansTabState extends State<TheLoansTab> {
   }
 }
 
-// Displays one LentItem.
-class LentItem extends StatelessWidget {
+// Displays one RequestedItem.
+class RequestedItem extends StatelessWidget {
 
-  LentItem(this.lentObject);
-  final Obj lentObject;
+  RequestedItem(this.requestedObject);
+  final Obj requestedObject;
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,8 @@ class LentItem extends StatelessWidget {
       },*/
       child: ListTile(
         leading: Container(
-          child: (lentObject.image!=null
-            ? Image.network(lentObject.image, width: 30)
+          child: (requestedObject.image!=null
+            ? Image.network(requestedObject.image, width: 30)
             : Image.asset('images/def_obj_pic.png', width: 30)),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 8.0)
@@ -66,34 +66,35 @@ class LentItem extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context){
-                    if (lentObject.objState.actual is User) {
-                      return UserDetails(lentObject.objState.actual);
-                    } else if (lentObject.objState.actual is Group) {
-                      return GroupDetails(lentObject.objState.actual);
+                    if (requestedObject.objState.next is User) {
+                      return UserDetails(requestedObject.objState.next);
+                    } else if (requestedObject.objState.next is Group) {
+                      return GroupDetails(requestedObject.objState.next);
                     }
                   }
                 );
               },
-              child: Text(lentObject.objState.actual.name) //WIP: hacerlo más clickable
+              child: Text(requestedObject.objState.next.name) //WIP: hacerlo más clickable
             ),
-            Text(' tiene '),
-            Text(lentObject.name)
+            Text(' pide '),
+            Text(requestedObject.name)
           ]
         ),
         subtitle: Column(
           children: [
-            (lentObject.desc!=null
-              ? Text(lentObject.desc)
+            (requestedObject.desc!=null
+              ? Text(requestedObject.desc)
               : Text('')),
             Row(
               children: [
                 MaterialButton(
                   color: Theme.of(context).accentColor,
-                  child: Text('Pedir devolución', style: TextStyle(color: Colors.black)),
+                  child: Text('Prestar', style: TextStyle(color: Colors.black)),
                   height: 42.0,
                   onPressed:() async {
-                    await lentObject.claimObj(); //TODO: claimObj({String claimMsg})
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud de devolución enviada")));
+                    await requestedObject.lendObj();
+                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Objeto prestado!")));
+                    //TODO: refresh here
                   }
                 ),
                 Padding(
@@ -101,10 +102,11 @@ class LentItem extends StatelessWidget {
                 ),
                 MaterialButton(
                   color: Colors.grey,
-                  child: Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)),
+                  child: Text('Rechazar solicitud', style: TextStyle(color: Colors.black)),
                   height: 42.0,
-                  onPressed:() {
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Préstamo finalizado! (//TODO)")));
+                  onPressed: () {
+                    //TODO: something like refuseObj()
+                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud rechazada (//TODO)")));
                   }
                 )
               ]
