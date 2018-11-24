@@ -168,7 +168,9 @@ class ResponsePost{
         if(errorCode >= 12 && errorCode <=17 ) throw new AuthServer(data["errorMsg"], id: errorCode);
         throw new PrivateServerErrorException(errorCode,data["errorMsg"]);
       }
-
+      if(errorCode >= 100){
+        throw new PublicServerErrorException(errorCode, data['errorMsg']);
+      }
 
     }
     this._data = data['responseData'];
