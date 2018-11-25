@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:TheyLendMe/tabs/the_loans_tab.dart';
-import 'package:TheyLendMe/tabs/the_requests_tab.dart';
-
-/*
-//WIP:
-* - Complete Dismissible behaviour
-*/
-
+import 'package:TheyLendMe/tabs/my_loans_tab.dart';
+import 'package:TheyLendMe/tabs/my_requests_tab.dart';
 
 class MyLoansPage extends StatefulWidget {
     @override
@@ -34,8 +28,8 @@ class _MyLoansPageState extends State<MyLoansPage> {
           ),
           body: TabBarView(
             children: [
-              TheRequestsTab(),
-              TheLoansTab(),
+              MyRequestsTab(),
+              MyLoansTab(),
             ],
           ),
         )
