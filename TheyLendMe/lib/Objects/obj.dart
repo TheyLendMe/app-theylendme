@@ -47,6 +47,7 @@ abstract class Obj{
   Future<bool> delObj({var context});
   Future objHistory({var context});
   Future<bool> updateObject({String name,File img,int amount = 1, var context});
+  Future<bool> deleteRequest();
 ///Getters and setters methods
   String get name => _name;
   String get desc => _desc;
@@ -63,6 +64,8 @@ abstract class Obj{
   set objState(ObjState objState) => _objState = objState;
   ///TODO pensar mejor este tema
   set image(String image) => this._name = endpoint + image;
+
+
 
   ///Static Methods 
   static Future<List<Obj>> getObjects({var context}) async{
@@ -135,6 +138,15 @@ class UserObject extends Obj{
         img: img
 
     ).doRequest(context : context)).hasError;
+  }
+
+  @override
+  Future<bool> deleteRequest({var context}) async{
+    return (await new RequestPost("deleteRequest").dataBuilder(
+      idObject: this.idObject,
+      userInfo: true,
+      idRequest: _objState.idState
+    ).doRequest(context: context)).hasError;
   }
 }
 
@@ -221,7 +233,13 @@ class GroupObject extends Obj{
     ).doRequest(context : context);
   }*/
   @override
-  GroupObjState get objState => _objState;
+  ObjState get objState => _objState;
+
+  @override
+  Future<bool> deleteRequest() {
+    // TODO: implement deleteRequest
+    return null;
+  }
 
 
 }

@@ -5,6 +5,8 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'dart:math'; // provisional
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 
 class MyObjectsPage extends StatefulWidget {
 
@@ -28,10 +30,12 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
           future: UserSingleton().user.getObjects(),
           builder: (context,snapshot){
             return (snapshot.hasData
-            ?
-            ListView.builder( //ListView de ejemplo:
-            itemBuilder: (BuildContext context, int index) => ObjectItem(snapshot.data[index]),
-            itemCount: snapshot.data.length)
+            /*
+            ListView.builder(
+              itemBuilder: (BuildContext context, int index) => ObjectItem(snapshot.data[index]),
+              itemCount: snapshot.data.length
+            )*/
+            ? ObjectTile(objects: snapshot.data)
             : Center(child: CircularProgressIndicator()));
           }
       ),
@@ -52,6 +56,49 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
   }
 }
 
+class ObjectTile extends StatelessWidget {
+  final List<Obj> objects;
+  ObjectTile({this.objects});
+
+  @override
+  Widget build(BuildContext context) {
+    // example for StaggeredGridView: https://youtu.be/SrGP1BdkYpk
+    return StaggeredGridView.countBuilder(
+      padding: const EdgeInsets.all(8.0),
+      crossAxisCount: 4,
+      itemCount: objects.length,
+      itemBuilder: (context, i) {
+        return Material(
+          elevation: 8.0,
+          borderRadius:
+              BorderRadius.all(Radius.circular(8.0)),
+          child: InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context){
+                  return ObjectDetails(objects[i]);
+                }
+              );
+            },
+            child: Hero(
+              tag: objects[i].idObject,
+              child: FadeInImage(
+                image: NetworkImage(objects[i].image),
+                fit: BoxFit.cover,
+                placeholder: AssetImage('images/tlm.jpg'),
+              )
+            ),
+          ),
+        );
+      },
+      staggeredTileBuilder: (i) =>
+          StaggeredTile.count(2, i.isEven ? 2 : 3),
+      mainAxisSpacing: 8.0,
+      crossAxisSpacing: 8.0,
+    );
+  }
+}
 // Displays one Object.
 class ObjectItem extends StatelessWidget {
 
@@ -69,6 +116,7 @@ class ObjectItem extends StatelessWidget {
           }
         );
       },
+
       child: ListTile(
         leading: new Container(
           child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
@@ -79,23 +127,21 @@ class ObjectItem extends StatelessWidget {
             ),
           ),
           padding: EdgeInsets.all(16.0),
-        ), //leading (Container)
+        ), //leading (Container)*/
         title: new Container(
           //padding: new EdgeInsets.only(left: 8.0),
           child: Row(
             //crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(object.name),
-              xN( object.amount ), //provisional
+              xN( object.amount ),
               Text(
                 object.objState.toString(),
                 style: stateColor(object.objState.toString()),
-                /*'Disponible', //provisional
-                style: stateColor('Disponible') //provisional*/
               )
             ]
-          )
+          ) //Row
         ) //title (Container)
       ) //ListTile
     ); //GestureDetector

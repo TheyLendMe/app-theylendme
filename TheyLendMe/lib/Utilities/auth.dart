@@ -31,7 +31,9 @@ class Auth {
     try{
       if(google){user = await _googleAuth();}
       if(email !=null){user = await _emailAuth(email,pass);}
-    }on PlatformException catch(e){ _onError(e); return false;}
+    }on PlatformException catch(e){ 
+      _onError(e); return false;
+      }
     ///First filter
     if(user == null){return false;}
     user = await FirebaseAuth.instance.currentUser();
@@ -39,7 +41,7 @@ class Auth {
     if(user != null){
       UserSingleton(user: user);
       await UserSingleton().refreshUser();
-      if(await new RequestPost('login').dataBuilder(userInfo: true, name: name).doRequest() != null){return false;};
+      if((await new RequestPost('login').dataBuilder(userInfo: true, name: name).doRequest()).hasError){return false;}
       if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
     }else{ ErrorToast().handleError(msg: "Algo ha fallado"); return false; }
     return true;
