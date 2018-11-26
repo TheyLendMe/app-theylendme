@@ -105,8 +105,13 @@ class RequestedItem extends StatelessWidget {
                   child: Text('Rechazar solicitud', style: TextStyle(color: Colors.black)),
                   height: 42.0,
                   onPressed: () {
-                    //TODO: something like refuseObj()
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud rechazada (//TODO)")));
+                    
+                    requestedObject.deleteRequest().then((valid){
+                      if(valid){
+                        Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud rechazada")));
+                      }
+                    });
+                    
                   }
                 )
               ]

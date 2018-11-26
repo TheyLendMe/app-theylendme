@@ -475,7 +475,7 @@ class ResponsePost{
         state: StateOfObject.REQUESTED,
         amount: int.parse(request['amount']),
         msg: request['requestMsg'],
-        actual: userBuilder(data : request['object']['owner']),
+        actual: request['object']['owner'] == null ?  UserSingleton().user : userBuilder(data :request['object']['owner']),
         next: userBuilder(data : request['requester']),
         date: request['date'],
       );
