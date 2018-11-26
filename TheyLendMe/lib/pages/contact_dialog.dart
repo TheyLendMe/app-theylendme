@@ -13,29 +13,39 @@ class ContactDialog extends StatefulWidget {
 }
 
 class _ContactDialogState extends State<ContactDialog> {
-    @override
-    Widget build(BuildContext context) {
-      return SimpleDialog(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+  Widget dialog;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Entity>(
+      future: widget._entity.getEntityInfo(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData){ //FIXME: dialog=null
+          dialog = SimpleDialog(
             children: [
-              (widget._entity.email!=null
-                ? SimpleDialogOption(
-                  onPressed: () {launch('mailto:${widget._entity.email}');},
-                  child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 20.0),
-                ): Text('') //esto nunca se mostrará porque siempre hay email
-              ),
-              (widget._entity.tfno!=null
-                ? SimpleDialogOption(
-                  //TODO: check first if it's on WhatsApp
-                  onPressed: () {launch('https://wa.me/${widget._entity.tfno}');},
-                  child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 20.0),
-                ): Text('')
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  (widget._entity.email!=null
+                    ? SimpleDialogOption(
+                      onPressed: () {launch('mailto:${snapshot.data.email}');},
+                      child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 20.0),
+                    ): Text('') //esto nunca se mostrará porque siempre hay email
+                  ),
+                  (widget._entity.tfno!=null
+                    ? SimpleDialogOption(
+                      //TODO: check first if it's on WhatsApp
+                      onPressed: () {launch('https://wa.me/${snapshot.data.tfno}');},
+                      child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 20.0),
+                    ): Text('')
+                  ),
+                ]
+              )
             ]
-          )
-        ]
-      );
-    }
+          );
+        }
+        return dialog;
+      }
+    );
+  }
 }
