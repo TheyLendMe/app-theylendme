@@ -91,7 +91,7 @@ class RequestPost{
     if(requestMsg != null) _data['request'] = requestMsg;
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
-    if(oUser != null) _data['oUser'] = oUser;
+    if(oUser != null) _data['idOtherUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
     if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];} else{
@@ -411,8 +411,7 @@ class ResponsePost{
     return u;
   }
   User userBuilder({Map<String, dynamic> data,int idMember, bool admin}){
-    if(data == null){return null;}
-    data = data == null ? _data : data;
+    data = data == null ? _data['user'] : data;
     return new User(
       data['idUser'], 
       data['nickname'],
@@ -425,8 +424,7 @@ class ResponsePost{
   }
 
   Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false}){
-    if(data == null){return null;}
-    data = data == null ? _data : data;
+    data = data == null ? _data['group'] : data;
     return new Group(
       int.parse(data['idGroup']), 
       data['groupName'],

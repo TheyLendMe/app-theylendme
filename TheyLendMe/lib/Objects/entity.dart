@@ -48,6 +48,7 @@ abstract class Entity{
   Future<List<Obj>> getClaimsOthersToMe({var context});
   Future<List<Obj>> getLoansOthersToMe({var context});
   Future<List<Obj>> getRequestsOthersToMe({var context});
+   Future<Entity> getEntityInfo({var context});
 }
 class User extends Entity{
   int idMember;
@@ -175,6 +176,15 @@ class User extends Entity{
       userInfo: true,
     ).doRequest(context:context);
     return res.myRequestedGroupsBuilder();
+  }
+
+  @override
+  Future<User> getEntityInfo({context}) async{
+    ResponsePost res = await new RequestPost("getUserInfo").dataBuilder(
+      userInfo: true,
+      oUser: this.idEntity
+    ).doRequest(context:context);
+    return res.userBuilder();
   }
 
 }
@@ -351,11 +361,13 @@ class Group extends Entity{
   Future addUser(Entity newUser) async{}
   Future delUser({User u}) async{}
 
-
-
-
+  @override
+  Future<Group> getEntityInfo({context})async{
+    ResponsePost res = await new RequestPost("getGroupInfo").dataBuilder(
+      userInfo: true,
+      idGroup: this.idEntity
+    ).doRequest(context:context);
+    return res.groupBuilder();
+  }
 }
-
-
-
   enum EntityType {USER, GROUP, Default}
