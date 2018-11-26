@@ -141,12 +141,12 @@ class ObjectItem extends StatelessWidget {
                 style: stateColor(object.objState.toString()),
               )
             ]
-          )
-        )
-      ) //title (Container)
-    ) //ListTile
-  ); //GestureDetector
-}}
+          ) //Row
+        ) //title (Container)
+      ) //ListTile
+    ); //GestureDetector
+  }
+}
 
 String getFirstCharacter(String getFirstCharacter){
   //Un poco feo [\u{1F600}-\U+E007F]
