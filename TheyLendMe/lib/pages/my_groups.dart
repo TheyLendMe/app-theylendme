@@ -69,6 +69,7 @@ class GroupItem extends StatelessWidget {
               child: ((group.img !=null)
               ? Image.network(group.img)
               : Image.asset('images/def_group_pic.png')), //just the initial letter in a circle
+
             ),
           title: new Container(
             child: Row(

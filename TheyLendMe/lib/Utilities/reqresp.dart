@@ -6,6 +6,7 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:TheyLendMe/Utilities/errorHandler.dart';
@@ -14,7 +15,7 @@ import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
 const String endpoint = "http://52.47.177.107/";
-
+final DateFormat dateFormat = new DateFormat('yyyy-MM-dd');
 
 
 class RequestPost{
@@ -29,7 +30,7 @@ class RequestPost{
     _url = fun;
 
 
-    dio.options.baseUrl=endpoint + "/app/";
+    dio.options.baseUrl=endpoint + "app/";
     dio.options.connectTimeout = 10000; //5s
     dio.options.receiveTimeout=3000;  
 
@@ -39,36 +40,35 @@ class RequestPost{
   }
 
 
-  Future<ResponsePost> doRequest({var context, ErrorHandler errorHandler}) async{
+  Future<ResponsePost> doRequest({var context}) async{
 
     ///TODO implementar un manejador de errores si deja de haber conexion
-    ///Si el 
     try{
       if(userInfo){
           Map<String,dynamic> m = await authInfo();
           this._data.addAll(m);
       }
-      return await ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
-      
+      return ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
     }on StatusException catch(e){
-      new ErrorToast().handleError(msg : e.errMsg);
-      return null;
-    }on AuthException catch(e){
-      new ErrorAuth(context).handleError();
-    
-    }on ServerException catch(e){
-      errorHandler.handleError(msg : e.errMsg);
-      return null;
+      new ErrorToast().handleError(msg :"Connection Error", id: e.id);
+      return new ResponsePost({'error' : true});
+    }on AuthServer catch(e){
+      new ErrorAuth(context).handleError(msg: e.errMsg, id: e.id);
+      return new ResponsePost({'error' : true});
+    }on PrivateServerErrorException catch(e){
+      new ErrorToast().handleError(msg: "Error in Server", id: e.id);
+      return new ResponsePost({'error' : true});
+    }on PublicServerErrorException catch(e){
+      new ErrorToast().handleError(msg: e.errMsg, id : e.id);
+      return new ResponsePost({'error' : true});
+    }on EmailNotVerify catch(e){
+      new ErrorEmail(context).handleError(msg: e.errMsg);
+      return new ResponsePost({'error' : true});
     }on Exception catch(e){
       new ErrorToast().handleError(msg : e.toString());
-      return null;
+      return new ResponsePost({'error' : true});
     }
-    
-
-
   }
-
-
 ///This will be the builder that
  RequestPost dataBuilder({String idUser,dynamic idGroup, int idObject, 
   String name, String desc,String info, String email, String tfno,String nickName,
@@ -111,7 +111,7 @@ class RequestPost{
 
   Future<Map<String,dynamic>> authInfo() async{
     FirebaseUser firebaseUser = await UserSingleton().firebaseUser;
-    if(firebaseUser == null){throw new AuthException("1", "not loged");}
+    if(firebaseUser == null){throw new AuthServer("No estas logeado",id :0);}
     UserSingleton user = await UserSingleton();
     Map<String,dynamic> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
@@ -122,10 +122,6 @@ class RequestPost{
     return m;
   }
 }
- /* if(nickName != null){fieldName[i] = 'nickname'; fieldValue[i]=nickName; i++;}
-  if(email != null){fieldName[i]='email';fieldValue[i]= (email); i++;}
-  if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
-  if(tfno != null){fieldName[i]=('tfno');fieldValue[i]=(tfno);i++;}*/
 List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
 String name, String groupName, bool private, bool autoloan}){
     List fieldName = new List();
@@ -148,30 +144,54 @@ String name, String groupName, bool private, bool autoloan}){
 class ResponsePost{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
-  static Future<ResponsePost> responseBuilder(Response response) async{
+  static ResponsePost responseBuilder(Response response){
     ///In case of server error like 404 not found... this 
     print(response.request.baseUrl+response.request.path);
     print(response.data);
-    if(response.statusCode != 200 ) throw new StatusException("Ha habido un error con el servidor", response.statusCode);
+    if(response.statusCode != 200 ) throw new StatusException(response.statusCode);
     return new ResponsePost(response.data);
   }
   dynamic _data;
   int _responseType;
+  bool _error =  false;
   ResponsePost(data){
- 
-    if(data['error'] != null && data['error'] ) { 
-      if(data['errorCode'] == 1) throw new AuthException(data["errorMsg"], data["errorCode"]);
+  ///Server error
+    if(data['error'] != null && data['error']) {
 
-      throw new ServerException(data["errorMsg"], data["errorCode"]);
-
+      
+      _error = true;
+      if(data['errorCode'] != null){
+        int errorCode  = data['errorCode'];
+        ///Private errors
+        if(errorCode <=22){
+          ///Email not verify
+          if(errorCode == 16){throw new EmailNotVerify();}
+          ///Auth error
+          if(errorCode >= 12 && errorCode <=17 ) throw new AuthServer(data["errorMsg"], id: errorCode);
+          throw new PrivateServerErrorException(errorCode,data["errorMsg"]);
+        }
+        if(errorCode >= 100){
+          throw new PublicServerErrorException(errorCode, data['errorMsg']);
+        }
+      }
     }
     this._data = data['responseData'];
     this._responseType = data['responseType'];
   }
   dynamic get data => _data;
+  
+  bool get hasError => _error;
 ////-----------Objects builders------------//////////
 
-
+  List<UserObject> getMyObjects(){
+    List objects = _data['BYproperty'];
+    List <UserObject> userObjects = new List();
+    objects.forEach((object){
+      
+      userObjects.add(objectBuilder(data : object,forUser: true));
+    });
+    return userObjects;
+  }
 
   List<Obj> objectsUserBuilder({Entity entity,String stateType, bool mine = false}){
     List<Obj> obj = new List();
@@ -192,6 +212,7 @@ class ResponsePost{
     if(_responseType == 3){
 
     }
+    _orderObjeList(obj);
     return obj;
   }
   List<Group> groupsBuilder(){
@@ -214,7 +235,8 @@ class ResponsePost{
           object['name'],
           image : object['imagen'],
           amount :int.parse(object['amount']),
-          //TODO incluir fecha 
+          date: object['creationDate'],
+  
         ) : 
         new GroupObject(
           int.parse(object['idObject']),
@@ -222,7 +244,7 @@ class ResponsePost{
           object['name'],
           image : object['imagen'],
           amount : int.parse(object['amount']),
-          //TODO incluir fecha 
+          date: object['creationDate']
         );
       objs.add(obj);
     });
@@ -343,16 +365,19 @@ class ResponsePost{
           data['name'],
           amount: int.parse(data['amount']),
           image : data['imagen'],
+          desc: data['descr'],
+          date: data['creationDate'],
           objState: objState
           ) 
           : 
         new GroupObject(
           int.parse(data['idObject']), 
           group,
-           //TODO decirle a victor que me incluya todo el grupo
           data['name'],
           image : data['imagen'],
+          desc: data['descr'],
           amount: int.parse(data['amount']),
+          date: data['creationDate'],
           objState: objState
         );
 
@@ -431,14 +456,17 @@ class ResponsePost{
   }
 
   List<UserObject> requestsUserObjectBuilder({bool mine = null}){
+    List<UserObject> list = new List();
     if(mine == null){
-      List<UserObject> list = new List();
+      
       list.addAll(_requestsUserObjectBuilder(_data['toUser']));
       list.addAll(_requestsUserObjectBuilder(_data['byUser']));
-      return list;
+     
     }else{
-      return mine ? _requestsUserObjectBuilder(_data['byUser']) : _requestsUserObjectBuilder(_data['toUser']);
+      list.addAll(mine ? _requestsUserObjectBuilder(_data['byUser']) : _requestsUserObjectBuilder(_data['toUser']));
     }
+    _orderObjeList(list);
+    return list;
   }
 
   List<UserObject> _requestsUserObjectBuilder(List<dynamic> requests){
@@ -455,6 +483,7 @@ class ResponsePost{
       );
       requestsList.add(objectBuilder(data: request['object'], objState: state));
     });
+    _orderObjeList(requestsList);
     return requestsList;
   }
 
@@ -476,6 +505,7 @@ class ResponsePost{
       list.addAll(_requestsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
       list.addAll(_requestsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
     }
+    _orderObjeList(list);
     return list;
   }
 
@@ -493,7 +523,7 @@ class ResponsePost{
         next: requesterGroup != null ? requesterGroup  : group,
         date: request['date'],
         //actualUser:userBuilder(data : request['user']) ,
-        nextUser: userBuilder(data : request['requester_user']), ///FIXME
+        nextUser: userBuilder(data : request['requester_user']),
         notFromAGroup: notFromAGroup
       );
       requestsList.add(objectBuilder(data: request['object'], objState: state, forUser: false));
@@ -502,13 +532,18 @@ class ResponsePost{
   }
 
   List<UserObject> claimsUserObjectBuilder({bool mine}){
+    List<UserObject> list = new List();
     if(mine == null){
-      List<UserObject> list = new List();
+      
       list.addAll(_claimsUserObjectBuilder(_data['toUser']));
       list.addAll(_claimsUserObjectBuilder(_data['byUser']));
+
     }else{
-      return mine ? _claimsUserObjectBuilder(_data['byUser']) : _claimsUserObjectBuilder(_data['toUser']);
+      list.addAll(mine ? _claimsUserObjectBuilder(_data['byUser']) : _claimsUserObjectBuilder(_data['toUser']));
     }
+
+     _orderObjeList(list);
+     return list;
   }
 
   List<UserObject> _claimsUserObjectBuilder(List<dynamic> claims){
@@ -548,6 +583,7 @@ class ResponsePost{
       list.addAll(_claimsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
 
     }
+    _orderObjeList(list);
     return list;
   }
 
@@ -575,13 +611,18 @@ class ResponsePost{
   }
 
   List<UserObject> loansUserObjectBuilder({bool mine}){
+    List<UserObject> list = new List();
     if(mine == null){
-      List<UserObject> list = new List();
+     
       list.addAll(_loansUserObjectBuilder(_data['toUser']));
       list.addAll(_loansUserObjectBuilder(_data['byUser']));
+      _orderObjeList(list);
+      return list;
     }else{
-      return mine ? _loansUserObjectBuilder(_data['byUser']) : _loansUserObjectBuilder(_data['toUser']);
+      list.addAll(mine ? _loansUserObjectBuilder(_data['byUser']) : _loansUserObjectBuilder(_data['toUser']));
     }
+    _orderObjeList(list);
+    return list;
   }
 
   List<UserObject> _loansUserObjectBuilder(List<dynamic> loans){
@@ -598,6 +639,7 @@ class ResponsePost{
       );
       loansList.add(objectBuilder(data: loan['object'], objState: state));
     });
+
     return loansList;
   }
   
@@ -620,6 +662,7 @@ class ResponsePost{
       list.addAll(_loansGroupObjectBuilder(_data['fromOthersGroups'], group: group));
 
     }
+    _orderObjeList(list);
     return list;
   }
 
@@ -646,7 +689,7 @@ class ResponsePost{
     return loanssList;
   }
 
-
+  void _orderObjeList(List<Obj> list){list.sort((a,b) => a.date.isAfter(b.date) ? 0 : 1);}
 
 
 ////-------------GetTopics----------------//////////
@@ -678,10 +721,27 @@ class RequestException implements Exception{
   RequestException(this.errMsg,this.idErr);
 }
 
-class StatusException extends RequestException{
-  ///TODO define status error
-  StatusException(String errMsg, int idErr) : super(errMsg, idErr);
+class StatusException implements Exception{
+  int id;
+  String errMsg = "Ha habido un error de conexion";
+  StatusException(this.id);
+  }
+class AuthServer implements Exception{
+  String errMsg;
+  int id; 
+  AuthServer(this.errMsg,{this.id});
 }
-class ServerException extends RequestException{
-  ServerException(String errMsg, int idErr) : super(errMsg, idErr);
+
+class PrivateServerErrorException implements Exception{
+  int id; 
+  String errMsg;
+  PrivateServerErrorException(this.id, this.errMsg);
 }
+
+class PublicServerErrorException implements Exception{
+  int id; 
+  String errMsg;
+  PublicServerErrorException(this.id, this.errMsg);
+}
+
+class EmailNotVerify implements Exception{String errMsg = "Necesitas verificar el email";}

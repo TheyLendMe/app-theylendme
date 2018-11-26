@@ -10,7 +10,7 @@ abstract class ErrorHandler{
 
 class ErrorToast extends ErrorHandler{
   @override
-  void handleError({String msg}) async{
+  void handleError({String msg, dynamic id}) async{
     Fluttertoast.showToast(
      msg: msg,
      toastLength: Toast.LENGTH_SHORT,
@@ -20,10 +20,21 @@ class ErrorToast extends ErrorHandler{
 class ErrorAuth extends ErrorHandler{
   ErrorAuth(BuildContext context) : super(context : context);
   @override
-  void handleError({String msg}) async{
-    await Navigator.of(_context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));
+  void handleError({String msg, dynamic id}) async{
+    if(_context != null){ await Navigator.of(_context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));}
     Fluttertoast.showToast(
      msg: "Tienes que logearte",
+     toastLength: Toast.LENGTH_SHORT,
+    );
+  }
+}
+class ErrorEmail extends ErrorHandler{
+  ErrorEmail(BuildContext context) : super(context : context);
+  @override
+  void handleError({String msg}) async{
+    //await Navigator.of(_context).push( MaterialPageRoute(builder: (_context) => new AuthPage()));
+    Fluttertoast.showToast(
+     msg : msg,
      toastLength: Toast.LENGTH_SHORT,
     );
   }

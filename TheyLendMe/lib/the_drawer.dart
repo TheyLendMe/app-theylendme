@@ -61,10 +61,11 @@ class _TheDrawerState extends State<TheDrawer> {
             currentAccountPicture: GestureDetector(
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
+                backgroundImage: (UserSingleton().login
+                  ? (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png'))
+                  : null),
                 child: (UserSingleton().login
-                    ? (UserSingleton().user.img!=null
-                      ? Image.network(UserSingleton().user.img) //TODO: circular
-                      : Image.asset('images/def_user_pic.png'))
+                  ? null
                   : Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor))
               ),
               onTap: () {
@@ -80,7 +81,7 @@ class _TheDrawerState extends State<TheDrawer> {
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('images/tlm.jpg')
+                image: AssetImage('images/tlm.png')
               ),
             )
           ),
