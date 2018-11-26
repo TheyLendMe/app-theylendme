@@ -142,12 +142,21 @@ class ObjectItem extends StatelessWidget {
                 style: stateColor(object.objState.toString()),
               )
             ]
+<<<<<<< HEAD
           )
         ) //title (Container)
       )
     ) //ListTile
   ); //GestureDetector
 }}
+=======
+          ) //Row
+        ) //title (Container)
+      ) //ListTile
+    ); //GestureDetector
+  }
+}
+>>>>>>> a19e1fe5f763856c8dd3bec3e0eb73444716496d
 
 Widget xN(amount) {
   if (amount>1)
