@@ -142,7 +142,7 @@ class UserObject extends Obj{
 
   @override
   Future<bool> deleteRequest({var context}) async{
-    return (await new RequestPost("updateObject").dataBuilder(
+    return (await new RequestPost("deleteRequest").dataBuilder(
       idObject: this.idObject,
       userInfo: true,
       idRequest: _objState.idState
