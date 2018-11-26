@@ -51,22 +51,22 @@ class RequestPost{
       return ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
     }on StatusException catch(e){
       new ErrorToast().handleError(msg :"Connection Error", id: e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on AuthServer catch(e){
       new ErrorAuth(context).handleError(msg: e.errMsg, id: e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on PrivateServerErrorException catch(e){
       new ErrorToast().handleError(msg: "Error in Server", id: e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on PublicServerErrorException catch(e){
       new ErrorToast().handleError(msg: e.errMsg, id : e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on EmailNotVerify catch(e){
       new ErrorEmail(context).handleError(msg: e.errMsg);
-      return null;
+      return new ResponsePost({'error' : true});
     }on Exception catch(e){
       new ErrorToast().handleError(msg : e.toString());
-      return null;
+      return new ResponsePost({'error' : true});
     }
   }
 ///This will be the builder that
@@ -91,7 +91,7 @@ class RequestPost{
     if(requestMsg != null) _data['request'] = requestMsg;
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
-    if(oUser != null) _data['oUser'] = oUser;
+    if(oUser != null) _data['idOtherUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
     if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];} else{
@@ -156,21 +156,24 @@ class ResponsePost{
   bool _error =  false;
   ResponsePost(data){
   ///Server error
-    if(data['error'] != null && data['error'] ) { 
-      int errorCode  = data['errorCode'];
-      _error = true;
-      ///Private errors
-      if(errorCode <=22){
-        ///Email not verify
-        if(errorCode == 16){throw new EmailNotVerify();}
-        ///Auth error
-        if(errorCode >= 12 && errorCode <=17 ) throw new AuthServer(data["errorMsg"], id: errorCode);
-        throw new PrivateServerErrorException(errorCode,data["errorMsg"]);
-      }
-      if(errorCode >= 100){
-        throw new PublicServerErrorException(errorCode, data['errorMsg']);
-      }
+    if(data['error'] != null && data['error']) {
 
+      
+      _error = true;
+      if(data['errorCode'] != null){
+        int errorCode  = data['errorCode'];
+        ///Private errors
+        if(errorCode <=22){
+          ///Email not verify
+          if(errorCode == 16){throw new EmailNotVerify();}
+          ///Auth error
+          if(errorCode >= 12 && errorCode <=17 ) throw new AuthServer(data["errorMsg"], id: errorCode);
+          throw new PrivateServerErrorException(errorCode,data["errorMsg"]);
+        }
+        if(errorCode >= 100){
+          throw new PublicServerErrorException(errorCode, data['errorMsg']);
+        }
+      }
     }
     this._data = data['responseData'];
     this._responseType = data['responseType'];
@@ -408,8 +411,7 @@ class ResponsePost{
     return u;
   }
   User userBuilder({Map<String, dynamic> data,int idMember, bool admin}){
-    if(data == null){return null;}
-    data = data == null ? _data : data;
+    data = data == null ? _data['user'] : data;
     return new User(
       data['idUser'], 
       data['nickname'],
@@ -422,8 +424,7 @@ class ResponsePost{
   }
 
   Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false}){
-    if(data == null){return null;}
-    data = data == null ? _data : data;
+    data = data == null ? _data['group'] : data;
     return new Group(
       int.parse(data['idGroup']), 
       data['groupName'],
@@ -463,6 +464,7 @@ class ResponsePost{
       list.addAll(mine ? _requestsUserObjectBuilder(_data['byUser']) : _requestsUserObjectBuilder(_data['toUser']));
     }
     _orderObjeList(list);
+    return list;
   }
 
   List<UserObject> _requestsUserObjectBuilder(List<dynamic> requests){

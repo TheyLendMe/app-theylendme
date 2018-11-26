@@ -13,15 +13,15 @@ class _TheGroupsTabState extends State<TheGroupsTab> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
+  Widget groupList;
+
 
   Future<Null> _refresh() {
-    //FIXME: no da error, pero no recarga grupos nuevos
-    // (por ejemplo, si mientras está en esta pestaña otro usuario crea un nuevo grupo)
     return Group.getGroups().then((_groups) {
-      ListView.builder(
-        itemBuilder: (BuildContext context, int index) => GroupItem(_groups[index]),
-        itemCount: _groups.length
-      );
+      groupList = ListView.builder(
+          itemBuilder: (BuildContext context, int index) => GroupItem(_groups[index]),
+          itemCount: _groups.length
+        );
     });
   }
 
@@ -34,17 +34,23 @@ class _TheGroupsTabState extends State<TheGroupsTab> {
         child: FutureBuilder<List<Group>>(
           future: Group.getGroups(),
           builder: (context, snapshot) {
-            return (snapshot.hasData
-              ? ListView.builder(
-                  itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
-                  itemCount: snapshot.data.length
-                )
-              : Center(child: CircularProgressIndicator()));
-          }
-        )
+            if(snapshot.hasData){
+              if(groupList == null){
+                groupList = ListView.builder(
+                    itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
+                    itemCount: snapshot.data.length
+                );
+              }
+              return groupList;
+            }
+            return Center(child: CircularProgressIndicator());
+        })
       )
     );
   }
+
+  
+  
 }
 
 // Displays one Group.

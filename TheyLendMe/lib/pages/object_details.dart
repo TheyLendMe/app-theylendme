@@ -62,7 +62,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(widget._object.name, overflow :TextOverflow.ellipsis, style: Theme.of(context).textTheme.title),
-              Text(' de ', style: Theme.of(context).textTheme.subtitle), //WIP: hacerlo más clickable
+              Text(' de ', style: Theme.of(context).textTheme.subtitle),
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -76,7 +76,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                     }
                   );
                 },
-                child: Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle)
+                child: Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle) //WIP: hacerlo más clickable
               )
             ]
           )
