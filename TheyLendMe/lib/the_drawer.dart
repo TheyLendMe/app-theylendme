@@ -81,7 +81,7 @@ class _TheDrawerState extends State<TheDrawer> {
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('images/tlm.jpg')
+                image: AssetImage('images/tlm.png')
               ),
             )
           ),

@@ -80,7 +80,7 @@ class ObjectTile extends StatelessWidget {
                   ? NetworkImage(objects[i].image)
                   : AssetImage('images/def_obj_pic.png')),
                 fit: BoxFit.cover,
-                placeholder: AssetImage('images/tlm.jpg'),
+                placeholder: AssetImage('images/tlm.png'),
               )
             ),
           ),
