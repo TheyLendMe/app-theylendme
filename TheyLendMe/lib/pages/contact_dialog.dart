@@ -14,25 +14,28 @@ class ContactDialog extends StatefulWidget {
 
 class _ContactDialogState extends State<ContactDialog> {
   Widget dialog;
+  bool isUser = true;
 
   @override
   Widget build(BuildContext context) {
+    isUser = widget._entity.type == EntityType.USER;
+
     return FutureBuilder<Entity>(
-      future: widget._entity.getEntityInfo(),
+      future: isUser ? (widget._entity as User).getEntityInfo() :  (widget._entity as Group).getEntityInfo() ,
       builder: (context, snapshot) {
         if(snapshot.hasData){ //FIXME: dialog=null
-          dialog = SimpleDialog(
+          dialog = new SimpleDialog(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  (widget._entity.email!=null
+                  (snapshot.data.email!=null
                     ? SimpleDialogOption(
                       onPressed: () {launch('mailto:${snapshot.data.email}');},
                       child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 20.0),
                     ): Text('') //esto nunca se mostrará porque siempre hay email
                   ),
-                  (widget._entity.tfno!=null
+                  (snapshot.data.tfno!=null
                     ? SimpleDialogOption(
                       //TODO: check first if it's on WhatsApp
                       onPressed: () {launch('https://wa.me/${snapshot.data.tfno}');},
@@ -43,8 +46,12 @@ class _ContactDialogState extends State<ContactDialog> {
               )
             ]
           );
+          return dialog;
+        }else{
+          dialog = new SimpleDialog();
+          return dialog;
         }
-        return dialog;
+        
       }
     );
   }
