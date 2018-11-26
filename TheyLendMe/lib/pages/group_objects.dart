@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/create_object.dart';
-import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/pages/group_object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:math'; // provisional
+import 'package:TheyLendMe/pages/create_group_object.dart';
 
 
 class MyGroupObjectsPage extends StatefulWidget {
@@ -22,8 +24,10 @@ class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      // TODO te lleve al drawer inicial o a los grupos
       appBar: AppBar(
           title: const Text('Inventario'),
+          
           //TODO: searchBar
         ),
       body: FutureBuilder<List<Obj>>(
@@ -37,13 +41,14 @@ class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
             : Center(child: CircularProgressIndicator()));
           }
       ),
+      // TODO esconder el boton si no eres miembro
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
         onPressed: (){
           showDialog(
             context: this.context,
             builder: (BuildContext context){
-              return CreateObject();
+              return CreateGroupObject(widget._group);
             }
           );
         },
@@ -56,7 +61,7 @@ class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
 class ObjectItem extends StatelessWidget {
 
   const ObjectItem(this.object);
-  final Obj object;
+  final GroupObject object;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +70,7 @@ class ObjectItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return ObjectDetails(object);
+            return GroupObjectDetails(object);
           }
         );
       },
@@ -87,10 +92,10 @@ class ObjectItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(object.name),
-              xN( Random().nextInt(20) ), //provisional
+              xN( object.amount ), //provisional
               Text(
-                object.objState.toString(),
-                style: stateColor(object.objState.toString()) //provisional
+                object.objState.state.toString(),
+                style: stateColor(object.objState.toString())
               )
             ]
           )
@@ -114,11 +119,12 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.red);
 }
 
-final User propietario = User('1', 'Señora Propietaria',
+/*final User propietario = User('1', 'Señora Propietaria',
   img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
   tfno: '34606991934', email: 'sofia@adolfodominguez.com');
+*/
 
-
+final User propietario = User(UserSingleton().user.idEntity,UserSingleton().user.name);
 //Group grupo = new Group(idEntity, name);
 
 //List<Obj> objects;

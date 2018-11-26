@@ -221,7 +221,7 @@ class GroupObject extends Obj{
     ).doRequest(context : context);
   }*/
   @override
-  GroupObjState get objState => _objState;
+  ObjState get objState => _objState;
 
 
 }

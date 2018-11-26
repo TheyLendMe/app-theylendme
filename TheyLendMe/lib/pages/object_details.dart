@@ -8,7 +8,7 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class ObjectDetails extends StatefulWidget {
+class  ObjectDetails extends StatefulWidget {
   final Obj _object;
 
   ObjectDetails(this._object);

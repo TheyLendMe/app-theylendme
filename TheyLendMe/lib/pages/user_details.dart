@@ -68,7 +68,13 @@ class _UserDetailsState extends State<UserDetails> {
           ),
           MaterialButton(
             height: 60.0,
-            onPressed:(){},
+            onPressed:(){
+              Navigator.push(context, new MaterialPageRoute(
+                builder: (BuildContext context) {
+                  
+                },
+              ));
+            },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
           )
