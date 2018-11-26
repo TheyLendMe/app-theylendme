@@ -24,18 +24,15 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
           title: const Text('Mis Objetos'),
           //TODO: searchBar
         ),
-      
-      body:
-      FutureBuilder<List<Obj>>(
+      body: FutureBuilder<List<Obj>>(
           future: UserSingleton().user.getObjects(),
-          builder: (context,snapshot){
+          builder: (context,snapshot) {
             return (snapshot.hasData
-            /*
+            ?
             ListView.builder(
               itemBuilder: (BuildContext context, int index) => ObjectItem(snapshot.data[index]),
               itemCount: snapshot.data.length
-            )*/
-            ? ObjectTile(objects: snapshot.data)
+            )
             : Center(child: CircularProgressIndicator()));
           }
       ),
@@ -55,7 +52,7 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
     );
   }
 }
-
+/*
 class ObjectTile extends StatelessWidget {
   final List<Obj> objects;
   ObjectTile({this.objects});
@@ -98,7 +95,7 @@ class ObjectTile extends StatelessWidget {
       crossAxisSpacing: 8.0,
     );
   }
-}
+}*/
 // Displays one Object.
 class ObjectItem extends StatelessWidget {
 
@@ -116,12 +113,16 @@ class ObjectItem extends StatelessWidget {
           }
         );
       },
-
-      child: ListTile(
-        leading: new Container(
-          child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
+      child: Container(
+        padding: new EdgeInsets.only(left: 8.0, top: 15.0),
+        child: ListTile(
+          leading: new CircleAvatar(
+              child: new Text(object.name[0]), //just the initial letter in a circle
+              backgroundColor: Colors.yellow
+            ),
+          /*new Text(object.name[0]), //just the initial letter in a circle
           decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
+            color: Colors.yellow,
             borderRadius: BorderRadius.all(
               const Radius.circular(4.0),
             ),
@@ -142,17 +143,11 @@ class ObjectItem extends StatelessWidget {
               )
             ]
           )
-        )
-      ) //title (Container)
+        ) //title (Container)
+      )
     ) //ListTile
   ); //GestureDetector
 }}
-
-String getFirstCharacter(String getFirstCharacter){
-  //Un poco feo [\u{1F600}-\U+E007F]
-  var regex = '[\u{1F600}\\-\\u{E007F}]';
-  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
-  return textWithoutEmojis[0];}
 
 Widget xN(amount) {
   if (amount>1)

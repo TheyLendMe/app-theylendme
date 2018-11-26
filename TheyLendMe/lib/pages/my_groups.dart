@@ -53,7 +53,7 @@ class GroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return GestureDetector(
       onTap: () {
         showDialog(
           context: context,
@@ -62,10 +62,26 @@ class GroupItem extends StatelessWidget {
           }
         );
       },
-      child: Container(
+      child: ListTile(
+        leading: CircleAvatar(
+            child: (group.img!=null ? Text('') : Text(group.name[0])),
+            backgroundImage: (group.img!=null ? NetworkImage(group.img) : Image.asset('images/def_group_pic.png')),
+            backgroundColor: Theme.of(context).accentColor
+          ),
+        title: Text(group.name),
+        subtitle: (group.info!=null
+          ? Text(group.info)
+          : Text(''))
+      )
+      
+      
+      
+      
+      
+      /*Container(
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
-          leading: new CircleAvatar(
+          leading: CircleAvatar(
               child: ((group.img !=null)
               ? Image.network(group.img)
               : Image.asset('images/def_group_pic.png')), //just the initial letter in a circle
@@ -81,8 +97,8 @@ class GroupItem extends StatelessWidget {
               ]
             )
           )
-        ) //end ListTile
-      ) //end Container
+        ) *///end ListTile
+       //end Container
     );
   }
 }
