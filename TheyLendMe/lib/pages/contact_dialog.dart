@@ -13,29 +13,46 @@ class ContactDialog extends StatefulWidget {
 }
 
 class _ContactDialogState extends State<ContactDialog> {
-    @override
-    Widget build(BuildContext context) {
-      return SimpleDialog(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+  Widget dialog;
+  bool isUser = true;
+
+  @override
+  Widget build(BuildContext context) {
+    isUser = widget._entity.type == EntityType.USER;
+
+    return FutureBuilder<Entity>(
+      future: isUser ? (widget._entity as User).getEntityInfo() :  (widget._entity as Group).getEntityInfo() ,
+      builder: (context, snapshot) {
+        if(snapshot.hasData){ //FIXME: dialog=null
+          dialog = new SimpleDialog(
             children: [
-              (widget._entity.email!=null
-                ? SimpleDialogOption(
-                  onPressed: () {launch('mailto:${widget._entity.email}');},
-                  child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 20.0),
-                ): Text('') //esto nunca se mostrará porque siempre hay email
-              ),
-              (widget._entity.tfno!=null
-                ? SimpleDialogOption(
-                  //TODO: check first if it's on WhatsApp
-                  onPressed: () {launch('https://wa.me/${widget._entity.tfno}');},
-                  child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 20.0),
-                ): Text('')
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  (snapshot.data.email!=null
+                    ? SimpleDialogOption(
+                      onPressed: () {launch('mailto:${snapshot.data.email}');},
+                      child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 20.0),
+                    ): Text('') //esto nunca se mostrará porque siempre hay email
+                  ),
+                  (snapshot.data.tfno!=null
+                    ? SimpleDialogOption(
+                      //TODO: check first if it's on WhatsApp
+                      onPressed: () {launch('https://wa.me/${snapshot.data.tfno}');},
+                      child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 20.0),
+                    ): Text('')
+                  ),
+                ]
+              )
             ]
-          )
-        ]
-      );
-    }
+          );
+          return dialog;
+        }else{
+          dialog = new SimpleDialog();
+          return dialog;
+        }
+        
+      }
+    );
+  }
 }
