@@ -128,35 +128,27 @@ class ObjectItem extends StatelessWidget {
             ),
           ),
           padding: EdgeInsets.all(16.0),
-        ), //leading (Container)*/
-        title: new Container(
-          //padding: new EdgeInsets.only(left: 8.0),
-          child: Row(
-            //crossAxisAlignment: CrossAxisAlignment.start,
-            //mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(object.name),
-              xN( object.amount ),
-              Text(
-                object.objState.toString(),
-                style: stateColor(object.objState.toString()),
-              )
-            ]
-<<<<<<< HEAD
-          )
-        ) //title (Container)
+          ), //leading (Container)*/
+          title: new Container(
+            //padding: new EdgeInsets.only(left: 8.0),
+            child: Row(
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              //mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(object.name),
+                xN( object.amount ),
+                Text(
+                  object.objState.toString(),
+                  style: stateColor(object.objState.toString()),
+                )
+              ]
+            ) //Row
+          ) //title (Container)
+        ) //ListTile
       )
-    ) //ListTile
-  ); //GestureDetector
-}}
-=======
-          ) //Row
-        ) //title (Container)
-      ) //ListTile
     ); //GestureDetector
   }
 }
->>>>>>> a19e1fe5f763856c8dd3bec3e0eb73444716496d
 
 Widget xN(amount) {
   if (amount>1)
