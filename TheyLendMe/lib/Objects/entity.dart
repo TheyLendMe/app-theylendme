@@ -179,12 +179,14 @@ class User extends Entity{
   }
   Future<bool> imAdmin(Group g,{var context}) async{
     List<Group> groups = await this.getGroupsImMember();
+    bool im = false;
     groups.forEach((group){
-      if(group.idEntity == g.idEntity && group.imAdmin){return true;}
+      if(group.idEntity == g.idEntity && group.imAdmin){
+        im = true;
+      }
     });
-    return false;
+    return im;
   }
-
   @override
   Future<User> getEntityInfo({var context}) async{
     ResponsePost res = await new RequestPost("getUserInfo").dataBuilder(
@@ -216,7 +218,7 @@ class Group extends Entity{
   set autoloan(bool autoloan) => _autoloan;
 
   get imAdmin => _imAdmin;
-  set imAdmon(bool imAdmin) => _imAdmin = imAdmin;
+  set imAdmin(bool imAdmin) => _imAdmin = imAdmin;
 
   static Future<List<Group>>getGroups() async{
     ResponsePost res = await new RequestPost("getGroups").dataBuilder().doRequest();
