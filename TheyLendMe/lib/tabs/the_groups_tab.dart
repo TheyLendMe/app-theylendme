@@ -74,7 +74,7 @@ class GroupItem extends StatelessWidget {
       },
       child: ListTile(
         leading: CircleAvatar(
-            child: (group.img!=null ? Text('') : Text(group.name[0])),
+            child: (group.img!=null ? Text('') : Text(getFirstCharacter(group.name))),
             backgroundImage: (group.img!=null ? NetworkImage(group.img) : null),
             backgroundColor: Theme.of(context).accentColor
           ),
@@ -86,3 +86,9 @@ class GroupItem extends StatelessWidget {
     );
   }
 }
+
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}

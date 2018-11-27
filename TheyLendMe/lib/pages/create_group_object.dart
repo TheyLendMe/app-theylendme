@@ -157,15 +157,8 @@ class _CreateGroupObjectState extends State<CreateGroupObject> {
                 } else if(myController2.text != null && _image != null){
                   await widget._group.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
                   }
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                  builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
-                ),
-                ModalRoute.withName('/'));
-                // TODO: evitar que se vuelva a crear objeto al echar atrás
-                /*push(context, MaterialPageRoute(
-                  builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
-                ));*/
-            } else {
+                Navigator.of(context).pop();
+                } else {
               Fluttertoast.showToast(msg: "Rellena el nombre",toastLength: Toast.LENGTH_SHORT);
             }},
             color: Theme.of(context).buttonColor,

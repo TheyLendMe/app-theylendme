@@ -3,7 +3,7 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/pages/group_objects.dart';
-
+import 'package:TheyLendMe/pages/my_groups_objects.dart';
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
@@ -88,10 +88,15 @@ class GroupDetailsState extends State<GroupDetails> {
           MaterialButton(
             height: 60.0,
             onPressed:(){
-              // TODO: sacar inventario == lista de objetos mis objetos
+              /*if(// TODO: está en el grupo){
               Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
+                builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
               ));
+              } else {*/
+                Navigator.push(context, new MaterialPageRoute(
+                  builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
+                ));
+              //}
             },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
