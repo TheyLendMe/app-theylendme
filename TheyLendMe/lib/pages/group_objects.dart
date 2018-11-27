@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/create_object.dart';
 import 'package:TheyLendMe/pages/group_object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
-import 'package:TheyLendMe/Objects/entity.dart'; // provisional
+import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'dart:math'; // provisional
 import 'package:TheyLendMe/pages/create_group_object.dart';
 
 
@@ -64,7 +63,7 @@ class ObjectItem extends StatelessWidget {
       },
       child: ListTile(
         leading: new Container(
-          child: new Text(object.name[0]), //just the initial letter in a circle
+          child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
           decoration: BoxDecoration(
             color: Theme.of(context).accentColor,
             borderRadius: BorderRadius.all(
@@ -107,22 +106,10 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.red);
 }
 
-/*final User propietario = User('1', 'Señora Propietaria',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
-  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
-*/
-
 final User propietario = User(UserSingleton().user.idEntity,UserSingleton().user.name);
-//Group grupo = new Group(idEntity, name);
 
-//List<Obj> objects;
-
-
-
-/*final List<UserObject> objects = <UserObject>[
-  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
-  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
-  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
-  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
-  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
-];*/
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}

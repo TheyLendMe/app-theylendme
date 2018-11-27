@@ -88,15 +88,15 @@ class GroupDetailsState extends State<GroupDetails> {
           MaterialButton(
             height: 60.0,
             onPressed:(){
-              if(/* TODO: en el grupo*/){
+              /*if(// TODO: está en el grupo){
               Navigator.push(context, new MaterialPageRoute(
                 builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
               ));
-              } else {
+              } else {*/
                 Navigator.push(context, new MaterialPageRoute(
                   builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
                 ));
-              }
+              //}
             },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),

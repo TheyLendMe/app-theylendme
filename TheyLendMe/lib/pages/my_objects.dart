@@ -3,7 +3,6 @@ import 'package:TheyLendMe/pages/create_object.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
-import 'dart:math'; // provisional
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -117,10 +116,10 @@ class ObjectItem extends StatelessWidget {
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
           leading: new CircleAvatar(
-              child: new Text(object.name[0]), //just the initial letter in a circle
+              child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
               backgroundColor: Colors.yellow
             ),
-          /*new Text(object.name[0]), //just the initial letter in a circle
+          /*new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
           decoration: BoxDecoration(
             color: Colors.yellow,
             borderRadius: BorderRadius.all(
@@ -165,3 +164,9 @@ TextStyle stateColor(state) {
   else
     return TextStyle(color: Colors.yellow);
 }
+
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}

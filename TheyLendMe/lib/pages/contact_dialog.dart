@@ -25,6 +25,7 @@ class _ContactDialogState extends State<ContactDialog> {
       builder: (context, snapshot) {
         if(snapshot.hasData){ //FIXME: dialog=null
           dialog = new SimpleDialog(
+            title: Text('Contactar a través de...'),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -32,14 +33,14 @@ class _ContactDialogState extends State<ContactDialog> {
                   (snapshot.data.email!=null
                     ? SimpleDialogOption(
                       onPressed: () {launch('mailto:${snapshot.data.email}');},
-                      child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 20.0),
+                      child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 50.0),
                     ): Text('') //esto nunca se mostrará porque siempre hay email
                   ),
                   (snapshot.data.tfno!=null
                     ? SimpleDialogOption(
                       //TODO: check first if it's on WhatsApp
                       onPressed: () {launch('https://wa.me/${snapshot.data.tfno}');},
-                      child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 20.0),
+                      child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 50.0),
                     ): Text('')
                   ),
                 ]
@@ -51,7 +52,6 @@ class _ContactDialogState extends State<ContactDialog> {
           dialog = new SimpleDialog();
           return dialog;
         }
-        
       }
     );
   }

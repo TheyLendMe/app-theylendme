@@ -3,6 +3,7 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 
@@ -41,14 +42,14 @@ class LentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      /*onTap: () { //TODO
+      onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return GroupDetails(request);
+            return ObjectDetails(lentObject);
           }
         );
-      },*/
+      },
       child: ListTile(
         leading: Container(
           child: (lentObject.image!=null
@@ -107,8 +108,7 @@ class LentItem extends StatelessWidget {
                   onPressed:() async {
                     lentObject.returnObj().then((error){
                       if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Préstamo finalizado!")));}
-                    });//FIXME: "permission error"
-                    
+                    });
                   }
                 )
               ]
