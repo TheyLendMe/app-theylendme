@@ -130,10 +130,12 @@ Widget googleButton(BuildContext context) {
     ),
     color: Theme.of(context).accentColor,
     onPressed: () async {
-      if(await Auth.login(google: true)){
+       Auth.login(google: true).then((valid){
+         if(valid){Navigator.of(context).pop(null);}
+       });
         //TODO: sync-await return Center(child: CircularProgressIndicator()));
-        Navigator.of(context).pop(null);
-      }
+       
+      
       
     },
     child: Container(

@@ -48,6 +48,7 @@ abstract class Entity{
   Future<List<Obj>> getClaimsOthersToMe({var context});
   Future<List<Obj>> getLoansOthersToMe({var context});
   Future<List<Obj>> getRequestsOthersToMe({var context});
+  Future<Entity> getEntityInfo({var context});
 }
 class User extends Entity{
   int idMember;
@@ -176,6 +177,25 @@ class User extends Entity{
     ).doRequest(context:context);
     return res.myRequestedGroupsBuilder();
   }
+  Future<bool> imAdmin(Group g,{var context}) async{
+    List<Group> groups = await this.getGroupsImMember();
+    bool im = false;
+    groups.forEach((group){
+      if(group.idEntity == g.idEntity && group.imAdmin){
+        im = true;
+      }
+    });
+    return im;
+  }
+  @override
+  Future<User> getEntityInfo({var context}) async{
+    ResponsePost res = await new RequestPost("getUserInfo").dataBuilder(
+      userInfo: true,
+      oUser: this.idEntity
+    ).doRequest(context:context);
+    User user = res.userBuilder();
+    return user;
+  }
 
 }
 
@@ -198,7 +218,7 @@ class Group extends Entity{
   set autoloan(bool autoloan) => _autoloan;
 
   get imAdmin => _imAdmin;
-  set imAdmon(bool imAdmin) => _imAdmin = imAdmin;
+  set imAdmin(bool imAdmin) => _imAdmin = imAdmin;
 
   static Future<List<Group>>getGroups() async{
     ResponsePost res = await new RequestPost("getGroups").dataBuilder().doRequest();
@@ -351,11 +371,14 @@ class Group extends Entity{
   Future addUser(Entity newUser) async{}
   Future delUser({User u}) async{}
 
-
-
-
+  @override
+  Future<Group> getEntityInfo({var context})async{
+    ResponsePost res = await new RequestPost("getGroupInfo").dataBuilder(
+      userInfo: true,
+      idGroup: this.idEntity
+    ).doRequest(context:context);
+    Group group = res.groupBuilder();
+    return group;
+  }
 }
-
-
-
   enum EntityType {USER, GROUP, Default}
