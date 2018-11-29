@@ -31,7 +31,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
         }
       ),
       floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
+        child: new Icon(Icons.add, color: Colors.black),
         onPressed: (){
           showDialog(
             context: this.context,

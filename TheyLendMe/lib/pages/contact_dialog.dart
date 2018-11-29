@@ -23,7 +23,7 @@ class _ContactDialogState extends State<ContactDialog> {
     return FutureBuilder<Entity>(
       future: isUser ? (widget._entity as User).getEntityInfo() :  (widget._entity as Group).getEntityInfo() ,
       builder: (context, snapshot) {
-        if(snapshot.hasData){ //FIXME: dialog=null
+        if(snapshot.hasData){
           dialog = new SimpleDialog(
             title: Text('Contactar a través de...'),
             children: [

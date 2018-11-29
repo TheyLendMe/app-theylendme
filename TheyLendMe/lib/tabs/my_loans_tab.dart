@@ -88,10 +88,18 @@ class LentItem extends StatelessWidget {
               : Text('')),
             Row(
               children: [
-                MaterialButton(
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                   color: Theme.of(context).accentColor,
-                  child: Text('Pedir devolución', style: TextStyle(color: Colors.black)),
-                  height: 42.0,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ Text('Pedir devolución', style: TextStyle(color: Colors.black)) ]
+                    ),
+                    height: 42.0
+                  ),
                   onPressed:() async {
                     await lentObject.claimObj().then((error){ //TODO: claimObj({String claimMsg})
                     if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud de devolución enviada")));}
@@ -101,10 +109,18 @@ class LentItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                 ),
-                MaterialButton(
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                   color: Colors.grey,
-                  child: Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)),
-                  height: 42.0,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)) ]
+                    ),
+                    height: 42.0
+                  ),
                   onPressed:() async {
                     lentObject.returnObj().then((error){
                       if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Préstamo finalizado!")));}

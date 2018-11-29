@@ -158,7 +158,7 @@ class _CreateObjectState extends State<CreateObject> {
                 Fluttertoast.showToast(msg: "Rellena el nombre",toastLength: Toast.LENGTH_SHORT);
               }},
             color: Theme.of(context).buttonColor,
-            child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
+            child: Text('Crear objeto', style: TextStyle(color: Colors.white)),
           )
         )
       ]

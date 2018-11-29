@@ -76,7 +76,7 @@ class _UserDetailsState extends State<UserDetails> {
               ));
             },
             color: Theme.of(context).indicatorColor,
-            child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
+            child: Text('Ver Inventario', style: TextStyle(color: Colors.black)),
           )
         ]
       );
