@@ -40,7 +40,7 @@ abstract class Obj{
 
 ///Abstract Methods 
   Future lendObj({var context});
-  Future<bool> requestObj({int amount = 1, String msg, var context});
+  Future<bool> requestObj({int amount = 1, String msg, var context, bool asUser});
   ///Devolver--> no me deja poner return D: valdra solo con requestObj???
   Future<bool> returnObj({var context});
   Future<bool> claimObj({String claimMsg, var context});
@@ -90,7 +90,7 @@ class UserObject extends Obj{
   }
   ///If the user does not set any amount, it will ask just for one object
   
-  Future<bool> requestObj({int amount = 1, String msg, var context}) async {
+  Future<bool> requestObj({int amount = 1, String msg, var context, bool asUser = true}) async {
     ResponsePost res = await new RequestPost("requestObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
@@ -179,14 +179,18 @@ class GroupObject extends Obj{
     ).doRequest(context : context);
     return res.hasError;
   }
-  @override
-  Future<bool> requestObj({int amount = 1, String msg, var context}) async{
+  Future<bool> requestObjAsUser({int amount = 1, String msg, var context}) async{
     ResponsePost res = await new RequestPost("RequestAsUser").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg,
     ).doRequest(context : context);
     return res.hasError;
+  }
+  @override
+  Future<bool> requestObj({int amount = 1, String msg, var context, bool asUser = true}) async{
+    return asUser ? await requestObjAsUser(amount: amount, msg: msg,context: context) : 
+      await requestObjAsGroup(amount: amount, msg: msg,context: context);
   }
   
   Future<bool> claimObj({int idLoan ,String claimMsg, var context}) async{
