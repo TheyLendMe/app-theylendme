@@ -32,6 +32,7 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
               itemBuilder: (BuildContext context, int index) => ObjectItem(snapshot.data[index]),
               itemCount: snapshot.data.length
             )
+
             : Center(child: CircularProgressIndicator()));
           }
       ),
@@ -94,7 +95,7 @@ class ObjectTile extends StatelessWidget {
       crossAxisSpacing: 8.0,
     );
   }
-}*/
+*/
 // Displays one Object.
 class ObjectItem extends StatelessWidget {
 
@@ -112,16 +113,18 @@ class ObjectItem extends StatelessWidget {
           }
         );
       },
+
       child: Container(
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
           leading: new CircleAvatar(
-              child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
+            child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
               backgroundColor: Colors.yellow
             ),
           /*new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
           decoration: BoxDecoration(
             color: Colors.yellow,
+
             borderRadius: BorderRadius.all(
               const Radius.circular(4.0),
             ),
@@ -148,6 +151,7 @@ class ObjectItem extends StatelessWidget {
     ); //GestureDetector
   }
 }
+
 
 Widget xN(amount) {
   if (amount>1)

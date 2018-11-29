@@ -113,3 +113,4 @@ String getFirstCharacter(String getFirstCharacter){
   var regex = '[\u{1F600}\\-\\u{E007F}]';
   String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
   return textWithoutEmojis[0];}
+

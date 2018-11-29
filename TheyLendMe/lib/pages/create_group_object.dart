@@ -158,7 +158,8 @@ class _CreateGroupObjectState extends State<CreateGroupObject> {
                   await widget._group.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
                   }
                 Navigator.of(context).pop();
-                } else {
+              } else {
+
               Fluttertoast.showToast(msg: "Rellena el nombre",toastLength: Toast.LENGTH_SHORT);
             }},
             color: Theme.of(context).buttonColor,
