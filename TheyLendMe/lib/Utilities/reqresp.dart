@@ -185,7 +185,6 @@ class ResponsePost{
     List objects = _data['BYproperty'];
     List <UserObject> userObjects = new List();
     objects.forEach((object){
-      
       userObjects.add(objectBuilder(data : object,forUser: true));
     });
     return userObjects;
