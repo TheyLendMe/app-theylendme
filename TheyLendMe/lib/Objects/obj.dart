@@ -81,7 +81,7 @@ class UserObject extends Obj{
   ///Constructor
   UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, String date})
   : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount, date : date);
-  @override
+  
   Future lendObj({int idRequest, var context}) async {
     await new RequestPost("lendObject").dataBuilder(
         userInfo: true,
@@ -89,64 +89,70 @@ class UserObject extends Obj{
     ).doRequest(context : context);
   }
   ///If the user does not set any amount, it will ask just for one object
-  @override
+  
   Future<bool> requestObj({int amount = 1, String msg, var context}) async {
-    return (await new RequestPost("requestObject").dataBuilder(
+    ResponsePost res = await new RequestPost("requestObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
-  @override
+  
   Future<bool> claimObj({int idLoan ,String claimMsg, var context}) async{
-    return (await new RequestPost("claimObject").dataBuilder(
+    ResponsePost res = await new RequestPost("claimObject").dataBuilder(
         userInfo: true,
         idLoan: idLoan != null ? idLoan : _objState.idState,
         claimMsg: claimMsg
-    ).doRequest(context : context)).hasError;
-  }
-  @override
-  Future<bool> delObj({var context}) async{
-    return (await new RequestPost("deleteObject").dataBuilder(
-        userInfo: true,
-        idObject : _idObject
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
 
-  @override
+  Future<bool> delObj({var context}) async{
+    ResponsePost res = await new RequestPost("deleteObject").dataBuilder(
+        userInfo: true,
+        idObject : _idObject
+    ).doRequest(context : context);
+    return res.hasError;
+  }
+
+  
   Future objHistory({var context}) {
     // TODO: implement objHistory
   }
 
 
 
-  @override
+  
   Future<bool> returnObj({int idLoan, var context}) async {
-    return(await new RequestPost("returnLendedObject").dataBuilder(
+    ResponsePost res = await new RequestPost("returnLendedObject").dataBuilder(
       userInfo: true,
       idLoan: idLoan != null ? idLoan : _objState.idState
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
-  @override
+  
   Future<bool> updateObject({String name,File img,int amount, var context}) async {
     List l = fieldNameFieldValue(name: name, amount: amount);
-    return (await new RequestPost("updateObject").dataBuilder(
+    ResponsePost res = await new RequestPost("updateObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         fieldname: l[0],
         fieldValue: l[1],
         img: img
 
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
 
-  @override
+  
   Future<bool> deleteRequest({var context}) async{
-    return (await new RequestPost("deleteRequest").dataBuilder(
+    ResponsePost res = await new RequestPost("deleteRequest").dataBuilder(
       idObject: this.idObject,
       userInfo: true,
       idRequest: _objState.idState
-    ).doRequest(context: context)).hasError;
+    ).doRequest(context: context);
+    return res.hasError;
   }
 }
 
@@ -155,59 +161,65 @@ class GroupObject extends Obj{
   //Constructor
   GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, String date}) 
   : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date);
-  @override
+  
   Future<bool> requestObj({Group group,int amount = 1, String msg, var context}) async{
-    return (await new RequestPost("RequestAsGroup").dataBuilder(
+    ResponsePost res = await new RequestPost("RequestAsGroup").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg,
         idGroup: group
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
   Future<bool> requestAsMember({int amount = 1, String msg, var context}) async{
-    return (await new RequestPost("intraRequest").dataBuilder(
+    ResponsePost res = await new RequestPost("intraRequest").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg,
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
   Future<bool> requestAsUser({int amount = 1, String msg, var context}) async{
-    return (await new RequestPost("RequestAsUser").dataBuilder(
+    ResponsePost res = await new RequestPost("RequestAsUser").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg,
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
-  @override
+  
   Future<bool> claimObj({int idLoan ,String claimMsg, var context}) async{
-    return (await new RequestPost("claimGObject").dataBuilder(
+    ResponsePost res = await new RequestPost("claimGObject").dataBuilder(
         userInfo: true,
         idLoan: idLoan != null ? idLoan : _objState.idState,
         claimMsg: claimMsg
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
-  @override
+  
   Future<bool> delObj({var context}) async{
-    return (await new RequestPost("deleteGObject").dataBuilder(
+    ResponsePost res = await new RequestPost("deleteGObject").dataBuilder(
       userInfo: true,
       idObject : this._idObject
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
-  @override
+  
   Future objHistory({var context}) async {
     // TODO: implement objHistory
   }
-  @override
+  
   Future<bool> returnObj({int idLoan, var context}) async{
-    return (await new RequestPost("returnLentGObject").dataBuilder(
+    ResponsePost res = await new RequestPost("returnLentGObject").dataBuilder(
       userInfo: true,
       idLoan: idLoan != null ? idLoan : _objState.idState
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
-  @override
+  
   Future<bool> updateObject({String name,File img,int amount = 1, var context}) async{
     List l = fieldNameFieldValue(name: name, amount: amount);
-    return (await new RequestPost("updateGObject").dataBuilder(
+    ResponsePost res = await new RequestPost("updateGObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         fieldname: l[0],
@@ -215,14 +227,16 @@ class GroupObject extends Obj{
         idGroup: owner.idEntity,
         img: img
 
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
-  @override
+  
   Future<bool> lendObj({int idRequest, var context}) async {
-    return (await new RequestPost("lendGObject").dataBuilder(
+    ResponsePost res = await new RequestPost("lendGObject").dataBuilder(
         userInfo: true,
         idRequest: idRequest != null ? idRequest : _objState.idState
-    ).doRequest(context : context)).hasError;
+    ).doRequest(context : context);
+    return res.hasError;
   }
 
   /*Future groupObjectRequest({int amount =1, var context}) async{
@@ -232,10 +246,10 @@ class GroupObject extends Obj{
       amount: amount,
     ).doRequest(context : context);
   }*/
-  @override
+  
   ObjState get objState => _objState;
 
-  @override
+  
   Future<bool> deleteRequest() {
     // TODO: implement deleteRequest
     return null;

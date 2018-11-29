@@ -43,6 +43,7 @@ class RequestedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -103,8 +104,10 @@ class RequestedItem extends StatelessWidget {
                     height: 42.0
                   ),
                   onPressed:() async {
-                    await requestedObject.lendObj();
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Objeto prestado!")));
+                    requestedObject.lendObj().then((valid){
+                      if(!valid){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Objeto prestado!")));}
+                    });
+                    
                     //TODO: refresh here
                   }
                 ),
@@ -123,7 +126,7 @@ class RequestedItem extends StatelessWidget {
                     ),
                     height: 42.0
                   ),
-                  onPressed: () {
+                  onPressed: () async  {
                     requestedObject.deleteRequest().then((valid){
                       if(valid){
                         Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud rechazada")));
