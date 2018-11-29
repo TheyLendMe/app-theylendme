@@ -23,6 +23,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
+      contentPadding: const EdgeInsets.all(0.0),
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -107,9 +108,8 @@ class _ObjectDetailsState extends State<ObjectDetails> {
           constraints: BoxConstraints.expand(
             height: Theme.of(context).textTheme.display1.fontSize * 1.5,
           ),
-          padding: const EdgeInsets.all(8.0),
           child: MaterialButton( //TODO: improve "Request" button design
-            height: 42.0,
+            height: 60.0,
             onPressed:() async{
               if(UserSingleton().login){
                 if(widget._object.amount>1) {
@@ -143,8 +143,8 @@ class _ObjectDetailsState extends State<ObjectDetails> {
                 Navigator.of(context).pushNamed("/AuthPage");
               }
             },
-            color: Theme.of(context).buttonColor,
-            child: Text('Pedir prestado', style: TextStyle(color: Colors.white)),
+            color: Theme.of(context).indicatorColor,
+            child: Text('Pedir prestado', style: TextStyle(color: Colors.black)),
           )
         )
       ]

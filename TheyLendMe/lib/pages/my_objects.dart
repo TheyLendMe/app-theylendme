@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/create_object.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
+import 'package:TheyLendMe/Objects/objState.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+//TODO: alinear todo (como una tabla)
 
 class MyObjectsPage extends StatefulWidget {
 
@@ -39,7 +41,7 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
 
       
       floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
+        child: new Icon(Icons.add, color: Colors.black),
         onPressed: (){
           showDialog(
             context: this.context,
@@ -52,50 +54,7 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
     );
   }
 }
-/*
-class ObjectTile extends StatelessWidget {
-  final List<Obj> objects;
-  ObjectTile({this.objects});
 
-  @override
-  Widget build(BuildContext context) {
-    // example for StaggeredGridView: https://youtu.be/SrGP1BdkYpk
-    return StaggeredGridView.countBuilder(
-      padding: const EdgeInsets.all(8.0),
-      crossAxisCount: 4,
-      itemCount: objects.length,
-      itemBuilder: (context, i) {
-        return Material(
-          elevation: 8.0,
-          borderRadius:
-              BorderRadius.all(Radius.circular(8.0)),
-          child: InkWell(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context){
-                  return ObjectDetails(objects[i]);
-                }
-              );
-            },
-            child: Hero(
-              tag: objects[i].idObject,
-              child: FadeInImage(
-                image: NetworkImage(objects[i].image),
-                fit: BoxFit.cover,
-                placeholder: AssetImage('images/tlm.jpg'),
-              )
-            ),
-          ),
-        );
-      },
-      staggeredTileBuilder: (i) =>
-          StaggeredTile.count(2, i.isEven ? 2 : 3),
-      mainAxisSpacing: 8.0,
-      crossAxisSpacing: 8.0,
-    );
-  }
-*/
 // Displays one Object.
 class ObjectItem extends StatelessWidget {
 
@@ -117,31 +76,25 @@ class ObjectItem extends StatelessWidget {
       child: Container(
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
-          leading: new CircleAvatar(
-            child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
-              backgroundColor: Colors.yellow
-            ),
-          /*new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
-          decoration: BoxDecoration(
-            color: Colors.yellow,
-
-            borderRadius: BorderRadius.all(
-              const Radius.circular(4.0),
-            ),
+          leading: Container(
+            child: (object.image!=null
+              ? Image.network(object.image, width: 30)
+              : Image.asset('images/def_obj_pic.png', width: 30)),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 2.0)
+            )
           ),
-          padding: EdgeInsets.all(16.0),
-          ), //leading (Container)*/
           title: new Container(
-            //padding: new EdgeInsets.only(left: 8.0),
             child: Row(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(object.name),
-                xN( object.amount ),
-                Text(
-                  object.objState.toString(),
-                  style: stateColor(object.objState.toString()),
+                SizedBox(
+                  width: 150.0,
+                  child: textNameAmount(object, context)
+                ),
+                SizedBox(
+                  width: 100.0,
+                  child: textState(object)
                 )
               ]
             ) //Row
@@ -152,21 +105,29 @@ class ObjectItem extends StatelessWidget {
   }
 }
 
-
-Widget xN(amount) {
-  if (amount>1)
-    return Text('x'+amount.toString());
+Widget textNameAmount(object, context) {
+  if (object.amount>1)
+    return RichText( text: TextSpan(
+      children:[
+        TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15)),
+        TextSpan(text: ' (x'+object.amount.toString()+')', style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15, color: Colors.grey[500]))
+      ]
+    ));
   else
-    return Text('');
+    return RichText( text: TextSpan(
+      children:[
+        TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15))
+      ]
+    ));
 }
 
-TextStyle stateColor(state) {
-  if (state=='Disponible')
-    return TextStyle(color: Colors.green);
-  else if (state=='Prestado')
-    return TextStyle(color: Colors.red);
+Text textState(object) {
+  if (object.objState.state == StateOfObject.DEFAULT)
+    return Text( 'Disponible', style: TextStyle(color: Colors.green) );
+  else if (object.objState.state == StateOfObject.LENT)
+    return Text( 'Prestado', style: TextStyle(color: Colors.red) );
   else
-    return TextStyle(color: Colors.yellow);
+    return Text( 'Reclamado', style: TextStyle(color: Colors.yellow) );
 }
 
 String getFirstCharacter(String getFirstCharacter){

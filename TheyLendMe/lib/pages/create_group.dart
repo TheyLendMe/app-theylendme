@@ -74,7 +74,8 @@ class _CreateGroupState extends State<CreateGroup> {
                           child: CircleAvatar(
                             radius: 120.0,
                             backgroundImage: (_image!=null ? FileImage(_image) : AssetImage('images/def_group_pic.png')),
-                            backgroundColor: Theme.of(context).accentColor
+                            backgroundColor: Theme.of(context).accentColor,
+                            child: Text('Selecciona la imagen del grupo', style: TextStyle(color: Colors.black))
                           )
 
                         )
@@ -117,7 +118,7 @@ class _CreateGroupState extends State<CreateGroup> {
               }
             },
             color: Theme.of(context).buttonColor,
-            child: Text('Crear grupo', style: TextStyle(color: Theme.of(context).accentColor)),
+            child: Text('Crear grupo', style: TextStyle(color: Colors.white)),
           )
         )
       ]

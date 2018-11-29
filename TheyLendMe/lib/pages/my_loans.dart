@@ -20,11 +20,11 @@ class _MyLoansPageState extends State<MyLoansPage> {
           appBar: AppBar(
             bottom: TabBar(
               tabs: [
-                Tab(icon: Text('SOLICITUDES')),
-                Tab(icon: Text('PRESTADOS')),
+                Tab(icon: Text('SOLICITUDES', style: TextStyle(color: Colors.white))),
+                Tab(icon: Text('PRESTADOS', style: TextStyle(color: Colors.white))),
               ],
             ),
-            title: Text('Mis Préstamos')
+            title: Text('Mis Préstamos', style: TextStyle(color: Colors.white)),
           ),
           body: TabBarView(
             children: [
