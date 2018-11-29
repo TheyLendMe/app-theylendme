@@ -27,6 +27,7 @@ dependencies:
   flutter_image_compress: ^0.2.1
   path_provider: ^0.4.1
   intl: ^0.15.7
+  flutter_colorpicker: any
 
 
 

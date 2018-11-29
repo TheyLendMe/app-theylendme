@@ -73,6 +73,7 @@ class GroupItem extends StatelessWidget {
           ? Text(group.info)
           : Text(''))
       )
+
     );
   }
 }

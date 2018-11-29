@@ -3,7 +3,7 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/pages/group_objects.dart';
-import 'package:TheyLendMe/pages/my_groups_objects.dart';
+
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
@@ -34,11 +34,9 @@ class GroupDetailsState extends State<GroupDetails> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
             ),
             alignment: Alignment.center,
-            child: CircleAvatar(
-              radius: 120.0,
-              backgroundImage: (widget._group.img!=null ? NetworkImage(widget._group.img) : AssetImage('images/def_group_pic.png')),
-              backgroundColor: Theme.of(context).accentColor
-            )
+            child: (widget._group.img!=null
+            ? Image.network(widget._group.img) //TODO: circular
+            : Image.asset('images/def_group_pic.png'))
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -49,7 +47,7 @@ class GroupDetailsState extends State<GroupDetails> {
               ]
             )
           ),
-          Container(
+          /*Container(
             constraints: BoxConstraints.expand(
               height: Theme.of(context).textTheme.display1.fontSize * 1.5,
             ),
@@ -68,9 +66,9 @@ class GroupDetailsState extends State<GroupDetails> {
                 );}
               },
               color: Theme.of(context).buttonColor,
-              child: Text('Contactar', style: TextStyle(color: Colors.white)),
+              child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
             )
-          ),
+          ),*/
           Container(
             constraints: BoxConstraints.expand(
               height: Theme.of(context).textTheme.display1.fontSize * 1.5,
@@ -82,22 +80,16 @@ class GroupDetailsState extends State<GroupDetails> {
                   
               }, //TODO acción de ver miembros
               color: Theme.of(context).buttonColor,
-              child: Text('Ver Miembros', style: TextStyle(color: Colors.white)),
+              child: Text('Ver Miembros', style: TextStyle(color: Theme.of(context).accentColor)),
             )
           ),
           MaterialButton(
             height: 60.0,
             onPressed:(){
-              /*if(// TODO: está en el grupo){
+              // TODO: sacar inventario == lista de objetos mis objetos
               Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
+                builder: (BuildContext context) => new MyGroupObjectsPage(widget._group)
               ));
-              } else {*/
-                Navigator.push(context, new MaterialPageRoute(
-                  builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
-                ));
-              //}
-
             },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),

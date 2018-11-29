@@ -76,6 +76,7 @@ class _CreateGroupState extends State<CreateGroup> {
                             backgroundImage: (_image!=null ? FileImage(_image) : AssetImage('images/def_group_pic.png')),
                             backgroundColor: Theme.of(context).accentColor
                           )
+
                         )
                       ),
                     ]
