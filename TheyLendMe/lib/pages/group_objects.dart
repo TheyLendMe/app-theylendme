@@ -119,22 +119,7 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.red);
 }
 
-/*final User propietario = User('1', 'Señora Propietaria',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
-  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
-*/
 
 final User propietario = User(UserSingleton().user.idEntity,UserSingleton().user.name);
 //Group grupo = new Group(idEntity, name);
 
-//List<Obj> objects;
-
-
-
-/*final List<UserObject> objects = <UserObject>[
-  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
-  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
-  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
-  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
-  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
-];*/

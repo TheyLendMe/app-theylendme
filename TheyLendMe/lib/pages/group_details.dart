@@ -68,7 +68,7 @@ class GroupDetailsState extends State<GroupDetails> {
                 );}
               },
               color: Theme.of(context).buttonColor,
-              child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+              child: Text('Contactar', style: TextStyle(color: Colors.white)),
             )
           ),
           Container(
@@ -82,7 +82,7 @@ class GroupDetailsState extends State<GroupDetails> {
                   
               }, //TODO acción de ver miembros
               color: Theme.of(context).buttonColor,
-              child: Text('Ver Miembros', style: TextStyle(color: Theme.of(context).accentColor)),
+              child: Text('Ver Miembros', style: TextStyle(color: Colors.white)),
             )
           ),
           MaterialButton(

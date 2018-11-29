@@ -116,21 +116,15 @@ class ObjectItem extends StatelessWidget {
           }
         );
       },
-<<<<<<< HEAD
+
       child: Container(
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
           leading: new CircleAvatar(
-              child: new Text(object.name[0]), //just the initial letter in a circle
-              backgroundColor: Colors.yellow
-            ),
-          /*new Text(object.name[0]), //just the initial letter in a circle
-=======
-      child: ListTile(
-        leading: new Container(
-          child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
->>>>>>> 9f3173e70780f7022b0ae54e44e16972e54d1ad8
-          decoration: BoxDecoration(
+            child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
+            backgroundColor: Colors.yellow,          
+          ),
+          /*decoration: BoxDecoration(
             color: Theme.of(context).accentColor,
             borderRadius: BorderRadius.all(
               const Radius.circular(4.0),

@@ -25,8 +25,10 @@ import 'package:TheyLendMe/Objects/entity.dart';
 void main() => runApp(TheApp());
 
 //WIP: choosing main colors ( i'm using https://randoma11y.com )
+
 Color firstColor; //64b5f6
 Color  secondColor; //#ffa000
+
 
 
 Group _group;

@@ -6,6 +6,7 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:TheyLendMe/Utilities/errorHandler.dart';
@@ -14,7 +15,7 @@ import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
 const String endpoint = "http://52.47.177.107/";
-
+final DateFormat dateFormat = new DateFormat('yyyy-MM-dd');
 
 
 class RequestPost{
@@ -47,25 +48,25 @@ class RequestPost{
           Map<String,dynamic> m = await authInfo();
           this._data.addAll(m);
       }
-      return await ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
+      return ResponsePost.responseBuilder(await dio.post(_url,data: new FormData.from(_data)));
     }on StatusException catch(e){
       new ErrorToast().handleError(msg :"Connection Error", id: e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on AuthServer catch(e){
       new ErrorAuth(context).handleError(msg: e.errMsg, id: e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on PrivateServerErrorException catch(e){
       new ErrorToast().handleError(msg: "Error in Server", id: e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on PublicServerErrorException catch(e){
       new ErrorToast().handleError(msg: e.errMsg, id : e.id);
-      return null;
+      return new ResponsePost({'error' : true});
     }on EmailNotVerify catch(e){
       new ErrorEmail(context).handleError(msg: e.errMsg);
-      return null;
+      return new ResponsePost({'error' : true});
     }on Exception catch(e){
       new ErrorToast().handleError(msg : e.toString());
-      return null;
+      return new ResponsePost({'error' : true});
     }
   }
 ///This will be the builder that
@@ -90,7 +91,7 @@ class RequestPost{
     if(requestMsg != null) _data['request'] = requestMsg;
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
-    if(oUser != null) _data['oUser'] = oUser;
+    if(oUser != null) _data['idOtherUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
     if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];} else{
@@ -121,10 +122,6 @@ class RequestPost{
     return m;
   }
 }
- /* if(nickName != null){fieldName[i] = 'nickname'; fieldValue[i]=nickName; i++;}
-  if(email != null){fieldName[i]='email';fieldValue[i]= (email); i++;}
-  if(info != null){fieldName[i]=('info');fieldValue[i]=(info); i++;}
-  if(tfno != null){fieldName[i]=('tfno');fieldValue[i]=(tfno);i++;}*/
 List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
 String name, String groupName, bool private, bool autoloan}){
     List fieldName = new List();
@@ -147,7 +144,7 @@ String name, String groupName, bool private, bool autoloan}){
 class ResponsePost{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
   ///returns a Future!
-  static Future<ResponsePost> responseBuilder(Response response) async{
+  static ResponsePost responseBuilder(Response response){
     ///In case of server error like 404 not found... this 
     print(response.request.baseUrl+response.request.path);
     print(response.data);
@@ -156,25 +153,34 @@ class ResponsePost{
   }
   dynamic _data;
   int _responseType;
+  bool _error =  false;
   ResponsePost(data){
   ///Server error
-    if(data['error'] != null && data['error'] ) { 
-      int errorCode  = data['errorCode'];
-      ///Private errors
-      if(errorCode <=22){
-        ///Email not verify
-        if(errorCode == 16){throw new EmailNotVerify();}
-        ///Auth error
-        if(errorCode >= 12 && errorCode <=17 ) throw new AuthServer(data["errorMsg"], id: errorCode);
-        throw new PrivateServerErrorException(errorCode,data["errorMsg"]);
+    if(data['error'] != null && data['error']) {
+
+      
+      _error = true;
+      if(data['errorCode'] != null){
+        int errorCode  = data['errorCode'];
+        ///Private errors
+        if(errorCode <=22){
+          ///Email not verify
+          if(errorCode == 16){throw new EmailNotVerify();}
+          ///Auth error
+          if(errorCode >= 12 && errorCode <=17 ) throw new AuthServer(data["errorMsg"], id: errorCode);
+          throw new PrivateServerErrorException(errorCode,data["errorMsg"]);
+        }
+        if(errorCode >= 100){
+          throw new PublicServerErrorException(errorCode, data['errorMsg']);
+        }
       }
-
-
     }
     this._data = data['responseData'];
     this._responseType = data['responseType'];
   }
   dynamic get data => _data;
+  
+  bool get hasError => _error;
 ////-----------Objects builders------------//////////
 
   List<UserObject> getMyObjects(){
@@ -206,6 +212,7 @@ class ResponsePost{
     if(_responseType == 3){
 
     }
+    _orderObjeList(obj);
     return obj;
   }
   List<Group> groupsBuilder(){
@@ -228,7 +235,8 @@ class ResponsePost{
           object['name'],
           image : object['imagen'],
           amount :int.parse(object['amount']),
-          //TODO incluir fecha 
+          date: object['creationDate'],
+  
         ) : 
         new GroupObject(
           int.parse(object['idObject']),
@@ -236,7 +244,7 @@ class ResponsePost{
           object['name'],
           image : object['imagen'],
           amount : int.parse(object['amount']),
-          //TODO incluir fecha 
+          date: object['creationDate']
         );
       objs.add(obj);
     });
@@ -358,17 +366,18 @@ class ResponsePost{
           amount: int.parse(data['amount']),
           image : data['imagen'],
           desc: data['descr'],
+          date: data['creationDate'],
           objState: objState
           ) 
           : 
         new GroupObject(
           int.parse(data['idObject']), 
           group,
-           //TODO decirle a victor que me incluya todo el grupo
           data['name'],
           image : data['imagen'],
           desc: data['descr'],
           amount: int.parse(data['amount']),
+          date: data['creationDate'],
           objState: objState
         );
 
@@ -402,8 +411,7 @@ class ResponsePost{
     return u;
   }
   User userBuilder({Map<String, dynamic> data,int idMember, bool admin}){
-    if(data == null){return null;}
-    data = data == null ? _data : data;
+    data = data == null ? _data['user'] : data;
     return new User(
       data['idUser'], 
       data['nickname'],
@@ -416,8 +424,7 @@ class ResponsePost{
   }
 
   Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false}){
-    if(data == null){return null;}
-    data = data == null ? _data : data;
+    data = data == null ? _data['group'] : data;
     return new Group(
       int.parse(data['idGroup']), 
       data['groupName'],
@@ -447,14 +454,17 @@ class ResponsePost{
   }
 
   List<UserObject> requestsUserObjectBuilder({bool mine = null}){
+    List<UserObject> list = new List();
     if(mine == null){
-      List<UserObject> list = new List();
+      
       list.addAll(_requestsUserObjectBuilder(_data['toUser']));
       list.addAll(_requestsUserObjectBuilder(_data['byUser']));
-      return list;
+     
     }else{
-      return mine ? _requestsUserObjectBuilder(_data['byUser']) : _requestsUserObjectBuilder(_data['toUser']);
+      list.addAll(mine ? _requestsUserObjectBuilder(_data['byUser']) : _requestsUserObjectBuilder(_data['toUser']));
     }
+    _orderObjeList(list);
+    return list;
   }
 
   List<UserObject> _requestsUserObjectBuilder(List<dynamic> requests){
@@ -465,12 +475,13 @@ class ResponsePost{
         state: StateOfObject.REQUESTED,
         amount: int.parse(request['amount']),
         msg: request['requestMsg'],
-        actual: userBuilder(data : request['object']['owner']),
+        actual: request['object']['owner'] == null ?  UserSingleton().user : userBuilder(data :request['object']['owner']),
         next: userBuilder(data : request['requester']),
         date: request['date'],
       );
       requestsList.add(objectBuilder(data: request['object'], objState: state));
     });
+    _orderObjeList(requestsList);
     return requestsList;
   }
 
@@ -492,6 +503,7 @@ class ResponsePost{
       list.addAll(_requestsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
       list.addAll(_requestsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
     }
+    _orderObjeList(list);
     return list;
   }
 
@@ -509,7 +521,7 @@ class ResponsePost{
         next: requesterGroup != null ? requesterGroup  : group,
         date: request['date'],
         //actualUser:userBuilder(data : request['user']) ,
-        nextUser: userBuilder(data : request['requester_user']), ///FIXME
+        nextUser: userBuilder(data : request['requester_user']),
         notFromAGroup: notFromAGroup
       );
       requestsList.add(objectBuilder(data: request['object'], objState: state, forUser: false));
@@ -518,13 +530,18 @@ class ResponsePost{
   }
 
   List<UserObject> claimsUserObjectBuilder({bool mine}){
+    List<UserObject> list = new List();
     if(mine == null){
-      List<UserObject> list = new List();
+      
       list.addAll(_claimsUserObjectBuilder(_data['toUser']));
       list.addAll(_claimsUserObjectBuilder(_data['byUser']));
+
     }else{
-      return mine ? _claimsUserObjectBuilder(_data['byUser']) : _claimsUserObjectBuilder(_data['toUser']);
+      list.addAll(mine ? _claimsUserObjectBuilder(_data['byUser']) : _claimsUserObjectBuilder(_data['toUser']));
     }
+
+     _orderObjeList(list);
+     return list;
   }
 
   List<UserObject> _claimsUserObjectBuilder(List<dynamic> claims){
@@ -564,6 +581,7 @@ class ResponsePost{
       list.addAll(_claimsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
 
     }
+    _orderObjeList(list);
     return list;
   }
 
@@ -591,13 +609,18 @@ class ResponsePost{
   }
 
   List<UserObject> loansUserObjectBuilder({bool mine}){
+    List<UserObject> list = new List();
     if(mine == null){
-      List<UserObject> list = new List();
+     
       list.addAll(_loansUserObjectBuilder(_data['toUser']));
       list.addAll(_loansUserObjectBuilder(_data['byUser']));
+      _orderObjeList(list);
+      return list;
     }else{
-      return mine ? _loansUserObjectBuilder(_data['byUser']) : _loansUserObjectBuilder(_data['toUser']);
+      list.addAll(mine ? _loansUserObjectBuilder(_data['byUser']) : _loansUserObjectBuilder(_data['toUser']));
     }
+    _orderObjeList(list);
+    return list;
   }
 
   List<UserObject> _loansUserObjectBuilder(List<dynamic> loans){
@@ -614,6 +637,7 @@ class ResponsePost{
       );
       loansList.add(objectBuilder(data: loan['object'], objState: state));
     });
+
     return loansList;
   }
   
@@ -636,6 +660,7 @@ class ResponsePost{
       list.addAll(_loansGroupObjectBuilder(_data['fromOthersGroups'], group: group));
 
     }
+    _orderObjeList(list);
     return list;
   }
 
@@ -662,7 +687,7 @@ class ResponsePost{
     return loanssList;
   }
 
-
+  void _orderObjeList(List<Obj> list){list.sort((a,b) => a.date.isAfter(b.date) ? 0 : 1);}
 
 
 ////-------------GetTopics----------------//////////

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
-import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 // Pestaña OBJETOS
@@ -12,16 +11,11 @@ class TheObjectsTab extends StatefulWidget {
 
 // CONTENIDO de la pestaña OBJETOS.
 class _TheObjectsTabState extends State<TheObjectsTab> {
-
+  ObjectTile listOfObject;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
 
-  Future<Null> _refresh() {
-    //FIXME: no da error, pero no recarga objetos nuevos
-    // (por ejemplo, si mientras está en esta pestaña otro usuario crea un nuevo objeto)
-    return Obj.getObjects().then((_objects) { ObjectTile(objects: _objects); });
-  }
-
+  Future<Null> _refresh() {return Obj.getObjects().then((_objects) {  setState(() {listOfObject = ObjectTile(objects: _objects);}); }); }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,25 +23,27 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
         child: FutureBuilder<List<Obj>>(
-        future: Obj.getObjects(),
-        builder: (context, snapshot) {
-          /*if (snapshot.hasError) //TODO: this is from https://github.com/CodingInfinite/FutureBuilderWithPagination
-            return PlaceHolderContent(
-              title: "Error de conexión",
-              message: "Error. Inténtalo de nuevo",
-              tryAgainButton: _tryAgainButtonClick,
-            );*/
-          return snapshot.hasData
-            ? ObjectTile(objects: snapshot.data)
-            : Center(child: CircularProgressIndicator());
-          }
-        )
+          future: Obj.getObjects(),
+          builder: (context, snapshot) {
+            /*if (snapshot.hasError) //TODO: this is from https://github.com/CodingInfinite/FutureBuilderWithPagination
+              return PlaceHolderContent(
+                title: "Error de conexión",
+                message: "Error. Inténtalo de nuevo",
+                tryAgainButton: _tryAgainButtonClick,
+              );*/
+            if(snapshot.hasData){
+              if(listOfObject == null){listOfObject = new ObjectTile(objects: snapshot.data);}
+              return listOfObject;
+            }
+            return Center(child: CircularProgressIndicator());
+            
+          }),
       )
     );
   }
 
   //_tryAgainButtonClick(bool _) => setState(() {});
-
+ 
 }
 
 class ObjectTile extends StatelessWidget {
@@ -84,7 +80,7 @@ class ObjectTile extends StatelessWidget {
                   ? NetworkImage(objects[i].image)
                   : AssetImage('images/def_obj_pic.png')),
                 fit: BoxFit.cover,
-                placeholder: AssetImage('images/tlm.jpg'),
+                placeholder: AssetImage('images/tlm.png'),
               )
             ),
           ),

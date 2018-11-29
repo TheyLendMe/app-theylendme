@@ -63,7 +63,7 @@ class _UserDetailsState extends State<UserDetails> {
                 );
               },
               color: Theme.of(context).buttonColor,
-              child: Text('Contactar', style: TextStyle(color: Theme.of(context).accentColor)),
+              child: Text('Contactar', style: TextStyle(color: Colors.white)),
             )
           ),
           MaterialButton(

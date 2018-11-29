@@ -23,7 +23,7 @@ class Auth {
   ///Method to loging with facebook
   static void facebookAuth(){
   }
-  static Future<bool> login({String email,String pass, bool google= false, bool facebook= false, BuildContext context}) async{
+  static Future<bool> login({String email,String pass, bool google= false, bool facebook= false, BuildContext context, String name}) async{
     ///First we have to make sure that the user is loged in 
     
     FirebaseUser user;
@@ -31,7 +31,9 @@ class Auth {
     try{
       if(google){user = await _googleAuth();}
       if(email !=null){user = await _emailAuth(email,pass);}
-    }on PlatformException catch(e){ _onError(e); return false;}
+    }on PlatformException catch(e){ 
+      _onError(e); return false;
+      }
     ///First filter
     if(user == null){return false;}
     user = await FirebaseAuth.instance.currentUser();
@@ -39,7 +41,7 @@ class Auth {
     if(user != null){
       UserSingleton(user: user);
       await UserSingleton().refreshUser();
-      if(await new RequestPost('login').dataBuilder(userInfo: true).doRequest() != null){return false;};
+      if((await new RequestPost('login').dataBuilder(userInfo: true, name: name).doRequest()).hasError){return false;}
       if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
     }else{ ErrorToast().handleError(msg: "Algo ha fallado"); return false; }
     return true;
@@ -64,7 +66,8 @@ class Auth {
     FirebaseAuth _auth= FirebaseAuth.instance;
     try{
       await _auth.createUserWithEmailAndPassword(email: email,password:pass);
-      return await login(email: email, pass: pass);
+      String name = email.split("@")[1];
+      return await login(email: email, pass: pass, name: name);
     }on PlatformException catch(e){_onError(e); return false;}
 
   }
