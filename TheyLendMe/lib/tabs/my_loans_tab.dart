@@ -107,7 +107,7 @@ class LentItem extends StatelessWidget {
                   }
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
+                  padding: const EdgeInsets.only(right: 10.0),
                 ),
                 FlatButton(
                   shape: RoundedRectangleBorder(
@@ -117,7 +117,7 @@ class LentItem extends StatelessWidget {
                   child: Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [ Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)) ]
+                      children: [ Text('Marcar como\n    devuelto', style: TextStyle(color: Colors.black)) ]
                     ),
                     height: 42.0
                   ),

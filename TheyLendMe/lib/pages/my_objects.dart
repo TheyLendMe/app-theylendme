@@ -77,24 +77,25 @@ class ObjectItem extends StatelessWidget {
         padding: new EdgeInsets.only(left: 8.0, top: 15.0),
         child: ListTile(
           leading: Container(
-          height: 40.0, width: 40.0,
-          child: Text(getFirstCharacter(object.name)), //just the initial letter in a circle
-          decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: BorderRadius.all(
-              const Radius.circular(4.0),
-            ),
+            child: (object.image!=null
+              ? Image.network(object.image, width: 30)
+              : Image.asset('images/def_obj_pic.png', width: 30)),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 2.0)
+            )
           ),
-          padding: EdgeInsets.all(15.0),
-          ), //leading (Container)
           title: new Container(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(object.name),
-                xN( object.amount ),
-                textState(object)
+                SizedBox(
+                  width: 150.0,
+                  child: textNameAmount(object, context)
+                ),
+                SizedBox(
+                  width: 100.0,
+                  child: textState(object)
+                )
               ]
             ) //Row
           ) //title (Container)
@@ -104,11 +105,20 @@ class ObjectItem extends StatelessWidget {
   }
 }
 
-Widget xN(amount) {
-  if (amount>1)
-    return Text('x'+amount.toString());
+Widget textNameAmount(object, context) {
+  if (object.amount>1)
+    return RichText( text: TextSpan(
+      children:[
+        TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15)),
+        TextSpan(text: ' (x'+object.amount.toString()+')', style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15, color: Colors.grey[500]))
+      ]
+    ));
   else
-    return Text('');
+    return RichText( text: TextSpan(
+      children:[
+        TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15))
+      ]
+    ));
 }
 
 Text textState(object) {
