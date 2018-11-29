@@ -41,7 +41,7 @@ class Auth {
     if(user != null){
       UserSingleton(user: user);
       await UserSingleton().refreshUser();
-      if((await new RequestPost('login').dataBuilder(userInfo: true, name: name).doRequest()).hasError){return false;}
+      if((await new RequestPost('login').dataBuilder(userInfo: true, nickName: name).doRequest()).hasError){return false;}
       if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
     }else{ ErrorToast().handleError(msg: "Algo ha fallado"); return false; }
     return true;
