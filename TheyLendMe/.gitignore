@@ -7,7 +7,6 @@
 build/
 
 .flutter-plugins
-android/app/local.properties
+
 google-services.json
 android/app/google-services.json
-build/app/outputs

@@ -66,7 +66,7 @@ class Auth {
     FirebaseAuth _auth= FirebaseAuth.instance;
     try{
       await _auth.createUserWithEmailAndPassword(email: email,password:pass);
-      String name = email.split("@")[0];
+      String name = email.split("@")[1];
       return await login(email: email, pass: pass, name: name);
     }on PlatformException catch(e){_onError(e); return false;}
 
