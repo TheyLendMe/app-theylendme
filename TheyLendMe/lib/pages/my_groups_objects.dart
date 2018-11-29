@@ -7,17 +7,17 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/pages/create_group_object.dart';
 
 
-class OtherGroupObjectsPage extends StatefulWidget {
+class MyGroupsObjectsPage extends StatefulWidget {
 
     final Group _group;
     
-    OtherGroupObjectsPage(this._group);
+    MyGroupsObjectsPage(this._group);
 
     @override
-    _OtherGroupObjectsPageState createState() => _OtherGroupObjectsPageState();
+    _MyGroupsObjectsPageState createState() => _MyGroupsObjectsPageState();
 }
 
-class _OtherGroupObjectsPageState extends State<OtherGroupObjectsPage> {
+class _MyGroupsObjectsPageState extends State<MyGroupsObjectsPage> {
   
   @override
   Widget build(BuildContext context) {
@@ -39,6 +39,18 @@ class _OtherGroupObjectsPageState extends State<OtherGroupObjectsPage> {
             itemCount: snapshot.data.length)
             : Center(child: CircularProgressIndicator()));
           }
+      ),
+      // TODO esconder el boton si no eres miembro
+      floatingActionButton: new FloatingActionButton(
+        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
+        onPressed: (){
+          showDialog(
+            context: this.context,
+            builder: (BuildContext context){
+              return CreateGroupObject(widget._group);
+            }
+          );
+        },
       ),
     );
   }
@@ -113,4 +125,3 @@ String getFirstCharacter(String getFirstCharacter){
   var regex = '[\u{1F600}\\-\\u{E007F}]';
   String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
   return textWithoutEmojis[0];}
-

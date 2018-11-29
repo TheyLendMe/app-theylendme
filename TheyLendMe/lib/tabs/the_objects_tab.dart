@@ -25,25 +25,16 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
         child: FutureBuilder<List<Obj>>(
           future: Obj.getObjects(),
           builder: (context, snapshot) {
-            /*if (snapshot.hasError) //TODO: this is from https://github.com/CodingInfinite/FutureBuilderWithPagination
-              return PlaceHolderContent(
-                title: "Error de conexión",
-                message: "Error. Inténtalo de nuevo",
-                tryAgainButton: _tryAgainButtonClick,
-              );*/
             if(snapshot.hasData){
               if(listOfObject == null){listOfObject = new ObjectTile(objects: snapshot.data);}
               return listOfObject;
             }
             return Center(child: CircularProgressIndicator());
-            
-          }),
+          }
+        ),
       )
     );
   }
-
-  //_tryAgainButtonClick(bool _) => setState(() {});
- 
 }
 
 class ObjectTile extends StatelessWidget {
@@ -72,7 +63,7 @@ class ObjectTile extends StatelessWidget {
               );
             },
             child: Hero(
-              tag: objects[i].idObject.toString()+objects[i].name[0],
+              tag: objects[i].idObject.toString()+getFirstCharacter(objects[i].name),
               //tag: idObject+first_name_lettter because it could happen
               // that groupObject.idObject=userObject.idObject -> black screen
               child: FadeInImage(
@@ -93,3 +84,9 @@ class ObjectTile extends StatelessWidget {
     );
   }
 }
+
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}

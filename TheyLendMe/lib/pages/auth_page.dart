@@ -134,9 +134,6 @@ Widget googleButton(BuildContext context) {
          if(valid){Navigator.of(context).pop(null);}
        });
         //TODO: sync-await return Center(child: CircularProgressIndicator()));
-       
-      
-      
     },
     child: Container(
       height: 50.0,

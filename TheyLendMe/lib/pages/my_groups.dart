@@ -53,7 +53,7 @@ class GroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return GestureDetector(
       onTap: () {
         showDialog(
           context: context,
@@ -62,26 +62,24 @@ class GroupItem extends StatelessWidget {
           }
         );
       },
-      child: Container(
-        padding: new EdgeInsets.only(left: 8.0, top: 15.0),
-        child: ListTile(
-          leading: new CircleAvatar(
-              child: ((group.img !=null)
-              ? Image.network(group.img)
-              : Image.asset('images/def_group_pic.png')), 
-          ),//just the initial letter in a circle
-          title: new Container(
-            child: Row(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(group.name),
-                
-              ]
-            )
-          )
-        ) //end ListTile
-      ) //end Container
+      child: ListTile(
+        leading: CircleAvatar(
+            child: (group.img!=null ? Text('') : Text(getFirstCharacter(group.name), style: TextStyle(color: Colors.black))),
+            backgroundImage: (group.img!=null ? NetworkImage(group.img) : null),
+            backgroundColor: Theme.of(context).accentColor
+          ),
+        title: Text(group.name),
+        subtitle: (group.info!=null
+          ? Text(group.info)
+          : Text(''))
+      )
+
     );
   }
 }
+
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}

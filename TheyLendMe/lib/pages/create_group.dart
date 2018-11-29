@@ -70,10 +70,13 @@ class _CreateGroupState extends State<CreateGroup> {
                         ),
                         alignment: Alignment.center,
                         child: MaterialButton(
-                        onPressed: () async {_image = (await PickImage.getImageFromGallery());},
-                        child: ((_image!=null)
-                          ? Image.file(_image) //TODO: circular
-                          : Image.asset('images/def_group_pic.png'))
+                          onPressed: () async {_image = (await PickImage.getImageFromGallery());},
+                          child: CircleAvatar(
+                            radius: 120.0,
+                            backgroundImage: (_image!=null ? FileImage(_image) : AssetImage('images/def_group_pic.png')),
+                            backgroundColor: Theme.of(context).accentColor
+                          )
+
                         )
                       ),
                     ]
