@@ -3,6 +3,7 @@ import 'package:TheyLendMe/Utilities/pickImage.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Utilities/pickImage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io';
 
 /*
@@ -142,19 +143,22 @@ class _CreateObjectState extends State<CreateObject> {
           child: MaterialButton(
             height: 42.0,
             onPressed:() async {
-              if(_image == null && myController2.text == null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount);
-              } else if(myController2.text == null && _image != null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
-              } else if (myController2.text != null && _image == null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount,desc: myController2.text);
-              } else if(myController2.text != null && _image != null){
-                await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
-                }
-              Navigator.of(context).pop(null);
-            },
+              if(myController.text.isNotEmpty){
+                if(_image == null && myController2.text == null){
+                  await UserSingleton().user.addObject(myController.text, _currentAmount);
+                } else if(myController2.text == null && _image != null){
+                  await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image);
+                } else if (myController2.text != null && _image == null){
+                  await UserSingleton().user.addObject(myController.text, _currentAmount,desc: myController2.text);
+                } else if(myController2.text != null && _image != null){
+                  await UserSingleton().user.addObject(myController.text, _currentAmount,img: _image,desc: myController2.text);
+                  }
+                Navigator.of(context).pop(null);}
+              else {
+                Fluttertoast.showToast(msg: "Rellena el nombre",toastLength: Toast.LENGTH_SHORT);
+              }},
             color: Theme.of(context).buttonColor,
-            child: Text('Crear objeto', style: TextStyle(color: Theme.of(context).accentColor)),
+            child: Text('Crear objeto', style: TextStyle(color: Colors.white)),
           )
         )
       ]

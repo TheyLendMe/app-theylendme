@@ -3,7 +3,9 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/pages/group_objects.dart';
+import 'package:TheyLendMe/pages/my_groups_objects.dart';
 
+import 'package:fluttertoast/fluttertoast.dart'; //provisional
 
 class GroupDetails extends StatefulWidget {
   final Group _group;
@@ -79,8 +81,9 @@ class GroupDetailsState extends State<GroupDetails> {
             child: MaterialButton(
               height: 42.0,
               onPressed:(){
-                  
-              }, //TODO acción de ver miembros
+                //TODO acción de ver miembros
+                Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+              },
               color: Theme.of(context).buttonColor,
               child: Text('Ver Miembros', style: TextStyle(color: Colors.white)),
             )
@@ -88,10 +91,19 @@ class GroupDetailsState extends State<GroupDetails> {
           MaterialButton(
             height: 60.0,
             onPressed:(){
-              // TODO: sacar inventario == lista de objetos mis objetos
+              /*if(// TODO: usuario pertenece al grupo){
+              Navigator.push(context, new MaterialPageRoute(
+                builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
+              ));
+              } else {
+                Navigator.push(context, new MaterialPageRoute(
+                  builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
+                ));
+              }*/
+              Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
             },
             color: Theme.of(context).indicatorColor,
-            child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
+            child: Text('Ver Inventario', style: TextStyle(color: Colors.black)),
           )
         ]
       );

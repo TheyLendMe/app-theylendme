@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/create_object.dart';
-import 'package:TheyLendMe/pages/object_details.dart';
+import 'package:TheyLendMe/pages/group_object_details.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
-import 'package:TheyLendMe/Objects/entity.dart'; // provisional
-import 'dart:math'; // provisional
+import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/pages/create_group_object.dart';
 
 
-class MyGroupObjectsPage extends StatefulWidget {
+class OtherGroupObjectsPage extends StatefulWidget {
 
     final Group _group;
     
-    MyGroupObjectsPage(this._group);
+    OtherGroupObjectsPage(this._group);
 
     @override
-    _MyGroupObjectsPageState createState() => _MyGroupObjectsPageState();
+    _OtherGroupObjectsPageState createState() => _OtherGroupObjectsPageState();
 }
 
-class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
+class _OtherGroupObjectsPageState extends State<OtherGroupObjectsPage> {
   
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+      // TODO te lleve al drawer inicial o a los grupos
       appBar: AppBar(
           title: const Text('Inventario'),
+          
           //TODO: searchBar
         ),
       body: FutureBuilder<List<Obj>>(
@@ -37,17 +40,6 @@ class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
             : Center(child: CircularProgressIndicator()));
           }
       ),
-      floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
-        onPressed: (){
-          showDialog(
-            context: this.context,
-            builder: (BuildContext context){
-              return CreateObject();
-            }
-          );
-        },
-      ),
     );
   }
 }
@@ -56,7 +48,7 @@ class _MyGroupObjectsPageState extends State<MyGroupObjectsPage> {
 class ObjectItem extends StatelessWidget {
 
   const ObjectItem(this.object);
-  final Obj object;
+  final GroupObject object;
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +57,13 @@ class ObjectItem extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return ObjectDetails(object);
+            return GroupObjectDetails(object);
           }
         );
       },
       child: ListTile(
         leading: new Container(
-          child: new Text(object.name[0]), //just the initial letter in a circle
+          child: new Text(getFirstCharacter(object.name)), //just the initial letter in a circle
           decoration: BoxDecoration(
             color: Theme.of(context).accentColor,
             borderRadius: BorderRadius.all(
@@ -87,10 +79,10 @@ class ObjectItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(object.name),
-              xN( Random().nextInt(20) ), //provisional
+              xN( object.amount ), //provisional
               Text(
-                object.objState.toString(),
-                style: stateColor(object.objState.toString()) //provisional
+                object.objState.state.toString(),
+                style: stateColor(object.objState.toString())
               )
             ]
           )
@@ -114,21 +106,11 @@ TextStyle stateColor(state) {
     return TextStyle(color: Colors.red);
 }
 
-final User propietario = User('1', 'Señora Propietaria',
-  img: 'https://vignette.wikia.nocookie.net/simpsons/images/b/bd/Eleanor_Abernathy.png',
-  tfno: '34606991934', email: 'sofia@adolfodominguez.com');
+final User propietario = User(UserSingleton().user.idEntity,UserSingleton().user.name);
 
+String getFirstCharacter(String getFirstCharacter){
+  //Un poco feo [\u{1F600}-\U+E007F]
+  var regex = '[\u{1F600}\\-\\u{E007F}]';
+  String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
+  return textWithoutEmojis[0];}
 
-//Group grupo = new Group(idEntity, name);
-
-//List<Obj> objects;
-
-
-
-/*final List<UserObject> objects = <UserObject>[
-  UserObject(1, propietario, 'cat-400', image: 'https://http.cat/400'),
-  UserObject(2, propietario, 'cat-401', image: 'https://http.cat/401'),
-  UserObject(3, propietario, 'cat-402', image: 'https://http.cat/402'),
-  UserObject(4, propietario, 'cat-403', image: 'https://http.cat/403'),
-  UserObject(5, propietario, 'cat-404', image: 'https://http.cat/404')
-];*/

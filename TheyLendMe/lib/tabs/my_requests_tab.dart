@@ -3,8 +3,11 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
+
+import 'package:fluttertoast/fluttertoast.dart'; //provisional
 
 // Pestaña SOLICITUDES
 class MyRequestsTab extends StatefulWidget {
@@ -40,15 +43,16 @@ class RequestedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return GestureDetector(
-      /*onTap: () { //TODO
+      onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return GroupDetails(request);
+            return ObjectDetails(requestedObject);
           }
         );
-      },*/
+      },
       child: ListTile(
         leading: Container(
           child: (requestedObject.image!=null
@@ -87,31 +91,47 @@ class RequestedItem extends StatelessWidget {
               : Text('')),
             Row(
               children: [
-                MaterialButton(
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                   color: Theme.of(context).accentColor,
-                  child: Text('Prestar', style: TextStyle(color: Colors.black)),
-                  height: 42.0,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ Text('Prestar', style: TextStyle(color: Colors.black)) ]
+                    ),
+                    height: 42.0
+                  ),
                   onPressed:() async {
-                    await requestedObject.lendObj();
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Objeto prestado!")));
+                    requestedObject.lendObj().then((error){
+                      if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Objeto prestado!")));}
+                    });
+                    
                     //TODO: refresh here
                   }
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                 ),
-                MaterialButton(
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                   color: Colors.grey,
-                  child: Text('Rechazar solicitud', style: TextStyle(color: Colors.black)),
-                  height: 42.0,
-                  onPressed: () {
-                    
-                    requestedObject.deleteRequest().then((valid){
-                      if(valid){
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ Text('Rechazar solicitud', style: TextStyle(color: Colors.black)) ]
+                    ),
+                    height: 42.0
+                  ),
+                  onPressed: () async  {
+                    requestedObject.deleteRequest().then((error){
+                      if(!error){
                         Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud rechazada")));
                       }
                     });
-                    
                   }
                 )
               ]

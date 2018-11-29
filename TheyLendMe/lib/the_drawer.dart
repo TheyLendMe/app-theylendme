@@ -29,11 +29,8 @@ class _TheDrawerState extends State<TheDrawer> {
   Widget build(BuildContext context) {
 
     List<Widget> drawerOptions = [];
-
     for (var i = 0; i < widget.drawerItems.length; i++) {
-
       var d = widget.drawerItems[i];
-
       drawerOptions.add(
         ListTile(
           leading: Icon(d.icon),
@@ -66,7 +63,7 @@ class _TheDrawerState extends State<TheDrawer> {
                   : null),
                 child: (UserSingleton().login
                   ? null
-                  : Icon(FontAwesomeIcons.signInAlt, color: Theme.of(context).primaryColor))
+                  : Icon(FontAwesomeIcons.signInAlt, color: Colors.black))
               ),
               onTap: () {
                 if(UserSingleton().login) {
@@ -81,7 +78,7 @@ class _TheDrawerState extends State<TheDrawer> {
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('images/tlm.jpg')
+                image: AssetImage('images/tlm.png')
               ),
             )
           ),
@@ -92,7 +89,6 @@ class _TheDrawerState extends State<TheDrawer> {
   }
 
   int _selectedDrawerIndex = 0;
-
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
     // A Navigator is a widget that manages routes

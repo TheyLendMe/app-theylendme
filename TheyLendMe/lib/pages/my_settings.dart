@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
 import 'package:TheyLendMe/Utilities/auth.dart';
 
+import 'package:fluttertoast/fluttertoast.dart'; //provisional
+
 /*
 //TODO:
 * - Validation
@@ -10,7 +12,7 @@ import 'package:TheyLendMe/Utilities/auth.dart';
 
 class MySettingsPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new _SettingsPageState();
+  State<StatefulWidget> createState() => _SettingsPageState();
 }
 
 //Para VALIDACIÓN
@@ -32,8 +34,8 @@ String _validateEmail(String value) {
 class _SettingsPageState extends State<MySettingsPage> {
 
   //VALIDACIÓN
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  _UserData _data = new _UserData();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  _UserData _data = _UserData();
 
   void submit() {
     // First validate form.
@@ -49,53 +51,42 @@ class _SettingsPageState extends State<MySettingsPage> {
   Widget build(BuildContext context) {
     //TODO: secciones: Perfil, Seguridad (contraseña)
     return Scaffold(
+
       body: Container(
-        padding: new EdgeInsets.all(20.0),
-        child: new Form(
+        padding: EdgeInsets.all(20.0),
+        child: Form(
           //key: this._formKey,
           child: ListView.builder(
             itemBuilder: (BuildContext context, int index) =>
                 EntryItem(fields[index]),
             itemCount: fields.length,
           )
-        
-          //TODO: Form.append(submit)
-          // new Container(
-          //   width: screenSize.width,
-          //   child: new RaisedButton(
-          //     child: new Text(
-          //       'Validar',
-          //       style: new TextStyle(
-          //         color: Colors.white
-          //       ),
-          //     ),
-          //     onPressed: this.submit,
-          //     color: Colors.blue,
-          //   ),
-          //   margin: new EdgeInsets.only(
-          //     top: 20.0
-          //   ),
-          // )
         )
       ),
+
       floatingActionButton: 
-        new Row( 
+        Row( 
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,       
           children: <Widget>[
-            new FlatButton(
+            FlatButton(
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+              },
+              child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
+            ),
+            FlatButton(
               color: Colors.red,
               onPressed: () async {
                 await Auth.signOut();
                 Navigator.of(context).pop(null);
-                },
-              child: new Text("Log out"),
+              },
+              child: Text("Cerrar sesión"),
             )
           ]
-        
         )
-      
     );
   }
 }
@@ -106,7 +97,7 @@ class EntryItem extends StatefulWidget {
   final Entry entry;
 
   @override
-  State<StatefulWidget> createState() => new _EntryItemState();
+  State<StatefulWidget> createState() => _EntryItemState();
 }
 
 class _EntryItemState extends State<EntryItem> {

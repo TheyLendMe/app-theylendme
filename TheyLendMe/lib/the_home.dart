@@ -24,11 +24,11 @@ class _TheHomePageState extends State<TheHome> {
           appBar: AppBar(
             bottom: TabBar(
               tabs: [
-                Tab(icon: Text('OBJETOS')),
-                Tab(icon: Text('GRUPOS')),
+                Tab(icon: Text('OBJETOS', style: TextStyle(color: Colors.white))),
+                Tab(icon: Text('GRUPOS', style: TextStyle(color: Colors.white))),
               ],
             ),
-            title: Text('TheyLendMe')
+            title: Text('TheyLendMe', style: TextStyle(color: Colors.white))
           ),
           body: TabBarView(
             children: [

@@ -133,10 +133,7 @@ Widget googleButton(BuildContext context) {
        Auth.login(google: true).then((valid){
          if(valid){Navigator.of(context).pop(null);}
        });
-        //TODO: sync-await return Center(child: CircularProgressIndicator()));
-       
-      
-      
+        //TODO: while login, sync-await return Center(child: CircularProgressIndicator()));
     },
     child: Container(
       height: 50.0,

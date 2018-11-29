@@ -3,6 +3,7 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 
@@ -41,14 +42,14 @@ class LentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      /*onTap: () { //TODO
+      onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context){
-            return GroupDetails(request);
+            return ObjectDetails(lentObject);
           }
         );
-      },*/
+      },
       child: ListTile(
         leading: Container(
           child: (lentObject.image!=null
@@ -87,10 +88,18 @@ class LentItem extends StatelessWidget {
               : Text('')),
             Row(
               children: [
-                MaterialButton(
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                   color: Theme.of(context).accentColor,
-                  child: Text('Pedir devolución', style: TextStyle(color: Colors.black)),
-                  height: 42.0,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ Text('Pedir devolución', style: TextStyle(color: Colors.black)) ]
+                    ),
+                    height: 42.0
+                  ),
                   onPressed:() async {
                     await lentObject.claimObj().then((error){ //TODO: claimObj({String claimMsg})
                     if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud de devolución enviada")));}
@@ -100,15 +109,22 @@ class LentItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                 ),
-                MaterialButton(
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                   color: Colors.grey,
-                  child: Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)),
-                  height: 42.0,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)) ]
+                    ),
+                    height: 42.0
+                  ),
                   onPressed:() async {
                     lentObject.returnObj().then((error){
                       if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Préstamo finalizado!")));}
-                    });//FIXME: "permission error"
-                    
+                    });
                   }
                 )
               ]
