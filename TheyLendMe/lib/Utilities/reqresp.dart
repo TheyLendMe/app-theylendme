@@ -80,6 +80,7 @@ class RequestPost{
     this.userInfo = userInfo;
     if(img != null){ _data['image'] = new UploadFileInfo(img, basename(img.path));}
     if(idUser != null && !userInfo)_data['idGroup'] = idGroup.toString();
+    
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
     if(name != null)_data['name'] = name;
@@ -87,6 +88,7 @@ class RequestPost{
     if(idLoan != null) _data['idLoan'] = idLoan.toString();
     if(idRequest != null) _data['idRequest'] = idRequest.toString();
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
+    if(nickName != null) _data['nickName'] = nickName.toString();
     if(amount != null) _data['amount'] = amount.toString();
     if(requestMsg != null) _data['request'] = requestMsg;
     if(privateCode != null) _data['privateCode'] = privateCode;
@@ -116,7 +118,7 @@ class RequestPost{
     Map<String,dynamic> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
     m['token'] = await firebaseUser.getIdToken();
-    m['nickname'] = UserSingleton().user.name;
+    if(UserSingleton().user.name != null) m['nickname'] = UserSingleton().user.name;
     m['email'] = firebaseUser.email;
     m['tfno'] = firebaseUser.phoneNumber;
     return m;
