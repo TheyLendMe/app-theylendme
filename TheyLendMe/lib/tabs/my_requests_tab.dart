@@ -104,8 +104,8 @@ class RequestedItem extends StatelessWidget {
                     height: 42.0
                   ),
                   onPressed:() async {
-                    requestedObject.lendObj().then((valid){
-                      if(!valid){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Objeto prestado!")));}
+                    requestedObject.lendObj().then((error){
+                      if(!error){Scaffold.of(context).showSnackBar(SnackBar(content: Text("¡Objeto prestado!")));}
                     });
                     
                     //TODO: refresh here
@@ -127,8 +127,8 @@ class RequestedItem extends StatelessWidget {
                     height: 42.0
                   ),
                   onPressed: () async  {
-                    requestedObject.deleteRequest().then((valid){
-                      if(valid){
+                    requestedObject.deleteRequest().then((error){
+                      if(!error){
                         Scaffold.of(context).showSnackBar(SnackBar(content: Text("Solicitud rechazada")));
                       }
                     });
