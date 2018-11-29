@@ -162,12 +162,12 @@ class GroupObject extends Obj{
   GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, String date}) 
   : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date);
   
-  Future<bool> requestObj({Group group,int amount = 1, String msg, var context}) async{
+  Future<bool> requestObjAsGroup({Group group,int amount = 1, String msg, var context}) async{
     ResponsePost res = await new RequestPost("RequestAsGroup").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg,
-        idGroup: group
+        idGroup: owner.idEntity
     ).doRequest(context : context);
     return res.hasError;
   }
@@ -179,7 +179,8 @@ class GroupObject extends Obj{
     ).doRequest(context : context);
     return res.hasError;
   }
-  Future<bool> requestAsUser({int amount = 1, String msg, var context}) async{
+  @override
+  Future<bool> requestObj({int amount = 1, String msg, var context}) async{
     ResponsePost res = await new RequestPost("RequestAsUser").dataBuilder(
         userInfo: true,
         idObject : _idObject,
