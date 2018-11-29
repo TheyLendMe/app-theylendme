@@ -4,11 +4,11 @@
 ## Screencast
 
 <p align="center">
-Préstamos<br><br>
-  <img src="https://raw.githubusercontent.com/TheyLendMe/app-theylendme/master/screenshots/beta1-loans.gif"><br>
-Grupos<br><br>
-  <img src="https://raw.githubusercontent.com/TheyLendMe/app-theylendme/master/screenshots/beta1-groups.gif"><br>
-Objetos<br><br>
+Préstamos<br>
+  <img src="https://raw.githubusercontent.com/TheyLendMe/app-theylendme/master/screenshots/beta1-loans.gif"><br><br>
+Grupos<br>
+  <img src="https://raw.githubusercontent.com/TheyLendMe/app-theylendme/master/screenshots/beta1-groups.gif"><br><br>
+Objetos<br>
   <img src="https://raw.githubusercontent.com/TheyLendMe/app-theylendme/master/screenshots/beta1-objects.gif"><br>
 </p>
 
