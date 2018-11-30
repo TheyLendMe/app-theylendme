@@ -89,6 +89,7 @@ class RequestPost{
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
     if(requestMsg != null) _data['request'] = requestMsg;
+    
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['idOtherUser'] = oUser;
@@ -98,6 +99,7 @@ class RequestPost{
         _data['fieldName'] =['null'];
         _data['fieldValue'] =['null'];
     }
+    if(nickName != null) _data['nickName'] = nickName.toString();
     if(info != null){_data['info'] = info;}
     if(email != null){_data['email']=email;}
     if(tfno != null){_data['tfno'] = tfno;}
@@ -116,7 +118,7 @@ class RequestPost{
     Map<String,dynamic> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
     m['token'] = await firebaseUser.getIdToken();
-    m['nickname'] = UserSingleton().user.name;
+    if(UserSingleton().user.name != null) m['nickname'] = UserSingleton().user.name;
     m['email'] = firebaseUser.email;
     m['tfno'] = firebaseUser.phoneNumber;
     return m;
