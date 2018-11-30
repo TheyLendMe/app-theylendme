@@ -1,3 +1,4 @@
+import 'package:TheyLendMe/pages/my_groups_objects.dart';
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';

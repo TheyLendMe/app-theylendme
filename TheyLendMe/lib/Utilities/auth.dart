@@ -41,7 +41,7 @@ class Auth {
     if(user != null){
       UserSingleton(user: user);
       await UserSingleton().refreshUser();
-      if((await new RequestPost('login').dataBuilder(userInfo: true, name: name).doRequest()).hasError){return false;}
+      if((await new RequestPost('login').dataBuilder(userInfo: true, nickName: name).doRequest()).hasError){return false;}
       if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
     }else{ ErrorToast().handleError(msg: "Algo ha fallado"); return false; }
     return true;
@@ -66,7 +66,7 @@ class Auth {
     FirebaseAuth _auth= FirebaseAuth.instance;
     try{
       await _auth.createUserWithEmailAndPassword(email: email,password:pass);
-      String name = email.split("@")[1];
+      String name = email.split("@")[0];
       return await login(email: email, pass: pass, name: name);
     }on PlatformException catch(e){_onError(e); return false;}
 

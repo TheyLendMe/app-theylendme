@@ -89,6 +89,7 @@ class RequestPost{
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
     if(requestMsg != null) _data['request'] = requestMsg;
+    
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['idOtherUser'] = oUser;
@@ -98,6 +99,7 @@ class RequestPost{
         _data['fieldName'] =['null'];
         _data['fieldValue'] =['null'];
     }
+    if(nickName != null) _data['nickName'] = nickName.toString();
     if(info != null){_data['info'] = info;}
     if(email != null){_data['email']=email;}
     if(tfno != null){_data['tfno'] = tfno;}
@@ -116,7 +118,7 @@ class RequestPost{
     Map<String,dynamic> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
     m['token'] = await firebaseUser.getIdToken();
-    m['nickname'] = UserSingleton().user.name;
+    if(UserSingleton().user.name != null) m['nickname'] = UserSingleton().user.name;
     m['email'] = firebaseUser.email;
     m['tfno'] = firebaseUser.phoneNumber;
     return m;
@@ -157,8 +159,6 @@ class ResponsePost{
   ResponsePost(data){
   ///Server error
     if(data['error'] != null && data['error']) {
-
-      
       _error = true;
       if(data['errorCode'] != null){
         int errorCode  = data['errorCode'];
@@ -187,7 +187,6 @@ class ResponsePost{
     List objects = _data['BYproperty'];
     List <UserObject> userObjects = new List();
     objects.forEach((object){
-      
       userObjects.add(objectBuilder(data : object,forUser: true));
     });
     return userObjects;
@@ -617,13 +616,13 @@ class ResponsePost{
       _orderObjeList(list);
       return list;
     }else{
-      list.addAll(mine ? _loansUserObjectBuilder(_data['byUser']) : _loansUserObjectBuilder(_data['toUser']));
+      list.addAll(mine ? _loansUserObjectBuilder(_data['byUser'], mine: mine) : _loansUserObjectBuilder(_data['toUser']));
     }
     _orderObjeList(list);
     return list;
   }
 
-  List<UserObject> _loansUserObjectBuilder(List<dynamic> loans){
+  List<UserObject> _loansUserObjectBuilder(List<dynamic> loans,{bool mine = false}){
     List<UserObject> loansList= new List();
     loans.forEach((loan){
       ObjState state = new ObjState(
@@ -633,7 +632,7 @@ class ResponsePost{
         msg: loan['loanMsg'],
         id: int.parse(loan['idLoan']),
         actual: userBuilder(data : loan['keeper']),
-        next: userBuilder(data : loan['object']['owner']),
+        next:mine ? UserSingleton().user : userBuilder(data : loan['object']['owner']),
       );
       loansList.add(objectBuilder(data: loan['object'], objState: state));
     });
