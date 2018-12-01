@@ -30,16 +30,16 @@ class _ContactDialogState extends State<ContactDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  (snapshot.data.email!=null
+                  (snapshot.data.email!=''
                     ? SimpleDialogOption(
                       onPressed: () {launch('mailto:${snapshot.data.email}');},
                       child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 50.0),
                     ): Text('') //esto nunca se mostrará porque siempre hay email
                   ),
-                  (snapshot.data.tfno!=null
+                  (snapshot.data.tfno!=''
                     ? SimpleDialogOption(
                       //TODO: check first if it's on WhatsApp
-                      onPressed: () {launch('https://wa.me/${snapshot.data.tfno}');},
+                      onPressed: () {launch('https://wa.me/${snapshot.data.tfno}/?text=Hola!%20He%20visto%20algo%20tuyo%20en%20TheyLendMe%20que%20te%20quería%20pedir%20prestado:');},
                       child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 50.0),
                     ): Text('')
                   ),

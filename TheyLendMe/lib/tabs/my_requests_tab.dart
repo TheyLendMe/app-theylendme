@@ -59,7 +59,7 @@ class RequestedItem extends StatelessWidget {
             ? Image.network(requestedObject.image, width: 30)
             : Image.asset('images/def_obj_pic.png', width: 30)),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 8.0)
+            border: Border.all(color: Colors.black, width: 2.0)
           )
         ),
         title: Row(

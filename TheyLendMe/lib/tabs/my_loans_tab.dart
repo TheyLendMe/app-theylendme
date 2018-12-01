@@ -56,7 +56,7 @@ class LentItem extends StatelessWidget {
             ? Image.network(lentObject.image, width: 30)
             : Image.asset('images/def_obj_pic.png', width: 30)),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 8.0)
+            border: Border.all(color: Colors.black, width: 2.0)
           )
         ),
         title: Row(
@@ -107,7 +107,7 @@ class LentItem extends StatelessWidget {
                   }
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
+                  padding: const EdgeInsets.only(right: 10.0),
                 ),
                 FlatButton(
                   shape: RoundedRectangleBorder(
@@ -117,7 +117,7 @@ class LentItem extends StatelessWidget {
                   child: Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [ Text('Marcar como\ndevuelto', style: TextStyle(color: Colors.black)) ]
+                      children: [ Text('Marcar como\n    devuelto', style: TextStyle(color: Colors.black)) ]
                     ),
                     height: 42.0
                   ),

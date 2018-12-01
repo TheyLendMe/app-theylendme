@@ -11,5 +11,6 @@ build/
 google-services.json
 android/app/google-services.json
 *.apk
-key.properties
+android/key.properties
 output.json
+app-release.apk

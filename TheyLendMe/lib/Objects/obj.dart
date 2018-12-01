@@ -39,8 +39,8 @@ abstract class Obj{
 
 
 ///Abstract Methods 
-  Future lendObj({var context});
-  Future<bool> requestObj({int amount = 1, String msg, var context, bool asUser});
+  Future<bool> lendObj({var context});
+  Future<bool> requestObj({int amount = 1, String msg, var context});
   ///Devolver--> no me deja poner return D: valdra solo con requestObj???
   Future<bool> returnObj({var context});
   Future<bool> claimObj({String claimMsg, var context});
@@ -82,11 +82,12 @@ class UserObject extends Obj{
   UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, String date})
   : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount, date : date);
   
-  Future lendObj({int idRequest, var context}) async {
-    await new RequestPost("lendObject").dataBuilder(
+  Future<bool> lendObj({int idRequest, var context}) async {
+    ResponsePost res = await new RequestPost("lendObject").dataBuilder(
         userInfo: true,
         idRequest: idRequest != null ? idRequest : _objState.idState
     ).doRequest(context : context);
+    return res.hasError;
   }
   ///If the user does not set any amount, it will ask just for one object
   
