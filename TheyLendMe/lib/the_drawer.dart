@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-import 'package:TheyLendMe/pages/my_objects.dart';
+import 'package:TheyLendMe/pages/my_inventory.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
@@ -12,7 +12,7 @@ class TheDrawer extends StatefulWidget {
 
   final drawerItems = [
     DrawerItem("Home",         Icons.home,         "/"),
-    DrawerItem("Mis Objetos",  Icons.folder_open,  "/MyObjectsPage"),
+    DrawerItem("Mi Inventario",  Icons.folder_open,  "/MyInventoryPage"),
     DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
     DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
     DrawerItem("Ajustes",      Icons.settings,     "/MySettingsPage")

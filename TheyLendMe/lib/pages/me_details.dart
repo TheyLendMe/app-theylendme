@@ -73,7 +73,7 @@ class _MeDetailsState extends State<MeDetails> {
           ),
           MaterialButton(
             height: 60.0,
-            onPressed:(){ Navigator.of(context).pushNamed("/MyObjectsPage"); },
+            onPressed:(){ Navigator.of(context).pushNamed("/MyInventoryPage"); },
             color: Theme.of(context).indicatorColor,
             child: Text('Mis Objetos', style: TextStyle(color: Colors.black)),
           )
