@@ -91,7 +91,9 @@ class GroupDetailsState extends State<GroupDetails> {
           MaterialButton(
             height: 60.0,
             onPressed:(){
-              /*if(// TODO: usuario pertenece al grupo){
+
+              if(UserSingleton().user.admin){
+
               Navigator.push(context, new MaterialPageRoute(
                 builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
               ));
@@ -99,8 +101,7 @@ class GroupDetailsState extends State<GroupDetails> {
                 Navigator.push(context, new MaterialPageRoute(
                   builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
                 ));
-              }*/
-              Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+              };
             },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Inventario', style: TextStyle(color: Colors.black)),
