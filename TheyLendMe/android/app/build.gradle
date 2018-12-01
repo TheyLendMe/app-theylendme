@@ -13,12 +13,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '2'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '1.01'
 }
 
 def keystoreProperties = new Properties()
@@ -42,8 +42,8 @@ android {
         applicationId "com.TheyLendMe.tlm"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 2
+        versionName "1.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -64,10 +64,10 @@ android {
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'*/
         }
-
+        /*
         debug{
             signingConfig signingConfigs.debug
-        }
+        }*/
     }
 }
 
