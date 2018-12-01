@@ -199,7 +199,12 @@ class ResponsePost{
       ///Obtenemos el estado que se le va a dar a cada uno de los objetos
       if (stateType == null){
         obj.addAll(defaultObjects(_data['UsersObjects'], ObjType.USER_OBJECT));
-        obj.addAll(defaultObjects(_data['GroupsObjects'], ObjType.GROUP_OBJECT));
+        try{
+          obj.addAll(defaultObjects(_data['GroupsObjects'], ObjType.GROUP_OBJECT));
+        }catch(e){
+          print(e);
+        }
+        
       }else{
         List<dynamic> objects = _data;
         StateOfObject stateOfObject = ObjState.getObjState(stateType);
