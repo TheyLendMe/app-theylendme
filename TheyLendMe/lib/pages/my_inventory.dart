@@ -9,20 +9,20 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 //TODO: alinear todo (como una tabla)
 
-class MyObjectsPage extends StatefulWidget {
+class MyInventoryPage extends StatefulWidget {
 
     @override
-    _MyObjectsPageState createState() => _MyObjectsPageState();
+    _MyInventoryPageState createState() => _MyInventoryPageState();
 }
 
-class _MyObjectsPageState extends State<MyObjectsPage> {
+class _MyInventoryPageState extends State<MyInventoryPage> {
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Mis Objetos'),
+          title: const Text('Mi inventario'),
           //TODO: searchBar
         ),
       body: FutureBuilder<List<Obj>>(

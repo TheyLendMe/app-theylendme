@@ -14,8 +14,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="TheyLendMe"
-        android:icon="@mipmap/ic_launcher">
+        android:label="TheyLendMe-dev"
+        android:icon="@mipmap/ic_launcher_dev"> <!-- WHEN PUBLISHING, CHANGE THIS -->
         <activity
             android:name="com.TheyLendMe.tlm.MainActivity"
             android:launchMode="singleTop"

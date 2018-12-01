@@ -10,3 +10,7 @@ build/
 
 google-services.json
 android/app/google-services.json
+*.apk
+android/key.properties
+output.json
+app-release.apk

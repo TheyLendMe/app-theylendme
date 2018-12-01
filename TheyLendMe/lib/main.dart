@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/the_home.dart';
-import 'package:TheyLendMe/pages/my_objects.dart';
+import 'package:TheyLendMe/pages/my_inventory.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
@@ -33,7 +33,7 @@ class TheApp extends StatelessWidget {
 
       //A Route is an abstraction for a "screen" or "page" of an app,
       routes: <String, WidgetBuilder> {
-        "/MyObjectsPage": (BuildContext context) => new MyObjectsPage(),
+        "/MyInventoryPage": (BuildContext context) => new MyInventoryPage(),
         "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
         "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
         "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
