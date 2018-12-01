@@ -6,7 +6,7 @@ import 'package:TheyLendMe/pages/my_objects.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
-import 'package:TheyLendMe/pages/user_details.dart';
+import 'package:TheyLendMe/pages/me_details.dart';
 
 class TheDrawer extends StatefulWidget {
 
@@ -70,7 +70,7 @@ class _TheDrawerState extends State<TheDrawer> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context){
-                      return UserDetails(UserSingleton().user); //TODO: since it's UserDetails(me), should it be different?
+                      return MeDetails(UserSingleton().user);
                     }
                   );
                 } else Navigator.of(context).pushNamed("/AuthPage");
