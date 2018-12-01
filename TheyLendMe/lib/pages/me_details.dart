@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:fluttertoast/fluttertoast.dart'; //provisonal
 
-class UserDetails extends StatefulWidget {
-  final User _user;
+class MeDetails extends StatefulWidget {
+  final User _me;
 
-  UserDetails(this._user);
+  MeDetails(this._me);
 
   @override
-    _UserDetailsState createState() => _UserDetailsState();
+    _MeDetailsState createState() => _MeDetailsState();
 }
 
-class _UserDetailsState extends State<UserDetails> {
+class _MeDetailsState extends State<MeDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
@@ -34,7 +35,7 @@ class _UserDetailsState extends State<UserDetails> {
             alignment: Alignment.center,
             child: CircleAvatar(
               radius: 120.0,
-              backgroundImage: (widget._user.img!=null ? NetworkImage(widget._user.img) : AssetImage('images/def_user_pic.png')),
+              backgroundImage: (widget._me.img!=null ? NetworkImage(widget._me.img) : AssetImage('images/def_user_pic.png')),
               backgroundColor: Theme.of(context).accentColor
             )
           ),
@@ -44,8 +45,8 @@ class _UserDetailsState extends State<UserDetails> {
               ),
             padding: const EdgeInsets.all(8.0),
             alignment: Alignment.center,
-            child: (widget._user.name!=null
-              ? Text(widget._user.name, style: Theme.of(context).textTheme.title)
+            child: (widget._me.name!=null
+              ? Text(widget._me.name, style: Theme.of(context).textTheme.title)
               : Text(''))
           ),
           Container(
@@ -57,30 +58,24 @@ class _UserDetailsState extends State<UserDetails> {
               height: 42.0,
               onPressed:(){
                 if(UserSingleton().login){
-                  showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return ContactDialog(widget._user);
-                  }
-                );} else{
+                  ( widget._me.tfno!=null
+                    ? ContactDialog(widget._me)
+                    : Fluttertoast.showToast(msg: "Función disponible próximamente: añadir teléfono",toastLength: Toast.LENGTH_SHORT) );
+                } else {
                   Navigator.of(context).pushNamed("/AuthPage");
                 }
               },
               color: Theme.of(context).buttonColor,
-              child: Text('Contactar', style: TextStyle(color: Colors.white)),
+              child: ( widget._me.tfno!=null
+                ? Text('Teléfono: ${widget._me.tfno}')
+                : Text('Añadir número de teléfono', style: TextStyle(color: Colors.white)) ),
             )
           ),
           MaterialButton(
             height: 60.0,
-            onPressed:(){
-              Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) {
-                  
-                },
-              ));
-            },
+            onPressed:(){ Navigator.of(context).pushNamed("/MyInventoryPage"); },
             color: Theme.of(context).indicatorColor,
-            child: Text('Ver Objetos', style: TextStyle(color: Colors.black)),
+            child: Text('Mis Objetos', style: TextStyle(color: Colors.black)),
           )
         ]
       );
