@@ -11,9 +11,11 @@ class MyGroupsPage extends StatefulWidget {
 
 class _MyGroupsPageState extends State<MyGroupsPage> {
 
+
+
   @override
   Widget build(BuildContext context) {
-
+  
     return Scaffold(
       appBar: AppBar(
           title: const Text('Mis Grupos'),
@@ -71,7 +73,11 @@ class GroupItem extends StatelessWidget {
         title: Text(group.name),
         subtitle: (group.info!=null
           ? Text(group.info)
-          : Text(''))
+          : Text('')),
+        trailing: MaterialButton(
+          onPressed: /*TODO: mandar al panel*/,
+          child: new Text('Administrar')
+        ),
       )
 
     );
@@ -83,3 +89,4 @@ String getFirstCharacter(String getFirstCharacter){
   var regex = '[\u{1F600}\\-\\u{E007F}]';
   String textWithoutEmojis = getFirstCharacter.replaceAll(new RegExp(regex), '');
   return textWithoutEmojis[0];}
+
