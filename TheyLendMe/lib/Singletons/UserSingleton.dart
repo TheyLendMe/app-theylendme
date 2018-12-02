@@ -40,7 +40,9 @@ class UserSingleton{
     FirebaseUser firebaseUser = await this.firebaseUser;
     if(firebaseUser == null){this._user = null;}else{
       this.token = await firebaseUser.getIdToken();
-       if(_user == null || _user.idEntity == ""){this._user = new User(firebaseUser.uid, firebaseUser.displayName); print("Me actualizo");}
+       if(_user == null || _user.idEntity == ""){
+         this._user = new User(firebaseUser.uid, firebaseUser.displayName, email: firebaseUser.email);
+          print("Me actualizo");}
     }
    
   }
