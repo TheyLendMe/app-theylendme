@@ -367,7 +367,7 @@ class ResponsePost{
           int.parse(data['idObject']), 
           data['owner'] != null ? userBuilder(data :data['owner']) : UserSingleton().user, 
           data['name'],
-          amount: int.parse(data['amount']),
+          amount: data['amount'] != null ? int.parse(data['amount']): data['available_amount'],
           image : data['imagen'],
           desc: data['descr'],
           date: data['creationDate'],
@@ -380,7 +380,7 @@ class ResponsePost{
           data['name'],
           image : data['imagen'],
           desc: data['descr'],
-          amount: int.parse(data['amount']),
+          amount: data['amount'] != null ? int.parse(data['amount']): data['available_amount'],
           date: data['creationDate'],
           objState: objState
         );
@@ -691,6 +691,38 @@ class ResponsePost{
     return loanssList;
   }
 
+  Map<String,List<Obj>> userInventory(){
+    Map<String,List<Obj>> map = new Map();
+
+    List<Obj> mines = new List();
+    List<Obj> elses = new List();
+    _data['mine_objs'].forEach((object){
+      if(object != null){mines.add(objectBuilder(data: object, user: UserSingleton().user));}
+    });
+    _data['elses_objs'].forEach((object){
+      if(object != null){mines.add(objectBuilder(data: object));}
+    });
+    map['mines'] = mines;
+    map['others'] = elses;
+    return map;
+  }
+
+
+  Map<String,List<GroupObject>> groupInventory(){
+    Map<String,List<GroupObject>> map = new Map();
+
+    List<GroupObject> mines = new List();
+    List<GroupObject> elses = new List();
+    _data['our_objs'].forEach((object){
+      if(object != null){mines.add(objectBuilder(data: object, user: UserSingleton().user));}
+    });
+    _data['elses_objs'].forEach((object){
+      if(object != null){mines.add(objectBuilder(data: object));}
+    });
+    map['mines'] = mines;
+    map['others'] = elses;
+    return map;
+  }
   void _orderObjeList(List<Obj> list){list.sort((a,b) => a.date.isAfter(b.date) ? 0 : 1);}
 
 

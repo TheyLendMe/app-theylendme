@@ -49,6 +49,7 @@ abstract class Entity{
   Future<List<Obj>> getLoansOthersToMe({var context});
   Future<List<Obj>> getRequestsOthersToMe({var context});
   Future<Entity> getEntityInfo({var context});
+  Future<Map<String,List<Obj>>> getEntityInventory({var context});
 }
 class User extends Entity{
   int idMember;
@@ -195,6 +196,16 @@ class User extends Entity{
     ).doRequest(context:context);
     User user = res.userBuilder();
     return user;
+  }
+
+  @override
+  Future<Map<String,List<Obj>>> getEntityInventory({var context}) async{
+    ResponsePost res = await new RequestPost("getUserInventary").dataBuilder(
+      userInfo: true,
+      idUser: this.idEntity
+    ).doRequest(context:context);
+    Map<String,List<Obj>> map = res.groupInventory();
+    return map;
   }
 
 }
@@ -379,6 +390,16 @@ class Group extends Entity{
     ).doRequest(context:context);
     Group group = res.groupBuilder();
     return group;
+  }
+
+  @override
+  Future<Map<String,List<Obj>>> getEntityInventory({context}) async {
+    ResponsePost res = await new RequestPost("getGroupInventary").dataBuilder(
+      userInfo: true,
+      idGroup: this.idEntity,
+    ).doRequest(context:context);
+    Map<String,List<Obj>> map = res.groupInventory();
+    return map;
   }
 }
   enum EntityType {USER, GROUP, Default}
