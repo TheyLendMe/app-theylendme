@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:flutter/cupertino.dart';
+import 'private_code_dialog.dart';
 
 class GeneralGroupSettingsTab extends StatefulWidget {
   
@@ -30,15 +31,14 @@ class _GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
           ),
           ListTile(
             title: Text('Compartir grupo'),
-            onTap: () {
+            onTap: () { 
               showDialog(
                 builder: (BuildContext context){
-                  widget._group.getPrivateCode();
+                  return PrivateCodeDialog(widget._group, widget._group);
                 },
               context: context
               );
             },
-            //onTap: ,
           )
         ],
       ),
