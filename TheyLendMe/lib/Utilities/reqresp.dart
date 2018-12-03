@@ -427,7 +427,7 @@ class ResponsePost{
       admin: admin);
   }
 
-  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false}){
+  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false, int idMember}){
     data = data == null ? _data['group'] : data;
     return new Group(
       int.parse(data['idGroup']), 
@@ -436,9 +436,10 @@ class ResponsePost{
       tfno: data['tfno'],
       img: data['imagen'],
       info: data['info'],
+      myIDMember: idMember,
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
-      imAdmin: true,
+      imAdmin: imAdmin,
     );
   }
   List<Group> myGroupsBuilder(){
@@ -723,6 +724,14 @@ class ResponsePost{
     map['others'] = elses;
     return map;
   }
+
+  Group signInGroupBuilder(){
+    int idMember = int.parse(_data['member']['idMember']);
+    bool admin = int.parse(_data['member']['idMember']) != 0 ;
+    return groupBuilder(data: _data['member']['group'], imAdmin: admin, idMember: idMember);
+  }
+
+
   void _orderObjeList(List<Obj> list){list.sort((a,b) => a.date.isAfter(b.date) ? 0 : 1);}
 
 

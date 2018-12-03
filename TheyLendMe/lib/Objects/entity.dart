@@ -110,19 +110,19 @@ class User extends Entity{
     ).doRequest(context: context);
     return res.hasError;
   }
-  Future<bool> joinPublicGroup(Group group, {var context}) async{
+  Future<Group> joinPublicGroup(Group group, {var context}) async{
     ResponsePost res = await new RequestPost("joinRequest").dataBuilder(
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest(context: context);
-    return res.hasError;
+    return res.signInGroupBuilder();
   }
-  Future<bool> joinPrivateGroup(String privateCode,{var context}) async{
+  Future<Group> joinPrivateGroup(String privateCode,{var context}) async{
     ResponsePost res = await new RequestPost("joinByPrivateCode").dataBuilder(
       userInfo: true,
       privateCode: privateCode,
     ).doRequest(context: context);
-    return res.hasError;
+    return res.signInGroupBuilder();
   }
 
   Future<List<String>> getNotTopics({var context}) async{
@@ -225,15 +225,20 @@ class Group extends Entity{
   bool _private;
   bool _autoloan; 
   bool _imAdmin;
-  Group(int idEntity, String name,{String email,String tfno,String info, String img,bool imAdmin = false,bool private = false, bool autoloan = false}) 
+  int _myIDMember;
+  Group(int idEntity, String name,{String email,String tfno,String info, String img,bool imAdmin = false,bool private = false, bool autoloan = false, int myIDMember}) 
   : super(EntityType.GROUP, idEntity.toString(), name,tfno : tfno, info : info, img : img, email : email){
     _private = private;
     _autoloan = autoloan;
     _imAdmin = imAdmin;
+    _myIDMember=myIDMember;
   }
 
   get private => _private;
   set private(bool private) => private;
+
+  get myIDMember => _myIDMember;
+  set myIDMember(int myIDMember) => myIDMember;
 
   get autoloan => _autoloan; 
   set autoloan(bool autoloan) => _autoloan;
