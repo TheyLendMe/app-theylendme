@@ -34,7 +34,7 @@ class _GroupSettingsPanelState extends State<GroupSettingsPanel> {
           ),
           body: TabBarView(
             children: [
-              GeneralGroupSettingsTab(),
+              GeneralGroupSettingsTab(widget._group),
               GroupMembersTab(widget._group)
             ],
           ),
