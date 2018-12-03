@@ -1,4 +1,5 @@
 import 'package:TheyLendMe/Objects/joinRequest.dart';
+import 'package:TheyLendMe/Utilities/auth.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
@@ -86,6 +87,7 @@ class User extends Entity{
       img: img
 
     ).doRequest(context: context);
+    Auth.changeInfoOfUser();
     return res.hasError;
   }
   Future<bool> createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
@@ -108,13 +110,21 @@ class User extends Entity{
     ).doRequest(context: context);
     return res.hasError;
   }
-  Future<bool> joinGroup(Group group, {var context, String privateCode}) async{
-    ResponsePost res = await new RequestPost(group.private ? "joinByPrivateCode" : "joinRequest").dataBuilder(
+  Future<bool> joinPublicGroup(Group group, {var context}) async{
+    ResponsePost res = await new RequestPost("joinRequest").dataBuilder(
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest(context: context);
     return res.hasError;
   }
+  Future<bool> joinPrivateGroup(String privateCode,{var context}) async{
+    ResponsePost res = await new RequestPost("joinByPrivateCode").dataBuilder(
+      userInfo: true,
+      privateCode: privateCode,
+    ).doRequest(context: context);
+    return res.hasError;
+  }
+
   Future<List<String>> getNotTopics({var context}) async{
     ResponsePost res = await new RequestPost("getAsociatedGroups").dataBuilder(
       userInfo: true,
