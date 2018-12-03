@@ -1,4 +1,5 @@
 import 'package:TheyLendMe/Objects/joinRequest.dart';
+import 'package:TheyLendMe/Utilities/auth.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
@@ -50,6 +51,7 @@ abstract class Entity{
   Future<List<Obj>> getLoansOthersToMe({var context});
   Future<List<Obj>> getRequestsOthersToMe({var context});
   Future<Entity> getEntityInfo({var context});
+  Future<Map<String,List<Obj>>> getEntityInventory({var context});
 }
 class User extends Entity{
   int idMember;
@@ -86,6 +88,7 @@ class User extends Entity{
       img: img
 
     ).doRequest(context: context);
+    Auth.changeInfoOfUser();
     return res.hasError;
   }
   Future<bool> createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
@@ -108,13 +111,21 @@ class User extends Entity{
     ).doRequest(context: context);
     return res.hasError;
   }
-  Future<bool> joinGroup(Group group, {var context, String privateCode}) async{
-    ResponsePost res = await new RequestPost(group.private ? "joinByPrivateCode" : "joinRequest").dataBuilder(
+  Future<Group> joinPublicGroup(Group group, {var context}) async{
+    ResponsePost res = await new RequestPost("joinRequest").dataBuilder(
       userInfo: true,
       idGroup: group.idEntity,
     ).doRequest(context: context);
-    return res.hasError;
+    return res.signInGroupBuilder();
   }
+  Future<Group> joinPrivateGroup(String privateCode,{var context}) async{
+    ResponsePost res = await new RequestPost("joinByPrivateCode").dataBuilder(
+      userInfo: true,
+      privateCode: privateCode,
+    ).doRequest(context: context);
+    return res.signInGroupBuilder();
+  }
+
   Future<List<String>> getNotTopics({var context}) async{
     ResponsePost res = await new RequestPost("getAsociatedGroups").dataBuilder(
       userInfo: true,
@@ -198,6 +209,16 @@ class User extends Entity{
     return user;
   }
 
+  @override
+  Future<Map<String,List<Obj>>> getEntityInventory({var context}) async{
+    ResponsePost res = await new RequestPost("getUserInventary").dataBuilder(
+      userInfo: true,
+      idUser: this.idEntity
+    ).doRequest(context:context);
+    Map<String,List<Obj>> map = res.groupInventory();
+    return map;
+  }
+
 }
 
 class Group extends Entity{
@@ -205,15 +226,20 @@ class Group extends Entity{
   bool _private;
   bool _autoloan; 
   bool _imAdmin;
-  Group(int idEntity, String name,{String email,String tfno,String info, String img,bool imAdmin = false,bool private = false, bool autoloan = false}) 
+  int _myIDMember;
+  Group(int idEntity, String name,{String email,String tfno,String info, String img,bool imAdmin = false,bool private = false, bool autoloan = false, int myIDMember}) 
   : super(EntityType.GROUP, idEntity.toString(), name,tfno : tfno, info : info, img : img, email : email){
     _private = private;
     _autoloan = autoloan;
     _imAdmin = imAdmin;
+    _myIDMember=myIDMember;
   }
 
   get private => _private;
   set private(bool private) => private;
+
+  get myIDMember => _myIDMember;
+  set myIDMember(int myIDMember) => myIDMember;
 
   get autoloan => _autoloan; 
   set autoloan(bool autoloan) => _autoloan;
@@ -385,6 +411,16 @@ class Group extends Entity{
     ).doRequest(context:context);
     Group group = res.groupBuilder();
     return group;
+  }
+
+  @override
+  Future<Map<String,List<Obj>>> getEntityInventory({context}) async {
+    ResponsePost res = await new RequestPost("getGroupInventary").dataBuilder(
+      userInfo: true,
+      idGroup: this.idEntity,
+    ).doRequest(context:context);
+    Map<String,List<Obj>> map = res.groupInventory();
+    return map;
   }
 }
   enum EntityType {USER, GROUP, Default}
