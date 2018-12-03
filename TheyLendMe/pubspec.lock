@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  fab_dialer:
+    dependency: "direct main"
+    description:
+      name: fab_dialer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -83,13 +90,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
-  flutter_fab_dialer:
-    dependency: "direct main"
-    description:
-      name: flutter_fab_dialer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   flutter_image_compress:
     dependency: "direct main"
     description:

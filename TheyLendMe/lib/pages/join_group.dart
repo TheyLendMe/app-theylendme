@@ -30,13 +30,14 @@ class _JoinGroupState extends State<JoinGroup> {
       return SimpleDialog(
         children: [
           Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Únete a un grupo', style: Theme.of(context).textTheme.title),
-            IconButton(
-              icon: new Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(null),
-            ),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('  Únete a un grupo', style: Theme.of(context).textTheme.title),
+              IconButton(
+                icon: new Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(null),
+              ),
           ]
         ),
         Padding(
@@ -65,7 +66,7 @@ class _JoinGroupState extends State<JoinGroup> {
             height: 42.0,
             onPressed:() async {
               if(myController.text.isNotEmpty){
-                //UserSingleton().user.joinGroup();
+                UserSingleton().user.joinPrivateGroup(myController.text);
                 Navigator.of(context).pop(null);
               } else {
                 Fluttertoast.showToast(msg: "Introduce un código",toastLength: Toast.LENGTH_SHORT);

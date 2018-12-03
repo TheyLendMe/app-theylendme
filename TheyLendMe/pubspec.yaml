@@ -28,7 +28,7 @@ dependencies:
   path_provider: ^0.4.1
   intl: ^0.15.7
   flutter_colorpicker: any
-  flutter_fab_dialer:
+  fab_dialer:
 
 
 

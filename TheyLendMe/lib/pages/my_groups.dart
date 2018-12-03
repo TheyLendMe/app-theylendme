@@ -4,8 +4,9 @@ import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'group_settings_panel.dart';
-import 'package:flutter_fab_dialer/flutter_fab_dialer.dart';
 import 'join_group.dart';
+import 'package:fab_dialer/fab_dialer.dart';
+
 
 class MyGroupsPage extends StatefulWidget {
   @override
@@ -29,8 +30,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
             builder: (BuildContext context){
               return CreateGroup();
             },);
-        }, 
-        true),
+        },),
       new FabMiniMenuItem.noText(
         new Icon(Icons.group_add), 
         Colors.orange, 
@@ -43,8 +43,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
               return JoinGroup();
             }
           );
-        },
-        true)
+        },)
     ];
     return Scaffold(
       appBar: AppBar(
@@ -64,17 +63,6 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
       ),
       // Fab menu, crear grupo y unirse a grupo
       floatingActionButton: new FabDialer(_fabMiniMenuItemList, Colors.orange, new Icon(Icons.group)),
-      /*floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add, color: Colors.black),
-        onPressed: (){
-          showDialog(
-            context: this.context,
-            builder: (BuildContext context){
-              return CreateGroup();
-          );
-        },
-      )*/
-
     );
   }
 }
