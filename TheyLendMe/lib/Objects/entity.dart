@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import 'package:TheyLendMe/Utilities/errorHandler.dart';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 
 abstract class Entity{
 
@@ -369,7 +370,12 @@ class Group extends Entity{
   
 
   Future addUser(Entity newUser) async{}
-  Future delUser({User u}) async{}
+  Future delUser({User u}) async{
+    Fluttertoast.showToast(
+      msg: 'Funcion vacia',
+      toastLength: Toast.LENGTH_LONG,
+    );
+  }
 
   @override
   Future<Group> getEntityInfo({var context})async{

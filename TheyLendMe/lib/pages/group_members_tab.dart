@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+
+class GroupMembersTab extends StatefulWidget {
+
+  final Group _group;
+  GroupMembersTab(this._group);
+
+  @override
+  _GroupMembersTabState createState() => _GroupMembersTabState();
+}
+
+class _GroupMembersTabState extends State<GroupMembersTab> {
+
+  @override
+  Widget build (BuildContext context){
+
+    return FutureBuilder<List<User>>(
+      future: widget._group.getGroupMembers(),
+      builder: (context,snapshot) {
+        return (snapshot.hasData
+        ? ListView.builder(
+          itemBuilder: (BuildContext context, int index) => MemberItem(snapshot.data[index],widget._group),
+          itemCount: snapshot.data.length,)
+        : Center(child: CircularProgressIndicator()));
+      }
+    );
+  }
+}
+
+class MemberItem extends StatelessWidget {
+
+  const MemberItem(this.member,this._group);
+  final User member;
+  final Group _group;
+
+  void choiceAction(String choice){
+    if(choice == Constants._admin){
+      //TODO: make admin
+    } else if(choice == Constants._kick){
+      _group.delUser(u: member);
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+      /*onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return ObjectDetails(member);
+          }
+        );
+      },*/
+
+      child: Container(
+        padding: new EdgeInsets.only(left: 8.0, top: 15.0),
+        child: ListTile(
+          leading: Container(
+            child: (member.img!=null
+              ? Image.network(member.img, width: 30)
+              : Image.asset('images/def_obj_pic.png', width: 30)),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 2.0)
+            )
+          ),
+          title: Text(member.name),
+          trailing: IconButton(
+            icon: new Icon(Icons.more_horiz),
+            onPressed: () {
+              PopupMenuButton<String>(
+                onSelected: choiceAction,
+                itemBuilder: (BuildContext context) {
+                  return Constants.choices.map((String choice){
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );}
+                  ).toList();
+
+                },
+            );},
+          )
+          
+          
+          /*MaterialButton(
+            onPressed: (){
+              _group.delUser(u: member);     
+            },
+            child: Text('Expulsar'),
+            color: Colors.red,
+          ),*/
+        ) //ListTile
+      )
+    ); //GestureDetector
+  }
+}
+
+class Constants{
+  static const String _admin = 'Hacer admin';
+  static const String _kick = 'Expulsar';
+
+  static const List<String> choices = <String>[
+    _admin,
+    _kick
+  ]  ;
+}

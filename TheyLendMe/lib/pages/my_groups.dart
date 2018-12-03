@@ -3,6 +3,9 @@ import 'package:TheyLendMe/pages/create_group.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'group_settings_panel.dart';
+import 'package:flutter_fab_dialer/flutter_fab_dialer.dart';
+import 'join_group.dart';
 
 class MyGroupsPage extends StatefulWidget {
   @override
@@ -11,11 +14,38 @@ class MyGroupsPage extends StatefulWidget {
 
 class _MyGroupsPageState extends State<MyGroupsPage> {
 
-
-
   @override
   Widget build(BuildContext context) {
   
+    var _fabMiniMenuItemList = [
+      new FabMiniMenuItem.noText(
+        new Icon(Icons.add),
+        Colors.orange,
+        4.0,
+        "Crea un grupo",
+        (){
+          showDialog(
+            context: this.context,
+            builder: (BuildContext context){
+              return CreateGroup();
+            },);
+        }, 
+        true),
+      new FabMiniMenuItem.noText(
+        new Icon(Icons.group_add), 
+        Colors.orange, 
+        4.0, 
+        "Unirse a un grupo", 
+        (){
+          showDialog(
+            context: this.context,
+            builder: (BuildContext context){
+              return JoinGroup();
+            }
+          );
+        },
+        true)
+    ];
     return Scaffold(
       appBar: AppBar(
           title: const Text('Mis Grupos'),
@@ -32,17 +62,19 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
             : Center(child: CircularProgressIndicator()));
         }
       ),
-      floatingActionButton: new FloatingActionButton(
+      // Fab menu, crear grupo y unirse a grupo
+      floatingActionButton: new FabDialer(_fabMiniMenuItemList, Colors.orange, new Icon(Icons.group)),
+      /*floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add, color: Colors.black),
         onPressed: (){
           showDialog(
             context: this.context,
             builder: (BuildContext context){
               return CreateGroup();
-            }
           );
         },
-      )
+      )*/
+
     );
   }
 }
@@ -75,8 +107,13 @@ class GroupItem extends StatelessWidget {
           ? Text(group.info)
           : Text('')),
         trailing: MaterialButton(
-          onPressed: /*TODO: mandar al panel*/,
-          child: new Text('Administrar')
+          onPressed: () {
+            Navigator.push(context, new MaterialPageRoute(
+              builder: (BuildContext context) => new GroupSettingsPanel(group)
+            ));
+          },
+          child: new Text('Administrar'),
+          color: Colors.red,
         ),
       )
 
