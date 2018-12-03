@@ -104,8 +104,8 @@ class RequestPost{
     if(email != null){_data['email']=email;}
     if(tfno != null){_data['tfno'] = tfno;}
     if(groupName != null) {_data['groupName'] = groupName;}
-    if(autoLoan != null){_data['autoloan'] = autoLoan ? 1 : 0;}
-    if(private != null)_data['private'] = private ? 1 : 0;
+    if(autoLoan != null){_data['autoloan'] = autoLoan;}
+    if(private != null)_data['private'] = private;
     if(idMemeber != null)_data['idMember'] = idMemeber;
 
     return this;
@@ -134,8 +134,8 @@ String name, String groupName, bool private, bool autoloan}){
     if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
     if(groupName != null){fieldName.add('groupName'); fieldValue.add(groupName);}
     if(amount != null){fieldName.add('amount'); fieldValue.add(amount);}
-    if(private != null){fieldName.add('private'); fieldValue.add(private ? 0 : 1);}
-    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan ? 0 : 1);}
+    if(private != null){fieldName.add('private'); fieldValue.add(private);}
+    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan);}
     if(name != null){fieldName.add('name'); fieldValue.add(name);}
     if(email != null){fieldName.add('email');fieldValue.add(email);}
     if(info != null){fieldName.add('info');fieldValue.add(info);}
