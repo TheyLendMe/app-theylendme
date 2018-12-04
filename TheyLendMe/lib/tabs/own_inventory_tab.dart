@@ -16,7 +16,10 @@ class OwnInventoryTab extends StatefulWidget {
 // CONTENIDO de la pestaña PROPIOS
 class _OwnInventoryTabState extends State<OwnInventoryTab> {
 
-  Future Map<String,List<Obj>> getOwnInventory() async {
+  @override
+  Widget build(BuildContext context) { return Scaffold(); }
+
+  /*Future Map<String,List<Obj>> getOwnInventory() async {
     Map<String,List<Obj>> m;
     m['claimsMeToOthers'] = await UserSingleton().user.getClaimsMeToOthers();
     m['myObjects'] = await UserSingleton().user.getObjects();
@@ -51,7 +54,7 @@ class _OwnInventoryTabState extends State<OwnInventoryTab> {
         },
       )
     );
-  }
+  }*/
 }
 
 // Displays one Object.

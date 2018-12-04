@@ -69,8 +69,13 @@ class _TheDrawerState extends State<TheDrawer> {
                 if(UserSingleton().login) {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context){
-                      return MeDetails(UserSingleton().user);
+                    builder: (BuildContext context){ //FIXME an async is missing here
+                      String tfno;
+                      UserSingleton().user.getEntityInfo().then( //TODO: is this way better than implementing UserSingleton().user.tfno?
+                        (user){
+                          return MeDetails(user.tfno);
+                        }
+                      );
                     }
                   );
                 } else Navigator.of(context).pushNamed("/AuthPage");

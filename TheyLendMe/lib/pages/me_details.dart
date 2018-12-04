@@ -5,9 +5,9 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:fluttertoast/fluttertoast.dart'; //provisonal
 
 class MeDetails extends StatefulWidget {
-  final User _me;
+  final String _tfno;
 
-  MeDetails(this._me);
+  MeDetails(this._tfno);
 
   @override
     _MeDetailsState createState() => _MeDetailsState();
@@ -35,7 +35,7 @@ class _MeDetailsState extends State<MeDetails> {
             alignment: Alignment.center,
             child: CircleAvatar(
               radius: 120.0,
-              backgroundImage: (widget._me.img!=null ? NetworkImage(widget._me.img) : AssetImage('images/def_user_pic.png')),
+              backgroundImage: (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png')),
               backgroundColor: Theme.of(context).accentColor
             )
           ),
@@ -45,8 +45,8 @@ class _MeDetailsState extends State<MeDetails> {
               ),
             padding: const EdgeInsets.all(8.0),
             alignment: Alignment.center,
-            child: (widget._me.name!=null
-              ? Text(widget._me.name, style: Theme.of(context).textTheme.title)
+            child: (UserSingleton().user.name!=null
+              ? Text(UserSingleton().user.name, style: Theme.of(context).textTheme.title)
               : Text(''))
           ),
           Container(
@@ -58,16 +58,16 @@ class _MeDetailsState extends State<MeDetails> {
               height: 42.0,
               onPressed:(){
                 if(UserSingleton().login){
-                  ( widget._me.tfno!=null
-                    ? ContactDialog(widget._me)
+                  ( widget._tfno!=null
+                    ? ContactDialog(UserSingleton().user)
                     : Fluttertoast.showToast(msg: "Función disponible próximamente: añadir teléfono",toastLength: Toast.LENGTH_SHORT) );
                 } else {
                   Navigator.of(context).pushNamed("/AuthPage");
                 }
               },
               color: Theme.of(context).buttonColor,
-              child: ( widget._me.tfno!=null
-                ? Text('Teléfono: ${widget._me.tfno}')
+              child: ( widget._tfno!=null
+                ? Text('Teléfono: ${widget._tfno}')
                 : Text('Añadir número de teléfono', style: TextStyle(color: Colors.white)) ),
             )
           ),
