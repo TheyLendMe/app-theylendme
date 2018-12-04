@@ -557,7 +557,7 @@ class ResponsePost{
         msg: claim['claimMsg'],
         id: int.parse(claim['idClaim']),
         actual: userBuilder(data : claim['loan']['keeper']),
-        next: userBuilder(data : claim['loan']['object']['owner']),
+        next: claim['loan']['object']['owner'] != null ? userBuilder(data : claim['loan']['object']['owner']) : UserSingleton().user,
         fromID: int.parse(claim['loan']['idLoan'])
       );
       claimsList.add(objectBuilder(data: claim['loan']['object'], objState: state));

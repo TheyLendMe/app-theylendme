@@ -16,21 +16,25 @@ class OwnInventoryTab extends StatefulWidget {
 // CONTENIDO de la pestaña PROPIOS
 class _OwnInventoryTabState extends State<OwnInventoryTab> {
 
-  @override
-  Widget build(BuildContext context) { return Scaffold(); }
 
-  /*Future Map<String,List<Obj>> getOwnInventory() async {
-    Map<String,List<Obj>> m;
-    m['claimsMeToOthers'] = await UserSingleton().user.getClaimsMeToOthers();
-    m['myObjects'] = await UserSingleton().user.getObjects();
-    //FIXME: "The method '[]=' isn't defined for the class 'invalid-type'."
-    return m;
+  Future<List<Obj>> getOwnInventory() async {
+    List<Obj> claims = await UserSingleton().user.getClaimsMeToOthers();
+    List<Obj> loans = await UserSingleton().user.getObjects();
+
+    claims.forEach((claim){
+      for(int i = loans.length -1; i <= 0; i--){
+        if(loans[i].objState.idState == claim.objState.fromID){loans.remove(i);}}
+    });
+    List<Obj> l = new List();
+    l.addAll(claims);
+    l.addAll(loans);
+    return l;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder< Map<String,List<Obj>> >(
+      body: FutureBuilder<List<Obj>>(
         future: getOwnInventory(),
         builder: (context,snapshot) {
           return (snapshot.hasData
@@ -54,7 +58,7 @@ class _OwnInventoryTabState extends State<OwnInventoryTab> {
         },
       )
     );
-  }*/
+  }
 }
 
 // Displays one Object.
