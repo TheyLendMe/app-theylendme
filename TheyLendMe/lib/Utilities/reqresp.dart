@@ -367,11 +367,11 @@ class ResponsePost{
           int.parse(data['idObject']), 
           data['owner'] != null ? userBuilder(data :data['owner']) : UserSingleton().user, 
           data['name'],
-          amount: data['amount'] != null ? int.parse(data['amount']): data['available_amount'],
+          amount: data['amount'] != null ? int.parse(data['amount']) :  int.parse(data['max_amount']),
           image : data['imagen'],
           desc: data['descr'],
           date: data['creationDate'],
-          actualAmount: data['available_amount'] != null ? data['available_amount'] : null,
+          actualAmount: data['available_amount'] != null ? data['available_amount'] : int.parse(data['amount']) ,
           objState: objState
           ) 
           : 
@@ -381,9 +381,9 @@ class ResponsePost{
           data['name'],
           image : data['imagen'],
           desc: data['descr'],
-          amount: data['amount'] != null ? int.parse(data['amount']): data['available_amount'],
+          amount: data['amount'] != null ? int.parse(data['amount']) : data['max_amount'],
           date: data['creationDate'],
-          actualAmount: data['available_amount'] != null ? int.parse(data['available_amount']) : null,
+          actualAmount: data['available_amount'] != null ? int.parse(data['available_amount']) : int.parse(data['amount']) ,
           objState: objState
         );
 
@@ -559,7 +559,7 @@ class ResponsePost{
         amount: int.parse(claim['loan']['amount']),
         msg: claim['claimMsg'],
         id: int.parse(claim['idClaim']),
-        actual: userBuilder(data : claim['loan']['keeper']),
+        actual:claim['loan']['keeper'] != null ? userBuilder(data : claim['loan']['keeper']) : UserSingleton().user,
         next: claim['loan']['object']['owner'] != null ? userBuilder(data : claim['loan']['object']['owner']) : UserSingleton().user,
         fromID: int.parse(claim['loan']['idLoan'])
       );
@@ -639,7 +639,7 @@ class ResponsePost{
         //date: loan['date'],
         msg: loan['loanMsg'],
         id: int.parse(loan['idLoan']),
-        actual: userBuilder(data : loan['keeper']),
+        actual: loan['keeper'] != null ? userBuilder(data : loan['keeper']): UserSingleton().user,
         next:mine ? UserSingleton().user : userBuilder(data : loan['object']['owner']),
       );
       loansList.add(objectBuilder(data: loan['object'], objState: state));
@@ -704,7 +704,7 @@ class ResponsePost{
         mines.add(objectBuilder(data: object, user: UserSingleton().user));}
     });
     _data['elses_objs'].forEach((object){
-      if(object != null){mines.add(objectBuilder(data: object));}
+      if(object != null){elses.add(objectBuilder(data: object));}
     });
     map['mines'] = mines;
     map['others'] = elses;

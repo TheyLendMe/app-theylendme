@@ -23,7 +23,7 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image,ObjState objState, int amount = 1, String date, int actualAmount}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image,ObjState objState, int amount = 1, String date, int actualAmount = null}){
     this._name = name;
     this._desc = desc;
     if (image!=null) {
@@ -32,9 +32,9 @@ abstract class Obj{
       _img = null;
     }
     this._amount = amount;
-    this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;
+    this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT, amount: actualAmount == null ? amount : actualAmount) : objState;
     this._date = dateFormat.parse(date);
-    if(actualAmount != null){this.actualAmount = amount;}
+
   }
 
 
