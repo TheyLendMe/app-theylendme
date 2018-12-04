@@ -42,20 +42,26 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
           ),
           alignment: Alignment.center,
-          child: Stack(
-            children:[
-              (widget._object.image!=null
-                ? Image.network(widget._object.image)
-                : Image.asset('images/def_obj_pic.png')),
-              Positioned(
-                right: 0.0,
-                bottom: 0.0,
-                child: new FloatingActionButton(
-                  child: Text("x"+widget._object.amount.toString(), style: Theme.of(context).textTheme.title),
-                  backgroundColor: Theme.of(context).accentColor,
+          child: GestureDetector(
+            child: Stack(
+              children:[
+                (widget._object.image!=null
+                  ? Image.network(widget._object.image)
+                  : Image.asset('images/def_obj_pic.png')),
+                Positioned(
+                  right: 0.0,
+                  bottom: 0.0,
+                  child: new FloatingActionButton(
+                    child: Text("x"+widget._object.amount.toString(), style: Theme.of(context).textTheme.title),
+                    backgroundColor: Theme.of(context).accentColor,
+                  ),
                 ),
-              ),
-            ]
+              ]
+            ),
+            onTap: () {
+              print("desc:");
+              print(widget._object.desc); //FIXME: can't get Obj.desc
+            }
           )
         ),
         Padding(
