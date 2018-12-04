@@ -19,15 +19,17 @@ class _OwnInventoryTabState extends State<OwnInventoryTab> {
 
   Future<List<Obj>> getOwnInventory() async {
     List<Obj> claims = await UserSingleton().user.getClaimsMeToOthers();
-    List<Obj> loans = await UserSingleton().user.getObjects();
-
-    claims.forEach((claim){
-      for(int i = loans.length -1; i <= 0; i--){
-        if(loans[i].objState.idState == claim.objState.fromID){loans.remove(i);}}
-    });
+    List<Obj> objects = (await UserSingleton().user.getEntityInventory())['mines'];
     List<Obj> l = new List();
     l.addAll(claims);
-    l.addAll(loans);
+    for(int i = objects.length-1; i >= 0; i-- ){
+      if(objects[i].actualAmount > 0){
+        l.add(objects[i]);
+      }
+    }
+
+   
+  
     return l;
   }
 

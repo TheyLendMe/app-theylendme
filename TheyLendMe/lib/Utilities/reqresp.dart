@@ -371,6 +371,7 @@ class ResponsePost{
           image : data['imagen'],
           desc: data['descr'],
           date: data['creationDate'],
+          actualAmount: data['available_amount'] != null ? data['available_amount'] : null,
           objState: objState
           ) 
           : 
@@ -382,6 +383,7 @@ class ResponsePost{
           desc: data['descr'],
           amount: data['amount'] != null ? int.parse(data['amount']): data['available_amount'],
           date: data['creationDate'],
+          actualAmount: data['available_amount'] != null ? int.parse(data['available_amount']) : null,
           objState: objState
         );
 
@@ -698,7 +700,8 @@ class ResponsePost{
     List<Obj> mines = new List();
     List<Obj> elses = new List();
     _data['mine_objs'].forEach((object){
-      if(object != null){mines.add(objectBuilder(data: object, user: UserSingleton().user));}
+      if(object != null){
+        mines.add(objectBuilder(data: object, user: UserSingleton().user));}
     });
     _data['elses_objs'].forEach((object){
       if(object != null){mines.add(objectBuilder(data: object));}
