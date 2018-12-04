@@ -16,11 +16,26 @@ class OthersInventoryTab extends StatefulWidget {
 // CONTENIDO de la pestaña AJENOS
 class _OthersInventoryTabState extends State<OthersInventoryTab> {
 
+  Future<List<Obj>> getOthersInventory() async {
+    List<Obj> claims = await UserSingleton().user.getClaimsOthersToMe();
+    List<Obj> objects = (await UserSingleton().user.getEntityInventory())['others']; //FIXME
+    List<Obj> l = new List();
+
+    l.addAll(claims);
+    for(int i = objects.length-1; i >= 0; i-- ){
+      if(objects[i].actualAmount > 0){
+        l.add(objects[i]);
+      }
+    }
+
+    return l;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<Obj>>(
-        future: UserSingleton().user.getObjects(), //TODO: Future Map<String,List<Obj>> getOthersInventory()
+        future: getOthersInventory(),
         builder: (context,snapshot) {
           return (snapshot.hasData
           ?

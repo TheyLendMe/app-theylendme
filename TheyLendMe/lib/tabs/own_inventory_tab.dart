@@ -21,6 +21,7 @@ class _OwnInventoryTabState extends State<OwnInventoryTab> {
     List<Obj> claims = await UserSingleton().user.getClaimsMeToOthers();
     List<Obj> objects = (await UserSingleton().user.getEntityInventory())['mines'];
     List<Obj> l = new List();
+
     l.addAll(claims);
     for(int i = objects.length-1; i >= 0; i-- ){
       if(objects[i].actualAmount > 0){
@@ -28,8 +29,6 @@ class _OwnInventoryTabState extends State<OwnInventoryTab> {
       }
     }
 
-   
-  
     return l;
   }
 
