@@ -55,7 +55,10 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
         builder: (context, snapshot) {
           return (snapshot.hasData
             ? ListView.builder(
-                itemBuilder: (BuildContext context, int index) => GroupItem(snapshot.data[index]),
+                itemBuilder: (BuildContext context, int index) => GroupItem(
+                  snapshot.data[index], 
+                  snapshot.data[index].imAdmin
+                ),
                 itemCount: snapshot.data.length
               )
             : Center(child: CircularProgressIndicator()));
@@ -67,10 +70,55 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
   }
 }
 
+
 // Displays one Group.
 class GroupItem extends StatelessWidget {
 
-  const GroupItem(this.group);
+  const GroupItem(this.group, this.admin);
+  final Group group;
+  final bool admin;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return GroupDetails(group);
+          }
+        );
+      },
+      child: ListTile(
+        leading: CircleAvatar(
+            child: (group.img!=null ? Text('') : Text(getFirstCharacter(group.name), style: TextStyle(color: Colors.black))),
+            backgroundImage: (group.img!=null ? NetworkImage(group.img) : null),
+            backgroundColor: Theme.of(context).accentColor
+          ),
+        title: Text(group.name),
+        subtitle: (group.info!=null
+          ? Text(group.info)
+          : Text('')),
+        trailing: (admin 
+          ? MaterialButton(
+            onPressed: () {
+              Navigator.push(context, new MaterialPageRoute(
+                builder: (BuildContext context) => new GroupSettingsPanel(group)
+              ));
+            },
+            child: new Text('Administrar'),
+            color: Colors.red,)
+          : null
+        ),
+      ),
+    );
+  }
+}
+
+/*
+class GroupAdminItem extends StatelessWidget {
+
+  const GroupAdminItem(this.group);
   final Group group;
 
   @override
@@ -102,12 +150,13 @@ class GroupItem extends StatelessWidget {
           },
           child: new Text('Administrar'),
           color: Colors.red,
+          
         ),
       )
 
     );
   }
-}
+}*/
 
 String getFirstCharacter(String getFirstCharacter){
   //Un poco feo [\u{1F600}-\U+E007F]
