@@ -20,6 +20,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
   
     var _fabMiniMenuItemList = [
       new FabMiniMenuItem.noText(
+        
         new Icon(Icons.add),
         Colors.orange,
         4.0,
@@ -65,7 +66,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
         }
       ),
       // Fab menu, crear grupo y unirse a grupo
-      floatingActionButton: new FabDialer(_fabMiniMenuItemList, Colors.orange, new Icon(Icons.group)),
+      floatingActionButton: new FabDialer(_fabMiniMenuItemList, Colors.orange, new Icon(Icons.group),new Icon(Icons.group),180,true),
     );
   }
 }
