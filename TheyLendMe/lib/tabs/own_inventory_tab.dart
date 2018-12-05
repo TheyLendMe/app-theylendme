@@ -113,11 +113,11 @@ class ObjectItem extends StatelessWidget {
 }
 
 Widget textNameAmount(object, context) {
-  if (object.amount>1)
+  if (object.actualAmount>1)
     return RichText( text: TextSpan(
       children:[
         TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15)),
-        TextSpan(text: ' (x'+object.amount.toString()+')', style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15, color: Colors.grey[500]))
+        TextSpan(text: ' (x'+object.actualAmount.toString()+')', style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15, color: Colors.grey[500]))
       ]
     ));
   else

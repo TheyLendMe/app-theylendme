@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 //TODO: MyObjectDetails, from MyInventory
 //      (en vez de "Contactar" y "Pedir prestado", "Borrar" y, en un futuro, "Modificar")
+//      (actualAmount)
 
 class ObjectDetails extends StatefulWidget {
   final Obj _object;

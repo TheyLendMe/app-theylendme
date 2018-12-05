@@ -19,7 +19,7 @@ class _MyInventoryPageState extends State<MyInventoryPage> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Mi inventario', style: TextStyle(color: Colors.white)),
+            title: const Text('Mi Inventario', style: TextStyle(color: Colors.white)),
             bottom: TabBar(
               tabs: [
                 Tab(icon: Text('PROPIOS', style: TextStyle(color: Colors.white))),
