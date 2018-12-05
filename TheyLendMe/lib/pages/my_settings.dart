@@ -51,7 +51,9 @@ class _SettingsPageState extends State<MySettingsPage> {
   Widget build(BuildContext context) {
     //TODO: secciones: Perfil, Seguridad (contraseña)
     return Scaffold(
-
+      appBar: AppBar(
+        title: const Text('Mis Ajustes'),
+      ),
       body: Container(
         padding: EdgeInsets.all(20.0),
         child: Form(
