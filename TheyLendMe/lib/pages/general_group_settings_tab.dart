@@ -9,24 +9,31 @@ class GeneralGroupSettingsTab extends StatefulWidget {
   GeneralGroupSettingsTab(this._group);
 
   @override
-  _GeneralGroupSettingsTabState createState() => _GeneralGroupSettingsTabState();
+  GeneralGroupSettingsTabState createState() => GeneralGroupSettingsTabState(_group);
 }
 
-class _GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
-
+class GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
+  Group group;
+  bool private;
+  GeneralGroupSettingsTabState(this.group){private = group.private;}
   @override
   Widget build (BuildContext context){
-    
     return Scaffold(
       body: ListView(
         children: [
           SwitchListTile(
             title: const Text('Grupo privado'),
-            value: widget._group.private,
-            onChanged: (bool newValue) { //FIXME: si se cambia el valor no se mantiene
-                widget._group.updateInfo(private: newValue);
-                widget._group.private = newValue;
-                setState(() {});
+            value: private,
+            onChanged: (bool newValue) async {
+                setState(() {private = newValue;}); 
+                group.updateInfo(private: newValue).then((error){
+                  if(!error){
+                     group.private = private;
+                  }else{
+                    setState(() {private = group.private;}); 
+                  }
+                });
+
             },
           ),
           ListTile(
