@@ -57,19 +57,26 @@ class _MeDetailsState extends State<MeDetails> {
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
               height: 42.0,
+              color: Theme.of(context).buttonColor,
+              child: ( widget._tfno!=''
+                ? Text('Teléfono: ${widget._tfno}', style: TextStyle(color: Colors.white))
+                : Text('Añadir número de teléfono', style: TextStyle(color: Colors.white)) ),
               onPressed:(){
                 if(UserSingleton().login){
-                  ( widget._tfno!=''
-                    ? ContactDialog(UserSingleton().user) //FIXME: no abre ContactDialog ni AddNumberDialog
-                    : AddNumberDialog(UserSingleton().user) );
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      if(widget._tfno!='') {
+                        return ContactDialog(UserSingleton().user);
+                      } else {
+                        return AddNumberDialog(UserSingleton().user);
+                      }
+                    }
+                  );
                 } else {
                   Navigator.of(context).pushNamed("/AuthPage");
                 }
               },
-              color: Theme.of(context).buttonColor,
-              child: ( widget._tfno!=''
-                ? Text('Teléfono: ${widget._tfno}')
-                : Text('Añadir número de teléfono', style: TextStyle(color: Colors.white)) ),
             )
           ),
           MaterialButton(
