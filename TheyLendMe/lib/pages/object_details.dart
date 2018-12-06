@@ -23,6 +23,7 @@ class ObjectDetails extends StatefulWidget {
 
 class _ObjectDetailsState extends State<ObjectDetails> {
   int _currentAmount = 1;
+  bool visibleDesc = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +40,32 @@ class _ObjectDetailsState extends State<ObjectDetails> {
           ]
         ),
         Container(
-          constraints: BoxConstraints.expand(
-            height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
-          ),
+          constraints: BoxConstraints.expand( height: Theme.of(context).textTheme.display1.fontSize*1.1+200.0 ),
           alignment: Alignment.center,
           child: GestureDetector(
             child: Stack(
               children:[
                 (widget._object.image!=null
-                  ? Image.network(widget._object.image)
-                  : Image.asset('images/def_obj_pic.png')),
+                  ? Center(child: Image.network(widget._object.image))
+                  : Center(child: Image.asset('images/def_obj_pic.png'))),
+                (visibleDesc
+                  ? Container(
+                    constraints: BoxConstraints.expand(),
+                    decoration: BoxDecoration(
+                      color: Colors.black45,
+                    ),
+                    child: (widget._object.desc!=''
+                      ? Text('\n'+widget._object.desc+'\n',
+                        style: TextStyle(fontSize:Theme.of(context).textTheme.subtitle.fontSize,color:Colors.white),
+                        textAlign: TextAlign.center
+                      )
+                      : Text('\n'+widget._object.name+'\n',
+                        style: TextStyle(fontSize:Theme.of(context).textTheme.subtitle.fontSize,color:Colors.white),
+                        textAlign: TextAlign.center
+                      )
+                    )
+                  ) : Container(child: Text(''))
+                ),
                 Positioned(
                   right: 0.0,
                   bottom: 0.0,
@@ -60,8 +77,9 @@ class _ObjectDetailsState extends State<ObjectDetails> {
               ]
             ),
             onTap: () {
-              print("desc:");
-              print(widget._object.desc); //FIXME: can't get Obj.desc
+              setState( () {
+                if (visibleDesc) {visibleDesc=false;} else {visibleDesc=true;}
+              });
             }
           )
         ),
