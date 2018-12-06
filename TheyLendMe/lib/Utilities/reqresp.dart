@@ -230,27 +230,7 @@ class ResponsePost{
   List<Obj> defaultObjects(List<dynamic> objects, ObjType objType){
     List<Obj> objs = new List();
     objects.forEach((object){
-      Obj obj;
-      obj = objType == ObjType.USER_OBJECT ? 
-      ///Pedir a victor que incluyaa nombres de los owners
-        new UserObject(
-          int.parse(object['idObject']),
-          userBuilder(data :object['owner']),
-          object['name'],
-          image : object['imagen'],
-          amount :int.parse(object['amount']),
-          date: object['creationDate'],
-  
-        ) : 
-        new GroupObject(
-          int.parse(object['idObject']),
-          groupBuilder(data: object['owner']),
-          object['name'],
-          image : object['imagen'],
-          amount : int.parse(object['amount']),
-          date: object['creationDate']
-        );
-      objs.add(obj);
+      objs.add(objectBuilder(data : object, forUser: objType == ObjType.USER_OBJECT));
     });
     return objs;
       
