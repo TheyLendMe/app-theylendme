@@ -34,12 +34,13 @@ class _ContactDialogState extends State<ContactDialog> {
                     ? SimpleDialogOption(
                       onPressed: () {launch('mailto:${snapshot.data.email}');},
                       child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 50.0),
-                    ): Text('') //esto nunca se mostrará porque siempre hay email
+                    ): Text('')
                   ),
                   (snapshot.data.tfno!=''
                     ? SimpleDialogOption(
-                      //TODO: check first if it's on WhatsApp
-                      onPressed: () {launch('https://wa.me/${snapshot.data.tfno}/?text=Hola!%20He%20visto%20algo%20tuyo%20en%20TheyLendMe%20que%20te%20quería%20pedir%20prestado:');},
+                      //                                   ## Spain's phone number prefix
+                      onPressed: () {launch('https://wa.me/34${snapshot.data.tfno}/?text=Hola!%20He%20visto%20algo%20tuyo%20en%20TheyLendMe%20que%20te%20quería%20pedir%20prestado:');},
+                      // (if it isn't on WhatsApp, Whatsapp itself warns the user)
                       child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 50.0),
                     ): Text('')
                   ),

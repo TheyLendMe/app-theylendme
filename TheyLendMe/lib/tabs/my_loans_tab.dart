@@ -83,9 +83,6 @@ class LentItem extends StatelessWidget {
         ),
         subtitle: Column(
           children: [
-            (lentObject.desc!=null
-              ? Text(lentObject.desc)
-              : Text('')),
             Row(
               children: [
                 FlatButton(

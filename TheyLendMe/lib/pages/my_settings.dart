@@ -51,7 +51,9 @@ class _SettingsPageState extends State<MySettingsPage> {
   Widget build(BuildContext context) {
     //TODO: secciones: Perfil, Seguridad (contraseña)
     return Scaffold(
-
+      appBar: AppBar(
+        title: const Text('Mis Ajustes'),
+      ),
       body: Container(
         padding: EdgeInsets.all(20.0),
         child: Form(
@@ -110,8 +112,7 @@ class _EntryItemState extends State<EntryItem> {
       ),
       validator: widget.entry.validator,
       onSaved: (String value) {
-        //this._email = value; //TODO: pasar '_email' como propiedad de widget.entry
-        //FIXME: Error: Setter not found: '_email'.
+        //TODO: UserSingleton().user.updateInfo()
       }
     );
   }
