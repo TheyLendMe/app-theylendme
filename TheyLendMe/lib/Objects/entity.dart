@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import 'package:TheyLendMe/Utilities/errorHandler.dart';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 
 abstract class Entity{
 

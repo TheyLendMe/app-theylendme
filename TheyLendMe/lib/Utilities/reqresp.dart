@@ -408,7 +408,7 @@ class ResponsePost{
       u.add((userBuilder(
         data : userInfo['user'], 
         admin: userInfo['admin'] == "1",
-        idMember: int.parse(userInfo['admin'])
+        idMember: int.parse(userInfo['idMember'])
         ))
       );
     });

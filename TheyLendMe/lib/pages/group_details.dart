@@ -91,17 +91,23 @@ class GroupDetailsState extends State<GroupDetails> {
           MaterialButton(
             height: 60.0,
             onPressed:(){
-              Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
-              /*if(UserSingleton().user.admin){ //FIXME: Another exception was thrown: Failed assertion: boolean expression must not be null
-              Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
-              ));
-              } else {
+
+
+              UserSingleton().user.imAdmin(widget._group)
+              .then<void>((bool value){
+                if(value){
                 Navigator.push(context, new MaterialPageRoute(
-                  builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
+                  builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
                 ));
-              };*/
-            },
+
+                } else {
+                  Navigator.push(context, new MaterialPageRoute(
+                    builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
+                  ));
+                }
+              }
+              );
+              },
             color: Theme.of(context).indicatorColor,
             child: Text('Ver Objetos', style: TextStyle(color: Colors.black)),
           )
