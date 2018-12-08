@@ -52,12 +52,7 @@ class _CreateGroupObjectState extends State<CreateGroupObject> {
         }
       });
     }
-/*
-  void galleryPicker() async{
-   
-  }
-
- 
+/* 
   void cameraPicker() async{
     _image = (await PickImage.getImageFromCamera());
   }
