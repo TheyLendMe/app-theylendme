@@ -28,8 +28,7 @@ class _TheObjectsTabState extends State<TheObjectsTab> {
             if(snapshot.hasData){
               if(listOfObject == null){listOfObject = new ObjectTile(objects: snapshot.data);}
               return listOfObject;
-            }
-            return Center(child: CircularProgressIndicator());
+            } else { return Center(child: CircularProgressIndicator()); }
           }
         ),
       )

@@ -21,6 +21,8 @@ abstract class Entity{
     if(img != null) {_img = endpoint + img;} else {_img = null;}
     _tfno = tfno;
     _email = email;
+   
+
   }
 
   ///Getters and setters
@@ -215,7 +217,7 @@ class User extends Entity{
       userInfo: true,
       idUser: this.idEntity
     ).doRequest(context:context);
-    Map<String,List<Obj>> map = res.groupInventory();
+    Map<String,List<Obj>> map = res.userInventory();
     return map;
   }
 

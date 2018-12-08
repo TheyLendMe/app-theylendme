@@ -48,9 +48,9 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
     ];
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Mis Grupos'),
-          //TODO: searchBar
-        ),
+        title: const Text('Mis Grupos'),
+        //TODO: searchBar
+      ),
       body: FutureBuilder<List<Group>>(
         future: UserSingleton().user.getGroupsImMember(),
         builder: (context, snapshot) {
