@@ -87,7 +87,7 @@ class User extends Entity{
       img: img
 
     ).doRequest(context: context);
-    Auth.changeInfoOfUser();
+    //Auth.changeInfoOfUser();
     return res.hasError;
   }
   Future<bool> createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
@@ -300,7 +300,15 @@ class Group extends Entity{
     ).doRequest(context: context);
     return response.joinRequestsBuilder(this);
   }
-
+  Future<bool> acceptJoinRequest(JoinRequest joinRequest, {var context})async{
+    ResponsePost response = await new RequestPost("validateMember").dataBuilder(
+        userInfo: true,
+        idRequest: joinRequest.id,
+    ).doRequest(context: context);
+    return response.hasError;
+  }
+  Future<bool> rejectJoinRequest(JoinRequest joinRequest, {var context}) async{
+  }
   Future<List<User>> getGroupMembers({var context}) async{
     ResponsePost response = await new RequestPost("getGroupMembers").dataBuilder(
         idGroup: this.idEntity,
@@ -309,7 +317,6 @@ class Group extends Entity{
     ).doRequest(context: context);
     return response.groupMembersBuilder();
   }
-
   ///Peticiones de objetos
   @override
   Future<List<Obj>> getObjects({var context}) async{
@@ -359,7 +366,6 @@ class Group extends Entity{
     ).doRequest(context:context);
     return res.claimsGroupObjectBuilder(this,mine : true);
   }
-
   @override
   Future<List<GroupObject>> getClaimsOthersToMe({var context}) async{
     ResponsePost res = await new RequestPost("getGroupClaims").dataBuilder(
@@ -368,14 +374,7 @@ class Group extends Entity{
     ).doRequest(context:context);
     return res.claimsGroupObjectBuilder(this,mine : false);
   }
-  Future<bool> kickUser(User user, {var context}) async{
-    ResponsePost res = await new RequestPost("kickUser").dataBuilder(
-      userInfo: true,
-      idMemeber: user.idEntity,
-      idGroup: this._idEntity,
-    ).doRequest(context:context);
-    return res.hasError;
-  }
+  ///Necesitas pasarle el idMember que tienes en ese momento
   Future<bool>  leaveGroup(User user, {var context}) async{
     ResponsePost res = await new RequestPost("leaveGroup").dataBuilder(
       userInfo: true,
@@ -395,7 +394,14 @@ class Group extends Entity{
   
 
   Future addUser(Entity newUser) async{}
-  Future delUser({User u}) async{}
+  Future delUser(User user, {var context}) async{
+     ResponsePost res = await new RequestPost("kickUser").dataBuilder(
+      userInfo: true,
+      idMemeber: user.idEntity,
+      idGroup: this._idEntity,
+    ).doRequest(context:context);
+    return res.hasError;
+  }
 
   @override
   Future<Group> getEntityInfo({var context})async{
