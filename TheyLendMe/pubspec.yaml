@@ -1,7 +1,7 @@
 name: TheyLendMe
 description: App de préstamos entre individuos y grupos.
 
-version: 1.1.0-dev # versión de nuestra app
+version: 1.1.0 # versión de nuestra app
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -27,6 +27,7 @@ dependencies:
   flutter_image_compress: ^0.2.1
   path_provider: ^0.4.1
   intl: ^0.15.7
+  fab_dialer: ^0.1.3
 
 dev_dependencies:
   flutter_test:
