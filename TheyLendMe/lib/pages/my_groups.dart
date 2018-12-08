@@ -101,14 +101,17 @@ class GroupItem extends StatelessWidget {
           ? Text(group.info)
           : Text('')),
         trailing: (admin 
-          ? MaterialButton(
+          ? FlatButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0)
+            ),
             onPressed: () {
               Navigator.push(context, new MaterialPageRoute(
                 builder: (BuildContext context) => new GroupSettingsPanel(group)
               ));
             },
             child: new Text('Administrar'),
-            color: Colors.red,)
+            color: Theme.of(context).accentColor,)
           : null
         ),
       ),
