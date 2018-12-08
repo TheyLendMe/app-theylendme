@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class GroupMembersTab extends StatefulWidget {
 
@@ -42,7 +41,7 @@ class MemberItem extends StatelessWidget {
     if(choice == Constants._admin){
       _group.addAdmin(member); //FIXME: idmember = 0
     } else if(choice == Constants._kick){
-      _group.delUser(u: member);
+      _group.delUser(member);
     }
   }
   @override
@@ -80,36 +79,10 @@ class MemberItem extends StatelessWidget {
             },
             onSelected: choiceAction,
             icon: new Icon(Icons.more_horiz),
-          ) /*IconButton(
-            icon: new Icon(Icons.more_horiz),
-            onPressed: () {
-              Fluttertoast.showToast(msg:'pudrete',toastLength: Toast.LENGTH_LONG);
-              showMenu<String>(
-                initialValue: ,
-                context: context,
-                items: Constants.choices.map((String choice){
-                    return new PopupMenuItem<String>(
-                      value: choice,
-                      child: new Text(choice),
-                    );}).toList(),
-              );}
-              new PopupMenuButton<String>(
-                onSelected: choiceAction,
-                itemBuilder: (BuildContext context) {
-                  return Constants.choices.map((String choice){
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );}
-                  ).toList();
-
-                },
-            );},*/
-          //),
-
-        ) //ListTile
+          ) 
+        ) 
       )
-    ); //GestureDetector
+    );
   }
 }
 

@@ -53,7 +53,7 @@ class GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
             title: Text('Abandonar grupo'),
             trailing: MaterialButton(
               onPressed: (){
-                widget._group.delUser(u: UserSingleton().user);
+                widget._group.delUser(UserSingleton().user);
               },
               color: Colors.red,
               child: Text('Abandonar'),
