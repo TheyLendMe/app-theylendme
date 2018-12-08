@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class GroupMembersTab extends StatefulWidget {
 
@@ -26,18 +27,20 @@ class _GroupMembersTabState extends State<GroupMembersTab> {
         : Center(child: CircularProgressIndicator()));
       }
     );
+
+    
   }
 }
 
 class MemberItem extends StatelessWidget {
 
-  const MemberItem(this.member,this._group);
   final User member;
   final Group _group;
+  const MemberItem(this.member,this._group);
 
   void choiceAction(String choice){
     if(choice == Constants._admin){
-      //TODO: make admin
+      _group.addAdmin(member);
     } else if(choice == Constants._kick){
       _group.delUser(u: member);
     }
@@ -66,10 +69,31 @@ class MemberItem extends StatelessWidget {
             )
           ),
           title: Text(member.name),
-          trailing: IconButton(
+          trailing: PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return Constants.choices.map((String choice){
+                return new PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+            onSelected: choiceAction,
+            icon: new Icon(Icons.more_horiz),
+          ) /*IconButton(
             icon: new Icon(Icons.more_horiz),
             onPressed: () {
-              PopupMenuButton<String>(
+              Fluttertoast.showToast(msg:'pudrete',toastLength: Toast.LENGTH_LONG);
+              showMenu<String>(
+                initialValue: ,
+                context: context,
+                items: Constants.choices.map((String choice){
+                    return new PopupMenuItem<String>(
+                      value: choice,
+                      child: new Text(choice),
+                    );}).toList(),
+              );}
+              new PopupMenuButton<String>(
                 onSelected: choiceAction,
                 itemBuilder: (BuildContext context) {
                   return Constants.choices.map((String choice){
@@ -80,17 +104,9 @@ class MemberItem extends StatelessWidget {
                   ).toList();
 
                 },
-            );},
-          )
-          
-          
-          /*MaterialButton(
-            onPressed: (){
-              _group.delUser(u: member);     
-            },
-            child: Text('Expulsar'),
-            color: Colors.red,
-          ),*/
+            );},*/
+          //),
+
         ) //ListTile
       )
     ); //GestureDetector
@@ -98,11 +114,11 @@ class MemberItem extends StatelessWidget {
 }
 
 class Constants{
-  static const String _admin = 'Hacer admin';
-  static const String _kick = 'Expulsar';
+  static final String _admin = 'Hacer admin';
+  static final String _kick = 'Expulsar';
 
-  static const List<String> choices = <String>[
+  static final List<String> choices = <String>[
     _admin,
     _kick
-  ]  ;
+]  ;
 }
