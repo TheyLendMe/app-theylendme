@@ -18,7 +18,7 @@ class _GroupMembersTabState extends State<GroupMembersTab> {
   Widget build (BuildContext context){
 
     return FutureBuilder<List<User>>(
-      future: widget._group.getGroupMembers(),
+      future: widget._group.getGroupMembers(),//FIXME: aqui hago la peticion
       builder: (context,snapshot) {
         return (snapshot.hasData
         ? ListView.builder(
@@ -40,7 +40,7 @@ class MemberItem extends StatelessWidget {
 
   void choiceAction(String choice){
     if(choice == Constants._admin){
-      _group.addAdmin(member);
+      _group.addAdmin(member); //FIXME: idmember = 0
     } else if(choice == Constants._kick){
       _group.delUser(u: member);
     }
