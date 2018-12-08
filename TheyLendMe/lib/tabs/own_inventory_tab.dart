@@ -7,39 +7,46 @@ import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-//TODO: alinear todo (como una tabla)
-
-class MyObjectsPage extends StatefulWidget {
-
+// Pestaña PROPIOS
+class OwnInventoryTab extends StatefulWidget {
     @override
-    _MyObjectsPageState createState() => _MyObjectsPageState();
+    _OwnInventoryTabState createState() => _OwnInventoryTabState();
 }
 
-class _MyObjectsPageState extends State<MyObjectsPage> {
+// CONTENIDO de la pestaña PROPIOS
+class _OwnInventoryTabState extends State<OwnInventoryTab> {
+
+
+  Future<List<Obj>> getOwnInventory() async {
+    List<Obj> claims = await UserSingleton().user.getClaimsMeToOthers();
+    List<Obj> objects = (await UserSingleton().user.getEntityInventory())['mines'];
+    List<Obj> l = new List();
+
+    l.addAll(claims);
+    for(int i = objects.length-1; i >= 0; i-- ){
+      if(objects[i].actualAmount > 0){
+        l.add(objects[i]);
+      }
+    }
+
+    return l;
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-          title: const Text('Mis Objetos'),
-          //TODO: searchBar
-        ),
       body: FutureBuilder<List<Obj>>(
-          future: UserSingleton().user.getObjects(),
-          builder: (context,snapshot) {
-            return (snapshot.hasData
-            ?
-            ListView.builder(
-              itemBuilder: (BuildContext context, int index) => ObjectItem(snapshot.data[index]),
-              itemCount: snapshot.data.length
-            )
-
-            : Center(child: CircularProgressIndicator()));
-          }
+        future: getOwnInventory(),
+        builder: (context,snapshot) {
+          return (snapshot.hasData
+          ?
+          ListView.builder(
+            itemBuilder: (BuildContext context, int index) => ObjectItem(snapshot.data[index]),
+            itemCount: snapshot.data.length
+          )
+          : Center(child: CircularProgressIndicator())); //TODO: what to do if there's no user objects?
+        }
       ),
-
-      
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add, color: Colors.black),
         onPressed: (){
@@ -50,7 +57,7 @@ class _MyObjectsPageState extends State<MyObjectsPage> {
             }
           );
         },
-      ),
+      )
     );
   }
 }
@@ -106,11 +113,11 @@ class ObjectItem extends StatelessWidget {
 }
 
 Widget textNameAmount(object, context) {
-  if (object.amount>1)
+  if (object.actualAmount>1)
     return RichText( text: TextSpan(
       children:[
         TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15)),
-        TextSpan(text: ' (x'+object.amount.toString()+')', style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15, color: Colors.grey[500]))
+        TextSpan(text: ' (x'+object.actualAmount.toString()+')', style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15, color: Colors.grey[500]))
       ]
     ));
   else
@@ -125,9 +132,9 @@ Text textState(object) {
   if (object.objState.state == StateOfObject.DEFAULT)
     return Text( 'Disponible', style: TextStyle(color: Colors.green) );
   else if (object.objState.state == StateOfObject.LENT)
-    return Text( 'Prestado', style: TextStyle(color: Colors.red) );
+    return Text( 'Prestado', style: TextStyle(color: Colors.yellow) );
   else
-    return Text( 'Reclamado', style: TextStyle(color: Colors.yellow) );
+    return Text( 'Reclamado', style: TextStyle(color: Colors.red) );
 }
 
 String getFirstCharacter(String getFirstCharacter){

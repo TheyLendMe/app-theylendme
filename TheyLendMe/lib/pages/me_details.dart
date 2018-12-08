@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
+import 'package:TheyLendMe/pages/add_number_dialog.dart';
 import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-class UserDetails extends StatefulWidget {
-  final User _user;
+class MeDetails extends StatefulWidget {
+  final String _tfno;
+  final String _name;
 
-  UserDetails(this._user);
+  MeDetails(this._tfno,this._name);
 
   @override
-    _UserDetailsState createState() => _UserDetailsState();
+    _MeDetailsState createState() => _MeDetailsState();
 }
 
-class _UserDetailsState extends State<UserDetails> {
+class _MeDetailsState extends State<MeDetails> {
     @override
     Widget build(BuildContext context) {
       return SimpleDialog(
@@ -34,7 +36,7 @@ class _UserDetailsState extends State<UserDetails> {
             alignment: Alignment.center,
             child: CircleAvatar(
               radius: 120.0,
-              backgroundImage: (widget._user.img!=null ? NetworkImage(widget._user.img) : AssetImage('images/def_user_pic.png')),
+              backgroundImage: (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png')),
               backgroundColor: Theme.of(context).accentColor
             )
           ),
@@ -44,9 +46,9 @@ class _UserDetailsState extends State<UserDetails> {
               ),
             padding: const EdgeInsets.all(8.0),
             alignment: Alignment.center,
-            child: (widget._user.name!=null
-              ? Text(widget._user.name, style: Theme.of(context).textTheme.title)
-              : Text(''))
+            child: (widget._name!=''
+              ? Text(widget._name, style: Theme.of(context).textTheme.title)
+              : Text('NombreUsuario', style: Theme.of(context).textTheme.title))
           ),
           Container(
             constraints: BoxConstraints.expand(
@@ -55,32 +57,33 @@ class _UserDetailsState extends State<UserDetails> {
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
               height: 42.0,
+              color: Theme.of(context).buttonColor,
+              child: ( widget._tfno!=''
+                ? Text('Teléfono: ${widget._tfno}', style: TextStyle(color: Colors.white))
+                : Text('Añadir número de teléfono', style: TextStyle(color: Colors.white)) ),
               onPressed:(){
                 if(UserSingleton().login){
                   showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return ContactDialog(widget._user);
-                  }
-                );} else{
+                    context: context,
+                    builder: (BuildContext context){
+                      if(widget._tfno!='') {
+                        return ContactDialog(UserSingleton().user);
+                      } else {
+                        return AddNumberDialog(UserSingleton().user);
+                      }
+                    }
+                  );
+                } else {
                   Navigator.of(context).pushNamed("/AuthPage");
                 }
               },
-              color: Theme.of(context).buttonColor,
-              child: Text('Contactar', style: TextStyle(color: Colors.white)),
             )
           ),
           MaterialButton(
             height: 60.0,
-            onPressed:(){
-              Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) {
-                  
-                },
-              ));
-            },
+            onPressed:(){ Navigator.of(context).pushNamed("/MyInventoryPage"); },
             color: Theme.of(context).indicatorColor,
-            child: Text('Ver Objetos', style: TextStyle(color: Colors.black)),
+            child: Text('Mis Objetos', style: TextStyle(color: Colors.black)),
           )
         ]
       );

@@ -93,7 +93,7 @@ class GroupDetailsState extends State<GroupDetails> {
               ));
             },
             color: Theme.of(context).indicatorColor,
-            child: Text('Ver Inventario', style: TextStyle(color: Theme.of(context).primaryColor)),
+            child: Text('Ver Objetos', style: TextStyle(color: Theme.of(context).primaryColor)),
           )
         ]
       );

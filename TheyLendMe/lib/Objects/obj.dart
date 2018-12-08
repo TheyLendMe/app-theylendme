@@ -23,7 +23,7 @@ abstract class Obj{
 
 
   ///Constructor
-  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image,ObjState objState, int amount = 1, String date}){
+  Obj(this._type,this._idObject,this.owner,String name,{String desc,String image,ObjState objState, int amount = 1, String date, int actualAmount = null}){
     this._name = name;
     this._desc = desc;
     if (image!=null) {
@@ -32,8 +32,9 @@ abstract class Obj{
       _img = null;
     }
     this._amount = amount;
-    this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT) : objState;
+    this._objState = objState == null ? new ObjState(state: StateOfObject.DEFAULT, amount: actualAmount == null ? amount : actualAmount) : objState;
     this._date = dateFormat.parse(date);
+
   }
 
 
@@ -57,6 +58,8 @@ abstract class Obj{
   int get idObject => _idObject;
   ObjState get objState => _objState;
   ObjType get type => _type;
+  get actualAmount => objState.amount;
+  set actualAmount(int actualAmount) => objState.amount = amount;
   set date(DateTime date) => _date = date;
   set name(String name) => this._name = name;
   set desc(String desc) => this._desc = desc;
@@ -79,8 +82,8 @@ abstract class Obj{
 
 class UserObject extends Obj{
   ///Constructor
-  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, String date})
-  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount, date : date);
+  UserObject(int idObject, User owner, String name, {String desc, String image ="", ObjState objState, int amount, String date, int actualAmount})
+  : super(ObjType.USER_OBJECT, idObject, owner, name, desc: desc, image: image, objState: objState, amount:amount, date : date, actualAmount : actualAmount);
   
   Future<bool> lendObj({int idRequest, var context}) async {
     ResponsePost res = await new RequestPost("lendObject").dataBuilder(
@@ -91,7 +94,7 @@ class UserObject extends Obj{
   }
   ///If the user does not set any amount, it will ask just for one object
   
-  Future<bool> requestObj({int amount = 1, String msg, var context}) async {
+  Future<bool> requestObj({int amount = 1, String msg, var context, bool asUser = true}) async {
     ResponsePost res = await new RequestPost("requestObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
@@ -160,8 +163,8 @@ class UserObject extends Obj{
 class GroupObject extends Obj{
   
   //Constructor
-  GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, String date}) 
-  : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date);
+  GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, String date, int actualAmount }) 
+  : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date, actualAmount : actualAmount);
   
   Future<bool> requestObjAsGroup({Group group,int amount = 1, String msg, var context}) async{
     ResponsePost res = await new RequestPost("RequestAsGroup").dataBuilder(
@@ -180,14 +183,18 @@ class GroupObject extends Obj{
     ).doRequest(context : context);
     return res.hasError;
   }
-  @override
-  Future<bool> requestObj({int amount = 1, String msg, var context}) async{
+  Future<bool> requestObjAsUser({int amount = 1, String msg, var context}) async{
     ResponsePost res = await new RequestPost("RequestAsUser").dataBuilder(
         userInfo: true,
         idObject : _idObject,
         requestMsg : msg,
     ).doRequest(context : context);
     return res.hasError;
+  }
+  @override
+  Future<bool> requestObj({int amount = 1, String msg, var context, bool asUser = true}) async{
+    return asUser ? await requestObjAsUser(amount: amount, msg: msg,context: context) : 
+      await requestObjAsGroup(amount: amount, msg: msg,context: context);
   }
   
   Future<bool> claimObj({int idLoan ,String claimMsg, var context}) async{

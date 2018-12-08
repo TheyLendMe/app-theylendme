@@ -112,6 +112,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 } else {
                   await UserSingleton().user.createGroup(groupName: myController.text, info: myController2.text,img: _image);
                 }
+                
                 Navigator.of(context).pop(null);
               } else {
                 Fluttertoast.showToast(msg: "Rellena el nombre del grupo",toastLength: Toast.LENGTH_SHORT);

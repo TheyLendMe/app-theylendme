@@ -104,8 +104,8 @@ class RequestPost{
     if(email != null){_data['email']=email;}
     if(tfno != null){_data['tfno'] = tfno;}
     if(groupName != null) {_data['groupName'] = groupName;}
-    if(autoLoan != null){_data['autoloan'] = autoLoan ? 1 : 0;}
-    if(private != null)_data['private'] = private ? 1 : 0;
+    if(autoLoan != null){_data['autoloan'] = autoLoan;}
+    if(private != null)_data['private'] = private;
     if(idMemeber != null)_data['idMember'] = idMemeber;
 
     return this;
@@ -134,8 +134,8 @@ String name, String groupName, bool private, bool autoloan}){
     if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
     if(groupName != null){fieldName.add('groupName'); fieldValue.add(groupName);}
     if(amount != null){fieldName.add('amount'); fieldValue.add(amount);}
-    if(private != null){fieldName.add('private'); fieldValue.add(private ? 0 : 1);}
-    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan ? 0 : 1);}
+    if(private != null){fieldName.add('private'); fieldValue.add(private);}
+    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan);}
     if(name != null){fieldName.add('name'); fieldValue.add(name);}
     if(email != null){fieldName.add('email');fieldValue.add(email);}
     if(info != null){fieldName.add('info');fieldValue.add(info);}
@@ -199,7 +199,12 @@ class ResponsePost{
       ///Obtenemos el estado que se le va a dar a cada uno de los objetos
       if (stateType == null){
         obj.addAll(defaultObjects(_data['UsersObjects'], ObjType.USER_OBJECT));
-        obj.addAll(defaultObjects(_data['GroupsObjects'], ObjType.GROUP_OBJECT));
+        try{
+          obj.addAll(defaultObjects(_data['GroupsObjects'], ObjType.GROUP_OBJECT));
+        }catch(e){
+          print(e);
+        }
+        
       }else{
         List<dynamic> objects = _data;
         StateOfObject stateOfObject = ObjState.getObjState(stateType);
@@ -225,27 +230,7 @@ class ResponsePost{
   List<Obj> defaultObjects(List<dynamic> objects, ObjType objType){
     List<Obj> objs = new List();
     objects.forEach((object){
-      Obj obj;
-      obj = objType == ObjType.USER_OBJECT ? 
-      ///Pedir a victor que incluyaa nombres de los owners
-        new UserObject(
-          int.parse(object['idObject']),
-          userBuilder(data :object['owner']),
-          object['name'],
-          image : object['imagen'],
-          amount :int.parse(object['amount']),
-          date: object['creationDate'],
-  
-        ) : 
-        new GroupObject(
-          int.parse(object['idObject']),
-          groupBuilder(data: object['owner']),
-          object['name'],
-          image : object['imagen'],
-          amount : int.parse(object['amount']),
-          date: object['creationDate']
-        );
-      objs.add(obj);
+      objs.add(objectBuilder(data : object, forUser: objType == ObjType.USER_OBJECT));
     });
     return objs;
       
@@ -362,10 +347,11 @@ class ResponsePost{
           int.parse(data['idObject']), 
           data['owner'] != null ? userBuilder(data :data['owner']) : UserSingleton().user, 
           data['name'],
-          amount: int.parse(data['amount']),
+          amount: data['amount'] != null ? int.parse(data['amount']) :  int.parse(data['max_amount']),
           image : data['imagen'],
           desc: data['descr'],
           date: data['creationDate'],
+          actualAmount: data['available_amount'] != null ? data['available_amount'] : int.parse(data['amount']) ,
           objState: objState
           ) 
           : 
@@ -375,8 +361,9 @@ class ResponsePost{
           data['name'],
           image : data['imagen'],
           desc: data['descr'],
-          amount: int.parse(data['amount']),
+          amount: data['amount'] != null ? int.parse(data['amount']) : data['max_amount'],
           date: data['creationDate'],
+          actualAmount: data['available_amount'] != null ? int.parse(data['available_amount']) : int.parse(data['amount']) ,
           objState: objState
         );
 
@@ -403,7 +390,7 @@ class ResponsePost{
       u.add((userBuilder(
         data : userInfo['user'], 
         admin: userInfo['admin'] == "1",
-        idMember: int.parse(userInfo['admin'])
+        idMember: int.parse(userInfo['idMember'])
         ))
       );
     });
@@ -422,7 +409,7 @@ class ResponsePost{
       admin: admin);
   }
 
-  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false}){
+  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false, int idMember}){
     data = data == null ? _data['group'] : data;
     return new Group(
       int.parse(data['idGroup']), 
@@ -431,9 +418,10 @@ class ResponsePost{
       tfno: data['tfno'],
       img: data['imagen'],
       info: data['info'],
+      myIDMember: idMember,
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
-      imAdmin: true,
+      imAdmin: imAdmin,
     );
   }
   List<Group> myGroupsBuilder(){
@@ -551,8 +539,8 @@ class ResponsePost{
         amount: int.parse(claim['loan']['amount']),
         msg: claim['claimMsg'],
         id: int.parse(claim['idClaim']),
-        actual: userBuilder(data : claim['loan']['keeper']),
-        next: userBuilder(data : claim['loan']['object']['owner']),
+        actual:claim['loan']['keeper'] != null ? userBuilder(data : claim['loan']['keeper']) : UserSingleton().user,
+        next: claim['loan']['object']['owner'] != null ? userBuilder(data : claim['loan']['object']['owner']) : UserSingleton().user,
         fromID: int.parse(claim['loan']['idLoan'])
       );
       claimsList.add(objectBuilder(data: claim['loan']['object'], objState: state));
@@ -631,7 +619,7 @@ class ResponsePost{
         //date: loan['date'],
         msg: loan['loanMsg'],
         id: int.parse(loan['idLoan']),
-        actual: userBuilder(data : loan['keeper']),
+        actual: loan['keeper'] != null ? userBuilder(data : loan['keeper']): UserSingleton().user,
         next:mine ? UserSingleton().user : userBuilder(data : loan['object']['owner']),
       );
       loansList.add(objectBuilder(data: loan['object'], objState: state));
@@ -685,6 +673,47 @@ class ResponsePost{
     });
     return loanssList;
   }
+
+  Map<String,List<Obj>> userInventory(){
+    Map<String,List<Obj>> map = new Map();
+
+    List<Obj> mines = new List();
+    List<Obj> elses = new List();
+    _data['mine_objs'].forEach((object){
+      if(object != null){
+        mines.add(objectBuilder(data: object, user: UserSingleton().user));}
+    });
+    _data['elses_objs'].forEach((object){
+      if(object != null){elses.add(objectBuilder(data: object));}
+    });
+    map['mines'] = mines;
+    map['others'] = elses;
+    return map;
+  }
+
+
+  Map<String,List<GroupObject>> groupInventory(){
+    Map<String,List<GroupObject>> map = new Map();
+
+    List<GroupObject> mines = new List();
+    List<GroupObject> elses = new List();
+    _data['our_objs'].forEach((object){
+      if(object != null){mines.add(objectBuilder(data: object, user: UserSingleton().user));}
+    });
+    _data['elses_objs'].forEach((object){
+      if(object != null){mines.add(objectBuilder(data: object));}
+    });
+    map['mines'] = mines;
+    map['others'] = elses;
+    return map;
+  }
+
+  Group signInGroupBuilder(){
+    int idMember = int.parse(_data['member']['idMember']);
+    bool admin = int.parse(_data['member']['idMember']) != 0 ;
+    return groupBuilder(data: _data['member']['group'], imAdmin: admin, idMember: idMember);
+  }
+
 
   void _orderObjeList(List<Obj> list){list.sort((a,b) => a.date.isAfter(b.date) ? 0 : 1);}
 

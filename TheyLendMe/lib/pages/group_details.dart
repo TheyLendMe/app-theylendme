@@ -92,19 +92,24 @@ class GroupDetailsState extends State<GroupDetails> {
             height: 60.0,
             onPressed:(){
 
-              if(UserSingleton().user.admin){
 
-              Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
-              ));
-              } else {
+              UserSingleton().user.imAdmin(widget._group)
+              .then<void>((bool value){
+                if(value){
                 Navigator.push(context, new MaterialPageRoute(
-                  builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
+                  builder: (BuildContext context) => new MyGroupsObjectsPage(widget._group)
                 ));
-              };
-            },
+
+                } else {
+                  Navigator.push(context, new MaterialPageRoute(
+                    builder: (BuildContext context) => new OtherGroupObjectsPage(widget._group)
+                  ));
+                }
+              }
+              );
+              },
             color: Theme.of(context).indicatorColor,
-            child: Text('Ver Inventario', style: TextStyle(color: Colors.black)),
+            child: Text('Ver Objetos', style: TextStyle(color: Colors.black)),
           )
         ]
       );

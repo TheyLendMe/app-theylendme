@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-import 'package:TheyLendMe/pages/my_objects.dart';
+import 'package:TheyLendMe/pages/my_inventory.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
 import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
-import 'package:TheyLendMe/pages/user_details.dart';
+import 'package:TheyLendMe/pages/me_details.dart';
 
 class TheDrawer extends StatefulWidget {
 
   final drawerItems = [
     DrawerItem("Home",         Icons.home,         "/"),
-    DrawerItem("Mis Objetos",  Icons.folder_open,  "/MyObjectsPage"),
+    DrawerItem("Mi Inventario",  Icons.folder_open,  "/MyInventoryPage"),
     DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
     DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
     DrawerItem("Ajustes",      Icons.settings,     "/MySettingsPage")
@@ -46,7 +47,7 @@ class _TheDrawerState extends State<TheDrawer> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: (UserSingleton().login
-              ? (UserSingleton().user.name!=null
+              ? (UserSingleton().user.name!='' //TODO: better with UserSingleton().user.getEntityInfo().name
                 ? Text(UserSingleton().user.name)
                 : Text("NombreUsuario"))
               : Text("UsuarioSinRegistrar")),
@@ -65,13 +66,13 @@ class _TheDrawerState extends State<TheDrawer> {
                   ? null
                   : Icon(FontAwesomeIcons.signInAlt, color: Colors.black))
               ),
-              onTap: () {
+              onTap: () async{
                 if(UserSingleton().login) {
+                  User user = await UserSingleton().user.getEntityInfo();
+                  String tfno = user.tfno; String name = user.name;
                   showDialog(
                     context: context,
-                    builder: (BuildContext context){
-                      return UserDetails(UserSingleton().user); //TODO: since it's UserDetails(me), should it be different?
-                    }
+                    builder: (BuildContext context){ return MeDetails(tfno,name);}
                   );
                 } else Navigator.of(context).pushNamed("/AuthPage");
               }

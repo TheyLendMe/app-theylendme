@@ -3,18 +3,20 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ContactDialog extends StatefulWidget {
+class PrivateCodeDialog extends StatefulWidget {
   final Entity _entity;
+  final Group _group;
 
-  ContactDialog(this._entity);
+  PrivateCodeDialog(this._entity,this._group);
 
   @override
-    _ContactDialogState createState() => _ContactDialogState();
+    _PrivateCodeDialogState createState() => _PrivateCodeDialogState();
 }
 
-class _ContactDialogState extends State<ContactDialog> {
+class _PrivateCodeDialogState extends State<PrivateCodeDialog> {
   Widget dialog;
   bool isUser = true;
+  String _privateCode;
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +27,32 @@ class _ContactDialogState extends State<ContactDialog> {
       builder: (context, snapshot) {
         if(snapshot.hasData){
           dialog = new SimpleDialog(
-            title: Text('Contactar a través de...'),
-            children: [
+            title: Text('Compartir a través de...'),
+            children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   (snapshot.data.email!=''
                     ? SimpleDialogOption(
-                      onPressed: () {launch('mailto:${snapshot.data.email}');},
+                      onPressed: () {
+                        widget._group.getPrivateCode()
+                        .then((code) {
+                          _privateCode = code;
+                        });
+                        launch('mailto:${snapshot.data.email}?subject=Código&body=Hola!%20Aquí%20tienes%20el%20código%20para%20unirte%20a%20nuestro%20grupo%20de%20TheyLendMe%20:%20$_privateCode');
+                      },
                       child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 50.0),
-                    ): Text('')
+                    ): Text('') //esto nunca se mostrará porque siempre hay email
                   ),
                   (snapshot.data.tfno!=''
                     ? SimpleDialogOption(
-                      //                                   ## Spain's phone number prefix
-                      onPressed: () {launch('https://wa.me/34${snapshot.data.tfno}/?text=Hola!%20He%20visto%20algo%20tuyo%20en%20TheyLendMe%20que%20te%20quería%20pedir%20prestado:');},
-                      // (if it isn't on WhatsApp, Whatsapp itself warns the user)
+                      //TODO: check first if it's on WhatsApp
+                      onPressed: () {
+                        widget._group.getPrivateCode()
+                        .then((code) {
+                          _privateCode = code;
+                        });
+                        launch('https://wa.me/${snapshot.data.tfno}/?text=Hola!%20Aquí%20tienes%20el%20código%20para%20unirte%20a%20nuestro%20grupo%20de%20TheyLendMe%20:%20$_privateCode');},
                       child: Icon( FontAwesomeIcons.whatsapp, color: Colors.green,  size: 50.0),
                     ): Text('')
                   ),
