@@ -72,10 +72,10 @@ class Auth {
 
   }
   static Future signOut() async{
-    await FirebaseAuth.instance.signOut();
-    UserSingleton().refreshUser();
     SharedPreferences sh = await SharedPreferences.getInstance();
     sh.clear();
+    await FirebaseAuth.instance.signOut();
+    UserSingleton().refreshUser();
 
   }
   static Future _firstSteps({String email,String pass, bool google= false, bool facebook= false}) async{
