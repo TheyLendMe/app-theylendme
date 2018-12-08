@@ -398,7 +398,7 @@ class Group extends Entity{
   Future delUser(User user, {var context}) async{
      ResponsePost res = await new RequestPost("kickUser").dataBuilder(
       userInfo: true,
-      idMemeber: user.idEntity,
+      idMemeber: user.idMember,
       idGroup: this._idEntity,
     ).doRequest(context:context);
     return res.hasError;
