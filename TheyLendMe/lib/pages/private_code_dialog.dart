@@ -38,8 +38,9 @@ class _PrivateCodeDialogState extends State<PrivateCodeDialog> {
                         widget._group.getPrivateCode()
                         .then((code) {
                           _privateCode = code;
+                          launch('mailto:${snapshot.data.email}?subject=Código&body=Hola!%20Aquí%20tienes%20el%20código%20para%20unirte%20a%20nuestro%20grupo%20de%20TheyLendMe%20:%20$_privateCode');
                         });
-                        launch('mailto:${snapshot.data.email}?subject=Código&body=Hola!%20Aquí%20tienes%20el%20código%20para%20unirte%20a%20nuestro%20grupo%20de%20TheyLendMe%20:%20$_privateCode');
+                        
                       },
                       child: Icon( FontAwesomeIcons.at, color: Colors.black,  size: 50.0),
                     ): Text('') //esto nunca se mostrará porque siempre hay email
