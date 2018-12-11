@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
 import 'package:TheyLendMe/Utilities/auth.dart';
-
 import 'package:fluttertoast/fluttertoast.dart'; //provisional
 
 /*
 //TODO:
-* - Validation
-* - Load data from API
+* 1 - text('No has confirmado tu dirección de email') and button('Reenviar')
+* 2 - Load data from API
+* 3 - Validation
 */
 
 class MySettingsPage extends StatefulWidget {
@@ -55,6 +55,10 @@ class _SettingsPageState extends State<MySettingsPage> {
         title: const Text('Mis Ajustes'),
       ),
       body: Container(
+        constraints: BoxConstraints.expand(), //provisional
+        decoration: BoxDecoration( //provisional
+          color: Colors.black26,
+        ),
         padding: EdgeInsets.all(20.0),
         child: Form(
           //key: this._formKey,
@@ -105,15 +109,18 @@ class EntryItem extends StatefulWidget {
 class _EntryItemState extends State<EntryItem> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField (
-      decoration: InputDecoration (
-        labelText: widget.entry.label,
-        hintText: widget.entry.hint
-      ),
-      validator: widget.entry.validator,
-      onSaved: (String value) {
-        //TODO: UserSingleton().user.updateInfo()
-      }
+    return FocusScope(  //provisional
+      node: FocusScopeNode(),  //provisional
+      child: TextFormField (
+        decoration: InputDecoration (
+          labelText: widget.entry.label,
+          hintText: widget.entry.hint
+        ),
+        validator: widget.entry.validator,
+        onSaved: (String value) {
+          //TODO: UserSingleton().user.updateInfo()
+        }
+      )
     );
   }
 }
@@ -122,7 +129,7 @@ final List<Entry> fields = <Entry> [ //'_validateEmail' en todos para probar
   Entry('Nombre',     'Escribe tu nombre',_validateEmail),
   Entry('Teléfono',   'Escribe tu número de teléfono',_validateEmail),
   Entry('Email',      'tuemail@ejemplo.com',_validateEmail),
-  Entry('Descripción','Escribe algo sobre ti para que los demás usuarios te conozcan mejor',_validateEmail)
+  Entry('Descripción','Escribe algo sobre ti',_validateEmail)
 ];
 
 class Entry {
