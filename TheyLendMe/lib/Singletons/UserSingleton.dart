@@ -5,6 +5,10 @@ import 'package:TheyLendMe/Utilities/auth.dart';
 import 'package:TheyLendMe/Utilities/reqresp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//FIXME: img?
+// needed, for example, in the_drawer.dart:63, because:
+// ? (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img))
+
 class UserSingleton{
   static UserSingleton _singleton;
   User _user;
