@@ -48,7 +48,7 @@ class Auth {
       ///Download profile Image from firebase
       
 
-      File image= await _downloadProfileImage(user.photoUrl,basename(user.photoUrl));
+      File image= await downloadProfileImage(user.photoUrl);
       UserSingleton(user: user);
       await UserSingleton().refreshUser();
       if((await new RequestPost('login').dataBuilder(userInfo: true, nickName: name, img: image).doRequest()).hasError){
@@ -62,7 +62,8 @@ class Auth {
     return true;
   }
 
-  static Future<File> _downloadProfileImage(String url, String filename) async {
+  static Future<File> downloadProfileImage(String url) async {
+    String filename = basename(url);
     http.Client client = new http.Client();
     var req = await client.get(Uri.parse(url));
     var bytes = req.bodyBytes;
