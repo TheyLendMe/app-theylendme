@@ -46,8 +46,8 @@ class UserSingleton{
           print("Me actualizo");} 
       try{
         User u = await _user.getEntityInfo();
-        _userImage = u.img == null ? firebaseUser.photoUrl : u.img;
-        if(u.img == null){_user.updateInfo(img: await Auth.downloadProfileImage(firebaseUser.photoUrl));}
+        _userImage = u.img;
+        /*if(u.img == null){_user.updateInfo(img: await Auth.downloadProfileImage(firebaseUser.photoUrl));}*/
       }catch(e){}
     }
     ///Esto en caso de que x info de google difiera de info de la base de datos o cierta info falte ya que solo
