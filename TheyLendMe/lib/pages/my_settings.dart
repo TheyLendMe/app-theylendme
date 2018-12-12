@@ -5,9 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart'; //provisional
 
 /*
 //TODO:
-* 1 - text('No has confirmado tu dirección de email') and button('Reenviar')
-* 2 - Load data from API
-* 3 - Validation
+* 1 - Load data from API
+* 2 - Validation
 */
 
 class MySettingsPage extends StatefulWidget {
@@ -60,8 +59,17 @@ class _SettingsPageState extends State<MySettingsPage> {
           color: Colors.black26,
         ),
         padding: EdgeInsets.all(20.0),
-        child: Form(
-          //key: this._formKey,
+        child: Form( //FIXME: add button('Guardar cambios') to Form
+          /*
+          FlatButton(
+            color: Theme.of(context).primaryColor,
+            onPressed: () {
+              Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+            },
+            child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
+          )
+          */
+          key: this._formKey,
           child: ListView.builder(
             itemBuilder: (BuildContext context, int index) =>
                 EntryItem(fields[index]),
@@ -71,25 +79,29 @@ class _SettingsPageState extends State<MySettingsPage> {
       ),
 
       floatingActionButton: 
-        Row( 
+        Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,       
           children: <Widget>[
+            Text('No has confirmado tu dirección de correo.'),
             FlatButton(
-              color: Theme.of(context).primaryColor,
+              color: Colors.green,
               onPressed: () {
                 Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
               },
-              child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
+              child: Text("Reenviar confirmación", style: TextStyle(color: Colors.black)),
             ),
-            FlatButton(
-              color: Colors.red,
-              onPressed: () async {
-                await Auth.signOut();
-                Navigator.of(context).pop(null);
-              },
-              child: Text("Cerrar sesión"),
+            Padding(
+              padding: EdgeInsets.only(top: 60.0),
+              child: FlatButton(
+                color: Colors.red,
+                onPressed: () async {
+                  await Auth.signOut();
+                  Navigator.of(context).pop(null);
+                },
+                child: Text("Cerrar sesión"),
+              )
             )
           ]
         )
