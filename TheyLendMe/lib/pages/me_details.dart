@@ -41,7 +41,12 @@ class _MeDetailsState extends State<MeDetails> {
           child: MaterialButton(
             onPressed: () async {
               _image = await PickImage.getImageFromGallery();
-              await UserSingleton().user.updateInfo(img: _image);
+              if(!await UserSingleton().user.updateInfo(img: _image)){
+                await UserSingleton().refreshUser();
+                setState(() {});
+              };
+              
+              
             },
             child: CircleAvatar(
               radius: 120.0,

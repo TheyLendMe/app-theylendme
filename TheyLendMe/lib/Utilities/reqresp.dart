@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
-const String endpoint = "http://52.47.177.107/";
+
+const String endpoint = "https://app.theylend.me/";
 final DateFormat dateFormat = new DateFormat('yyyy-MM-dd');
 
 

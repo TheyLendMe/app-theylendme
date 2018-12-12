@@ -59,22 +59,22 @@ class _SettingsPageState extends State<MySettingsPage> {
           color: Colors.black26,
         ),
         padding: EdgeInsets.all(20.0),
-        child: Form( //FIXME: add button('Guardar cambios') to Form
-          /*
-          FlatButton(
-            color: Theme.of(context).primaryColor,
-            onPressed: () {
-              Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
-            },
-            child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
-          )
-          */
+        child: Form(
           key: this._formKey,
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) =>
-                EntryItem(fields[index]),
-            itemCount: fields.length,
-          )
+          child: new Column(
+            children: <Widget>[
+              new Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) =>
+                      EntryItem(fields[index]),
+                  itemCount: fields.length,
+                ),
+              ),
+             
+             
+            ]
+            
+          ),
         )
       ),
 
@@ -92,16 +92,31 @@ class _SettingsPageState extends State<MySettingsPage> {
               },
               child: Text("Reenviar confirmación", style: TextStyle(color: Colors.black)),
             ),
+          
             Padding(
-              padding: EdgeInsets.only(top: 60.0),
-              child: FlatButton(
-                color: Colors.red,
-                onPressed: () async {
-                  await Auth.signOut();
-                  Navigator.of(context).pop(null);
-                },
-                child: Text("Cerrar sesión"),
+              padding: EdgeInsets.only(top: 6.0),
+
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  FlatButton(
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+                    },
+                    child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
+                  ),
+                  FlatButton(
+                    color: Colors.red,
+                    onPressed: () async {
+                      await Auth.signOut();
+                      Navigator.of(context).pop(null);
+                    },
+                    child: Text("Cerrar sesión"),
+                  )
+                ],
               )
+              
             )
           ]
         )

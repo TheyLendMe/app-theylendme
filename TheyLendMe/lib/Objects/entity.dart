@@ -90,7 +90,6 @@ class User extends Entity{
       img: img
 
     ).doRequest(context: context);
-    //Auth.changeInfoOfUser();
     return res.hasError;
   }
   Future<bool> createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
