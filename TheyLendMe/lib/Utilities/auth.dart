@@ -16,8 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:image_picker_saver/image_picker_saver.dart';
+import 'package:dio/dio.dart';
 
 ///Responsetype 10:cuenta login, sin verificar email
 //////Responsetye: 11, login true,
@@ -48,30 +47,27 @@ class Auth {
       ///Download profile Image from firebase
       
 
-      File image= await downloadProfileImage(user.photoUrl);
+     // File image= await downloadProfileImage(user.photoUrl);
       UserSingleton(user: user);
       await UserSingleton().refreshUser();
-      if((await new RequestPost('login').dataBuilder(userInfo: true, nickName: name, img: image).doRequest()).hasError){
-         UserSingleton().login = false; 
-         return false;
+      if((await new RequestPost('login').dataBuilder(userInfo: true, nickName: name).doRequest()).hasError){
+        return false;
       }
       if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
 
       
-    }else{ ErrorToast().handleError(msg: "Algo ha fallado"); return false; }
+    }else{ ErrorToast().handleError(msg: "Algo ha fallado intenta logearte de nuevo"); return false; }
     return true;
   }
 
   static Future<File> downloadProfileImage(String url) async {
-    String filename = basename(url);
-    http.Client client = new http.Client();
-    var req = await client.get(Uri.parse(url));
-    var bytes = req.bodyBytes;
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    return file;
-}
+    Dio dio = new Dio();
+    final String path = (await getApplicationDocumentsDirectory()).path;
+    final String name = basename(url);
+    var response = await dio.download(url,'$path/$name');
+    File file = new File('$path/$name');
+    return file ;
+  }
 
 
   static Future<FirebaseUser> _googleAuth() async{

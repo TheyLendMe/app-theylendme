@@ -73,10 +73,10 @@ class RequestPost{
 ///This will be the builder that
  RequestPost dataBuilder({String idUser,dynamic idGroup, int idObject, 
   String name, String desc,String info, String email, String tfno,String nickName,
-
   int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
   String oUser, String msg, File img, String claimMsg, String groupName, bool autoLoan,
-  bool private, int idMemeber, String requestMsg, bool userInfo = false, String privateCode//add more fields if they are necessary
+  bool private, int idMemeber, String requestMsg, bool userInfo = false, String privateCode,//add more fields if they are necessary
+  Map updateValues,
   }){
     this.userInfo = userInfo;
     if(img != null){ _data['image'] = new UploadFileInfo(img, basename(img.path));}
@@ -90,16 +90,12 @@ class RequestPost{
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
     if(requestMsg != null) _data['request'] = requestMsg;
-    
+    if(updateValues != null && updateValues.length != 0){_data['updateRequest']= json.encode(updateValues);}
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['idOtherUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
-    if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];} else{
-        _data['fieldName'] =['null'];
-        _data['fieldValue'] =['null'];
-    }
     if(nickName != null) _data['nickName'] = nickName.toString();
     if(info != null){_data['info'] = info;}
     if(email != null){_data['email']=email;}
@@ -112,11 +108,11 @@ class RequestPost{
     return this;
   }
 
-  Future<Map<String,dynamic>> authInfo() async{
+  Future<Map<String,String>> authInfo() async{
     FirebaseUser firebaseUser = await UserSingleton().firebaseUser;
     if(firebaseUser == null){throw new AuthServer("No estas logeado",id :0);}
     UserSingleton user = await UserSingleton();
-    Map<String,dynamic> m = new Map();
+    Map<String,String> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
     m['token'] = await firebaseUser.getIdToken();
     if(UserSingleton().user.name != null) m['nickname'] = UserSingleton().user.name;
@@ -125,24 +121,21 @@ class RequestPost{
     return m;
   }
 }
-List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
+
+Map<String,dynamic> updateRequestBuild({String nickName,String email, String info, String tfno,String desc, int amount, 
 String name, String groupName, bool private, bool autoloan}){
-    List fieldName = new List();
-    List fieldValue = new List();
-    List<dynamic> r = new List();
-    r.add(fieldName);
-    r.add(fieldValue);
-    if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
-    if(groupName != null){fieldName.add('groupName'); fieldValue.add(groupName);}
-    if(amount != null){fieldName.add('amount'); fieldValue.add(amount);}
-    if(private != null){fieldName.add('private'); fieldValue.add(private);}
-    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan);}
-    if(name != null){fieldName.add('name'); fieldValue.add(name);}
-    if(email != null){fieldName.add('email');fieldValue.add(email);}
-    if(info != null){fieldName.add('info');fieldValue.add(info);}
-    if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
-    if(fieldName.length == 0){r.clear(); r.add(null); r.add(null);}
-    return r;
+  Map<String,dynamic> updateRequest = new Map();
+  if(nickName != null){updateRequest['nickname'] = nickName;}
+  if(email != null){updateRequest['email'] = email;}
+  if(info != null){updateRequest['info'] = info;}
+  if(tfno != null){updateRequest['tfno'] = tfno;}
+  if(amount != null){updateRequest['amount'] = amount;}
+  if(name != null){updateRequest['name'] = name;}
+  if(desc != null){updateRequest['desc'] = desc;}
+  if(groupName != null){updateRequest['groupName'] = groupName;}
+  if(private != null){updateRequest['private'] = private;}
+  if(autoloan != null){updateRequest['autoloan'] = autoloan;}
+  return updateRequest;
 }
 class ResponsePost{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
@@ -367,9 +360,7 @@ class ResponsePost{
           actualAmount: data['available_amount'] != null ? int.parse(data['available_amount']) : int.parse(data['amount']) ,
           objState: objState
         );
-
   } 
-
   List<JoinRequest> joinRequestsBuilder(Group group){
     List<dynamic> list = _data;
     List<JoinRequest> joinRequests = new List();

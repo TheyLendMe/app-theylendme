@@ -136,13 +136,13 @@ class UserObject extends Obj{
     return res.hasError;
   }
   
-  Future<bool> updateObject({String name,File img,int amount, var context}) async {
-    List l = fieldNameFieldValue(name: name, amount: amount);
+  Future<bool> updateObject({String name,File img,int amount,String desc, var context}) async {
+    //List l = fieldNameFieldValue(name: name, amount: amount);
+    Map m = updateRequestBuild(name : name, amount: amount, desc: desc);
     ResponsePost res = await new RequestPost("updateObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
-        fieldname: l[0],
-        fieldValue: l[1],
+        updateValues: m,
         img: img
 
     ).doRequest(context : context);
@@ -163,7 +163,7 @@ class UserObject extends Obj{
 class GroupObject extends Obj{
   
   //Constructor
-  GroupObject(int idObject, Entity owner, String name, {String desc, GroupObjState objState, int amount, String image, String date, int actualAmount }) 
+  GroupObject(int idObject, Group owner, String name, {String desc, GroupObjState objState, int amount, String image, String date, int actualAmount }) 
   : super(ObjType.GROUP_OBJECT, idObject, owner, name, desc : desc, objState:objState, amount : amount, image :image, date : date, actualAmount : actualAmount);
   
   Future<bool> requestObjAsGroup({Group group,int amount = 1, String msg, var context}) async{
@@ -176,6 +176,7 @@ class GroupObject extends Obj{
     return res.hasError;
   }
   Future<bool> requestAsMember({int amount = 1, String msg, var context}) async{
+    
     ResponsePost res = await new RequestPost("intraRequest").dataBuilder(
         userInfo: true,
         idObject : _idObject,
@@ -184,6 +185,9 @@ class GroupObject extends Obj{
     return res.hasError;
   }
   Future<bool> requestObjAsUser({int amount = 1, String msg, var context}) async{
+    if((owner as Group).imMember){
+      return requestAsMember(amount: amount, msg: msg);
+    }
     ResponsePost res = await new RequestPost("RequestAsUser").dataBuilder(
         userInfo: true,
         idObject : _idObject,
@@ -226,13 +230,13 @@ class GroupObject extends Obj{
     return res.hasError;
   }
   
-  Future<bool> updateObject({String name,File img,int amount = 1, var context}) async{
-    List l = fieldNameFieldValue(name: name, amount: amount);
+  Future<bool> updateObject({String name,String desc, File img,int amount = 1, var context}) async{
+   // List l = fieldNameFieldValue(name: name, amount: amount);
+    Map m = updateRequestBuild(name: name,desc: desc, amount: amount);
     ResponsePost res = await new RequestPost("updateGObject").dataBuilder(
         userInfo: true,
         idObject : _idObject,
-        fieldname: l[0],
-        fieldValue: l[1],
+        updateValues: m,
         idGroup: owner.idEntity,
         img: img
 
