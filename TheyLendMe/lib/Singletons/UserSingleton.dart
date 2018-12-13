@@ -54,6 +54,10 @@ class UserSingleton{
     ///se guarda en la base de datos.
     
   }
+
+  Future<bool> resendEmail() async{
+    (await firebaseUser).sendEmailVerification();
+  }
   set userImage (String img) => _userImage = img;
   String get userImage =>  _userImage;
   set user(user) => _user = user;
