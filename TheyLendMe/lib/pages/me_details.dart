@@ -44,15 +44,13 @@ class _MeDetailsState extends State<MeDetails> {
               if(!await UserSingleton().user.updateInfo(img: _image)){
                 await UserSingleton().refreshUser();
                 setState(() {});
-              };
+              }
               
               
             },
             child: CircleAvatar(
               radius: 120.0,
-              backgroundImage: (UserSingleton().user.img!=null
-                ? NetworkImage(UserSingleton().user.img)
-                : (_image!=null
+              backgroundImage: (UserSingleton().userImage !=null ? NetworkImage(UserSingleton().userImage) : (_image!=null
                   ? FileImage(_image)
                   : AssetImage('images/def_user_pic.png'))),
               backgroundColor: Theme.of(context).accentColor,
