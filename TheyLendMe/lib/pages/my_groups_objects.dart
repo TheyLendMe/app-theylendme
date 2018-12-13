@@ -5,6 +5,7 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/pages/create_group_object.dart';
+import 'package:TheyLendMe/Objects/objState.dart';
 
 
 class MyGroupsObjectsPage extends StatefulWidget {
@@ -90,12 +91,14 @@ class ObjectItem extends StatelessWidget {
             //crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(object.name),
-              xN( object.amount ), //provisional
-              Text(
-                object.objState.state.toString(),
-                style: stateColor(object.objState.toString())
-              )
+              SizedBox(
+                  width: 150.0,
+                  child: textNameAmount(object, context)
+                ),
+                SizedBox(
+                  width: 100.0,
+                  child: textState(object)
+                )
             ]
           )
         ) //title (Container)
@@ -104,21 +107,30 @@ class ObjectItem extends StatelessWidget {
   }
 }
 
-Widget xN(amount) {
-  if (amount>1)
-    return Text('x'+amount.toString());
+Widget textNameAmount(object, context) {
+  if (object.amount>1)
+    return RichText( text: TextSpan(
+      children:[
+        TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15)),
+        TextSpan(text: ' (x'+object.amount.toString()+')', style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15, color: Colors.grey[500]))
+      ]
+    ));
   else
-    return Text('');
+    return RichText( text: TextSpan(
+      children:[
+        TextSpan(text: object.name.toString(), style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.15))
+      ]
+    ));
 }
 
-TextStyle stateColor(state) {
-  if (state=='Disponible')
-    return TextStyle(color: Colors.green);
-  else if (state=='Prestado')
-    return TextStyle(color: Colors.red);
+Text textState(object) {
+  if (object.objState.state == StateOfObject.DEFAULT)
+    return Text( 'Disponible', style: TextStyle(color: Colors.green) );
+  else if (object.objState.state == StateOfObject.LENT)
+    return Text( 'Prestado', style: TextStyle(color: Colors.red) );
+  else
+    return Text( 'Reclamado', style: TextStyle(color: Colors.yellow) );
 }
-
-final User propietario = User(UserSingleton().user.idEntity,UserSingleton().user.name);
 
 String getFirstCharacter(String getFirstCharacter){
   //Un poco feo [\u{1F600}-\U+E007F]
