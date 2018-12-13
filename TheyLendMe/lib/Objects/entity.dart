@@ -21,6 +21,8 @@ abstract class Entity{
     if(img != null) {_img = endpoint + img;} else {_img = null;}
     _tfno = tfno;
     _email = email;
+   
+
   }
 
   ///Getters and setters
@@ -88,7 +90,6 @@ class User extends Entity{
       img: img
 
     ).doRequest(context: context);
-    //Auth.changeInfoOfUser();
     return res.hasError;
   }
   Future<bool> createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
@@ -215,7 +216,7 @@ class User extends Entity{
       userInfo: true,
       idUser: this.idEntity
     ).doRequest(context:context);
-    Map<String,List<Obj>> map = res.groupInventory();
+    Map<String,List<Obj>> map = res.userInventory();
     return map;
   }
 
@@ -398,7 +399,7 @@ class Group extends Entity{
   Future delUser(User user, {var context}) async{
      ResponsePost res = await new RequestPost("kickUser").dataBuilder(
       userInfo: true,
-      idMemeber: user.idEntity,
+      idMemeber: user.idMember,
       idGroup: this._idEntity,
     ).doRequest(context:context);
     return res.hasError;

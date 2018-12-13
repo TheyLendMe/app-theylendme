@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
@@ -27,7 +28,6 @@ class _TheDrawerState extends State<TheDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
     List<Widget> drawerOptions = [];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];
@@ -46,7 +46,7 @@ class _TheDrawerState extends State<TheDrawer> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: (UserSingleton().login
-              ? (UserSingleton().user.name!=null
+              ? (UserSingleton().user.name!='' //TODO: better with UserSingleton().user.getEntityInfo().name
                 ? Text(UserSingleton().user.name)
                 : Text("NombreUsuario"))
               : Text("UsuarioSinRegistrar")),
@@ -59,19 +59,19 @@ class _TheDrawerState extends State<TheDrawer> {
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
                 backgroundImage: (UserSingleton().login
-                  ? (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png'))
+                  ? (UserSingleton().userImage!=null ? NetworkImage(UserSingleton().userImage) : AssetImage('images/def_user_pic.png'))
                   : null),
                 child: (UserSingleton().login
                   ? null
                   : Icon(FontAwesomeIcons.signInAlt, color: Colors.black))
               ),
-              onTap: () {
+              onTap: () async{
                 if(UserSingleton().login) {
+                  User user = await UserSingleton().user.getEntityInfo();
+                  String tfno = user.tfno; String name = user.name;
                   showDialog(
                     context: context,
-                    builder: (BuildContext context){
-                      return MeDetails(UserSingleton().user);
-                    }
+                    builder: (BuildContext context){ return MeDetails(tfno,name);}
                   );
                 } else Navigator.of(context).pushNamed("/AuthPage");
               }

@@ -42,8 +42,7 @@ class _TheGroupsTabState extends State<TheGroupsTab> {
                 );
               }
               return groupList;
-            }
-            return Center(child: CircularProgressIndicator());
+            } else { return Center(child: CircularProgressIndicator()); }
         })
       )
     );

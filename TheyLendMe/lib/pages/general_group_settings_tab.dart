@@ -16,8 +16,25 @@ class GeneralGroupSettingsTab extends StatefulWidget {
 class GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
   Group group;
   bool private;
+  bool autoloan;
   // TODO: Guardarlo siempre primero, FutureBuilder pidiendo getEntityInfo
-  GeneralGroupSettingsTabState(this.group){private = group.private;}
+  
+  void groupInfo(){
+    FutureBuilder<Group>(
+      future: widget._group.getEntityInfo(),
+      builder: (context,snapshot){
+        return (snapshot.hasData
+          ? (){
+            group = snapshot.data;
+            private = snapshot.data.private;
+            autoloan = snapshot.data.autoloan;
+          }
+          : Center(child: CircularProgressIndicator(),));
+      },
+    );
+  }
+
+  GeneralGroupSettingsTabState(this.group){private = group.private;autoloan = group.autoloan;}
   @override
   Widget build (BuildContext context){
     return Scaffold(
@@ -38,6 +55,21 @@ class GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
 
             },
           ),
+          SwitchListTile(
+            title: const Text('Permitir autopréstamo'),
+            value: autoloan,
+            onChanged: (bool newValue) async {
+                setState(() {autoloan = newValue;}); 
+                group.updateInfo(autoloan: newValue).then((error){
+                  if(!error){
+                     group.autoloan = autoloan;
+                  }else{
+                    setState(() {autoloan = group.autoloan;}); 
+                  }
+                });
+
+            },
+          ),
           ListTile(
             title: Text('Compartir grupo'),
             onTap: () { 
@@ -53,7 +85,7 @@ class GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
             title: Text('Abandonar grupo'),
             trailing: MaterialButton(
               onPressed: (){
-                widget._group.delUser(u: UserSingleton().user);
+                widget._group.delUser(UserSingleton().user);
               },
               color: Colors.red,
               child: Text('Abandonar'),

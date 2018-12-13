@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
 import 'package:TheyLendMe/Utilities/auth.dart';
-
 import 'package:fluttertoast/fluttertoast.dart'; //provisional
 
 /*
 //TODO:
-* - Validation
-* - Load data from API
+* 1 - Load data from API
+* 2 - Validation
 */
 
 class MySettingsPage extends StatefulWidget {
@@ -51,39 +50,73 @@ class _SettingsPageState extends State<MySettingsPage> {
   Widget build(BuildContext context) {
     //TODO: secciones: Perfil, Seguridad (contraseña)
     return Scaffold(
-
+      appBar: AppBar(
+        title: const Text('Mis Ajustes'),
+      ),
       body: Container(
+        constraints: BoxConstraints.expand(), //provisional
+        decoration: BoxDecoration( //provisional
+          color: Colors.black26,
+        ),
         padding: EdgeInsets.all(20.0),
         child: Form(
-          //key: this._formKey,
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) =>
-                EntryItem(fields[index]),
-            itemCount: fields.length,
-          )
+          key: this._formKey,
+          child: new Column(
+            children: <Widget>[
+              new Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) =>
+                      EntryItem(fields[index]),
+                  itemCount: fields.length,
+                ),
+              ),
+             
+             
+            ]
+            
+          ),
         )
       ),
 
       floatingActionButton: 
-        Row( 
+        Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,       
           children: <Widget>[
+            Text('No has confirmado tu dirección de correo.'),
             FlatButton(
-              color: Theme.of(context).primaryColor,
+              color: Colors.green,
               onPressed: () {
                 Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
               },
-              child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
+              child: Text("Reenviar confirmación", style: TextStyle(color: Colors.black)),
             ),
-            FlatButton(
-              color: Colors.red,
-              onPressed: () async {
-                await Auth.signOut();
-                Navigator.of(context).pop(null);
-              },
-              child: Text("Cerrar sesión"),
+          
+            Padding(
+              padding: EdgeInsets.only(top: 6.0),
+
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  FlatButton(
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+                    },
+                    child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
+                  ),
+                  FlatButton(
+                    color: Colors.red,
+                    onPressed: () async {
+                      await Auth.signOut();
+                      Navigator.of(context).pop(null);
+                    },
+                    child: Text("Cerrar sesión"),
+                  )
+                ],
+              )
+              
             )
           ]
         )
@@ -103,16 +136,18 @@ class EntryItem extends StatefulWidget {
 class _EntryItemState extends State<EntryItem> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField (
-      decoration: InputDecoration (
-        labelText: widget.entry.label,
-        hintText: widget.entry.hint
-      ),
-      validator: widget.entry.validator,
-      onSaved: (String value) {
-        //this._email = value; //TODO: pasar '_email' como propiedad de widget.entry
-        //FIXME: Error: Setter not found: '_email'.
-      }
+    return FocusScope(  //provisional
+      node: FocusScopeNode(),  //provisional
+      child: TextFormField (
+        decoration: InputDecoration (
+          labelText: widget.entry.label,
+          hintText: widget.entry.hint
+        ),
+        validator: widget.entry.validator,
+        onSaved: (String value) {
+          //TODO: UserSingleton().user.updateInfo()
+        }
+      )
     );
   }
 }
@@ -121,7 +156,7 @@ final List<Entry> fields = <Entry> [ //'_validateEmail' en todos para probar
   Entry('Nombre',     'Escribe tu nombre',_validateEmail),
   Entry('Teléfono',   'Escribe tu número de teléfono',_validateEmail),
   Entry('Email',      'tuemail@ejemplo.com',_validateEmail),
-  Entry('Descripción','Escribe algo sobre ti para que los demás usuarios te conozcan mejor',_validateEmail)
+  Entry('Descripción','Escribe algo sobre ti',_validateEmail)
 ];
 
 class Entry {
