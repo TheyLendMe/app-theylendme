@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
 import 'package:TheyLendMe/Utilities/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart'; //provisional
+import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
 /*
 //TODO:
@@ -70,10 +71,7 @@ class _SettingsPageState extends State<MySettingsPage> {
                   itemCount: fields.length,
                 ),
               ),
-             
-             
             ]
-            
           ),
         )
       ),
@@ -83,12 +81,13 @@ class _SettingsPageState extends State<MySettingsPage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,       
-          children: <Widget>[
+          children: (UserSingleton().emailVerified==false
+          ? [
             Text('No has confirmado tu dirección de correo.'),
             FlatButton(
               color: Colors.green,
               onPressed: () {
-                Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+                UserSingleton().resendEmail();
               },
               child: Text("Reenviar confirmación", style: TextStyle(color: Colors.black)),
             ),
@@ -115,10 +114,35 @@ class _SettingsPageState extends State<MySettingsPage> {
                     child: Text("Cerrar sesión"),
                   )
                 ],
-              )
-              
+              ) 
             )
           ]
+          : [
+          Padding(
+            padding: EdgeInsets.only(top: 6.0),
+
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FlatButton(
+                  color: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    Fluttertoast.showToast(msg: "Función disponible en versiones futuras",toastLength: Toast.LENGTH_SHORT);
+                  },
+                  child: Text("Guardar cambios", style: TextStyle(color: Colors.white)),
+                ),
+                FlatButton(
+                  color: Colors.red,
+                  onPressed: () async {
+                    await Auth.signOut();
+                    Navigator.of(context).pop(null);
+                  },
+                  child: Text("Cerrar sesión"),
+                )
+              ],
+            ) 
+          )
+          ])
         )
     );
   }
