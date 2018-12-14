@@ -28,7 +28,6 @@ class _TheDrawerState extends State<TheDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
     List<Widget> drawerOptions = [];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];
@@ -60,7 +59,7 @@ class _TheDrawerState extends State<TheDrawer> {
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
                 backgroundImage: (UserSingleton().login
-                  ? (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png'))
+                  ? (UserSingleton().userImage!=null ? NetworkImage(UserSingleton().userImage) : AssetImage('images/def_user_pic.png'))
                   : null),
                 child: (UserSingleton().login
                   ? null

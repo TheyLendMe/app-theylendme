@@ -81,16 +81,14 @@ class User extends Entity{
     return res.getMyObjects();
   }
   @override 
-  Future<bool> updateInfo({String nickName , String info,String email, String tfno, File img, var context}) async {
-    var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
+  Future<bool> updateInfo({String nickName ,String info,String email, String tfno, File img, var context}) async {
+    //var l = fieldNameFieldValue(nickName: nickName, email: email, tfno: tfno, info: info);
+    Map m = updateRequestBuild(nickName: nickName,info: info,email: email,tfno: tfno);
     ResponsePost res = await new RequestPost("updateUser").dataBuilder(
       userInfo: true,
-      fieldname: l[0],
-      fieldValue: l[1],
+      updateValues: m,
       img: img
-
     ).doRequest(context: context);
-    //Auth.changeInfoOfUser();
     return res.hasError;
   }
   Future<bool> createGroup({String groupName, String info, String email, String tfno, bool autoloan = false, bool private = false, File img, var context}) async{
@@ -191,6 +189,7 @@ class User extends Entity{
     ).doRequest(context:context);
     return res.myRequestedGroupsBuilder();
   }
+
   Future<bool> imAdmin(Group g,{var context}) async{
     List<Group> groups = await this.getGroupsImMember();
     bool im = false;
@@ -246,6 +245,8 @@ class Group extends Entity{
   get autoloan => _autoloan; 
   set autoloan(bool autoloan) => _autoloan;
 
+  get imMember =>  _myIDMember != null;
+
   get imAdmin => _imAdmin;
   set imAdmin(bool imAdmin) => _imAdmin = imAdmin;
 
@@ -284,12 +285,12 @@ class Group extends Entity{
 
   @override
   Future<bool> updateInfo({String groupName, bool private, bool autoloan, String email, String tfno, String info, File img, var context}) async {
-    var l = fieldNameFieldValue(groupName: groupName,autoloan: autoloan,private: private, email: email, tfno: tfno, info: info);
+    //var l = fieldNameFieldValue(groupName: groupName,autoloan: autoloan,private: private, email: email, tfno: tfno, info: info);
+    Map m = updateRequestBuild(groupName: groupName,autoloan: autoloan,private: private, email: email, tfno: tfno, info: info);
     ResponsePost res = await new RequestPost("updateGroup").dataBuilder(
       userInfo: true,
       idGroup: this.idEntity,
-      fieldname: l[0],
-      fieldValue: l[1],
+      updateValues: m,
       img: img
     ).doRequest(context: context);
     return res.hasError;
@@ -378,10 +379,10 @@ class Group extends Entity{
     return res.claimsGroupObjectBuilder(this,mine : false);
   }
   ///Necesitas pasarle el idMember que tienes en ese momento
-  Future<bool>  leaveGroup(User user, {var context}) async{
+  Future<bool>  leaveGroup({var context}) async{
     ResponsePost res = await new RequestPost("leaveGroup").dataBuilder(
       userInfo: true,
-      idMemeber: user.idEntity,
+      idMemeber: this.myIDMember,
       idGroup: this._idEntity,
     ).doRequest(context:context);
     return res.hasError;

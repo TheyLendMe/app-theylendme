@@ -28,6 +28,7 @@ dependencies:
   path_provider: ^0.4.1
   intl: ^0.15.7
   fab_dialer: ^0.1.3
+  http: ^0.12.0
 
 dev_dependencies:
   flutter_test:

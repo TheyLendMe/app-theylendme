@@ -42,7 +42,7 @@ class _MyGroupsObjectsPageState extends State<MyGroupsObjectsPage> {
       ),
       // TODO esconder el boton si no eres miembro
       floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add, color: Theme.of(context).primaryColor),
+        child: Icon(Icons.add, color: Colors.black),
         onPressed: (){
           showDialog(
             context: this.context,
