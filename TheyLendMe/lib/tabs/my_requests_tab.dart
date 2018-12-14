@@ -86,9 +86,6 @@ class RequestedItem extends StatelessWidget {
         ),
         subtitle: Column(
           children: [
-            (requestedObject.desc!=null
-              ? Text(requestedObject.desc)
-              : Text('')),
             Row(
               children: [
                 FlatButton(
