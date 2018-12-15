@@ -3,6 +3,8 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'private_code_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
+import 'package:TheyLendMe/pages/my_group_objects_loans.dart';
+import 'package:TheyLendMe/pages/my_group_objects_requests.dart';
 
 class GeneralGroupSettingsTab extends StatefulWidget {
   
@@ -35,6 +37,7 @@ class GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
   }
 
   GeneralGroupSettingsTabState(this.group){private = group.private;autoloan = group.autoloan;}
+
   @override
   Widget build (BuildContext context){
     return Scaffold(
@@ -69,6 +72,18 @@ class GeneralGroupSettingsTabState extends State<GeneralGroupSettingsTab> {
                 });
 
             },
+          ),
+          !widget._group.autoloan ? ListTile(
+            title: Text('Ver solicitudes de objetos'),
+            onTap: () { 
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyRequestsTab(widget._group)));
+              },
+          ) : Container(),
+          ListTile(
+            title: Text('Ver objetos prestados'),
+            onTap: () { 
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyLoansTab(widget._group)));
+              },
           ),
           ListTile(
             title: Text('Compartir grupo'),

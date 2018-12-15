@@ -7,6 +7,8 @@ import 'package:TheyLendMe/pages/contact_dialog.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:TheyLendMe/Objects/objState.dart';
+
 
 //TODO: MyObjectDetails, from MyInventory
 //      (en vez de "Contactar" y "Pedir prestado", "Borrar" y, en un futuro, "Modificar")
@@ -95,15 +97,16 @@ class _ObjectDetailsState extends State<ObjectDetails> {
               GestureDetector(
                 onTap: () {
                   showDialog(
-                    context: context,
-                    builder: (BuildContext context){
-                      if (widget._object.owner is User) {
-                        return UserDetails(widget._object.owner);
-                      } else if (widget._object.owner is Group) {
-                        return GroupDetails(widget._object.owner);
+                      context: context,
+                      builder: (BuildContext context){
+                        if (widget._object.owner is User) {
+                          return UserDetails(widget._object.owner);
+                        } else if (widget._object.owner is Group) {
+                          return GroupDetails(widget._object.owner);
+                        }
                       }
-                    }
                   );
+                
                 },
                 child: Text(widget._object.owner.name, style: Theme.of(context).textTheme.subtitle) //WIP: hacerlo más clickable
               )
@@ -132,6 +135,8 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             child: Text('Contactar', style: TextStyle(color: Colors.white)),
           )
         ),
+
+        widget._object.objState.state == StateOfObject.DEFAULT ?
         Container(
           constraints: BoxConstraints.expand(
             height: Theme.of(context).textTheme.display1.fontSize * 1.5,
@@ -174,7 +179,7 @@ class _ObjectDetailsState extends State<ObjectDetails> {
             color: Theme.of(context).indicatorColor,
             child: Text('Pedir prestado', style: TextStyle(color: Colors.black)),
           )
-        )
+        ) : Container(),
       ]
     );
   }
