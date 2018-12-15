@@ -30,7 +30,7 @@ class _GroupSettingsPanelState extends State<GroupSettingsPanel> {
                 Tab(icon: Text('MIEMBROS',style: TextStyle(color: Colors.white))),
               ],
             ),
-            title: Text('Panel de ajustes', style: TextStyle(color: Colors.white)),
+            title: Text('Administrar Grupo', style: TextStyle(color: Colors.white)),
           ),
           body: TabBarView(
             children: [

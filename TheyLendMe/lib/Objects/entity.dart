@@ -227,25 +227,24 @@ class Group extends Entity{
   bool _private;
   bool _autoloan; 
   bool _imAdmin;
-  int _myIDMember;
-  Group(int idEntity, String name,{String email,String tfno,String info, String img,bool imAdmin = false,bool private = false, bool autoloan = false, int myIDMember}) 
+  bool _imMember;
+  Group(int idEntity, String name,{String email,String tfno,String info, String img,bool imAdmin = false,bool private = false, bool autoloan = false, bool imMember}) 
   : super(EntityType.GROUP, idEntity.toString(), name,tfno : tfno, info : info, img : img, email : email){
     _private = private;
     _autoloan = autoloan;
     _imAdmin = imAdmin;
-    _myIDMember=myIDMember;
+    _imMember=imMember;
   }
 
   get private => _private;
   set private(bool private) => private;
 
-  get myIDMember => _myIDMember;
-  set myIDMember(int myIDMember) => myIDMember;
+  get imMember => _imMember;
+  set imMember(int imMember) => imMember;
 
   get autoloan => _autoloan; 
   set autoloan(bool autoloan) => _autoloan;
 
-  get imMember =>  _myIDMember != null;
 
   get imAdmin => _imAdmin;
   set imAdmin(bool imAdmin) => _imAdmin = imAdmin;
@@ -336,7 +335,7 @@ class Group extends Entity{
         idGroup: this.idEntity,
         userInfo: true,
     ).doRequest(context: context);
-    return responsePost.requestsGroupObjectBuilder(this, mine: false);
+    return responsePost.requestsGroupObjectBuilder(this, mine: true);
   }
   ///Las que he hecho
   Future<List<GroupObject>> getRequestsOthersToMe({var context}) async{
@@ -344,7 +343,7 @@ class Group extends Entity{
         idGroup: this.idEntity,
         userInfo: true,
     ).doRequest(context: context);
-    return responsePost.requestsGroupObjectBuilder(this, mine: true);
+    return responsePost.requestsGroupObjectBuilder(this, mine: false);
   }
   @override
   Future<List<GroupObject>> getLoansMeToOthers({var context}) async{
@@ -382,7 +381,6 @@ class Group extends Entity{
   Future<bool>  leaveGroup({var context}) async{
     ResponsePost res = await new RequestPost("leaveGroup").dataBuilder(
       userInfo: true,
-      idMemeber: this.myIDMember,
       idGroup: this._idEntity,
     ).doRequest(context:context);
     return res.hasError;
@@ -423,7 +421,7 @@ class Group extends Entity{
       userInfo: true,
       idGroup: this.idEntity,
     ).doRequest(context:context);
-    Map<String,List<Obj>> map = res.groupInventory();
+    Map<String,List<Obj>> map = res.groupInventory(this);
     return map;
   }
 }

@@ -259,8 +259,9 @@ class GroupObject extends Obj{
       amount: amount,
     ).doRequest(context : context);
   }*/
-  
+  GroupObjState get groupObjectState => _objState;
   ObjState get objState => _objState;
+
 
   
   Future<bool> deleteRequest() {

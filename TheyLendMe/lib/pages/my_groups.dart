@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/create_group.dart';
-import 'package:TheyLendMe/pages/group_details.dart';
+import 'package:TheyLendMe/pages/my_group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'group_settings_panel.dart';
