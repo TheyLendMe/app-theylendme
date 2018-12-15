@@ -233,7 +233,7 @@ class Group extends Entity{
     _private = private;
     _autoloan = autoloan;
     _imAdmin = imAdmin;
-    _imMember=imMember;
+    _imMember = imMember != null ? imMember : false;
   }
 
   get private => _private;

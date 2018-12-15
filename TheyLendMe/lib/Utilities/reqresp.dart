@@ -351,7 +351,7 @@ class ResponsePost{
           : 
         new GroupObject(
           int.parse(data['idObject']), 
-          group,
+          data['owner'] != null ? groupBuilder(data:data['owner'])  : group ,
           data['name'],
           image : data['imagen'],
           desc: data['descr'],
@@ -401,7 +401,7 @@ class ResponsePost{
       admin: admin);
   }
 
-  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false, bool imMember}){
+  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false, bool imMember = false}){
     data = data == null ? _data['group'] : data;
     return new Group(
       int.parse(data['idGroup']), 
@@ -475,6 +475,7 @@ class ResponsePost{
     }
     if(mine) {
       list.addAll(_requestsGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
       list.addAll(_requestsGroupObjectBuilder(_data['toOthersGroups'], group: group));
 
     

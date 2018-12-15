@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TheyLendMe/pages/create_group.dart';
-import 'package:TheyLendMe/pages/my_group_details.dart';
+import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'group_settings_panel.dart';
@@ -21,7 +21,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
     var _fabMiniMenuItemList = [
       new FabMiniMenuItem.noText(
         
-        new Icon(Icons.add,color: Colors.white,),
+        new Icon(Icons.add),
         Colors.orange,
         4.0,
         "Crea un grupo",
@@ -33,7 +33,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
             },);
         },),
       new FabMiniMenuItem.noText(
-        new Icon(Icons.group_add, color: Colors.white), 
+        new Icon(Icons.group_add), 
         Colors.orange, 
         4.0, 
         "Unirse a un grupo", 
@@ -66,7 +66,7 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
         }
       ),
       // Fab menu, crear grupo y unirse a grupo
-      floatingActionButton: new FabDialer(_fabMiniMenuItemList, Colors.orange, new Icon(Icons.group, color: Colors.white,),new Icon(Icons.group, color: Colors.white,),180,true),
+      floatingActionButton: new FabDialer(_fabMiniMenuItemList, Colors.orange, new Icon(Icons.group),new Icon(Icons.group),180,true),
     );
   }
 }

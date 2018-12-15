@@ -264,9 +264,13 @@ class GroupObject extends Obj{
 
 
   
-  Future<bool> deleteRequest() {
-    // TODO: implement deleteRequest
-    return null;
+  Future<bool> deleteRequest({var context}) async{
+     ResponsePost res = await new RequestPost("deleteGRequest").dataBuilder(
+      idObject: this.idObject,
+      userInfo: true,
+      idRequest: _objState.idState
+    ).doRequest(context: context);
+    return res.hasError;
   }
 
 
