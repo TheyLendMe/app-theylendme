@@ -692,7 +692,7 @@ class ResponsePost{
     List<GroupObject> mines = new List();
     List<GroupObject> elses = new List();
     _data['our_objs'].forEach((object){
-      if(object != null){mines.add(objectBuilder(data: object,forUser: false));}
+      if(object != null){mines.add(objectBuilder(data: object,group: group,forUser: false));}
     });
     _data['elses_objs'].forEach((object){
       if(object != null){elses.add(objectBuilder(data: object, group: group, forUser: false ));}

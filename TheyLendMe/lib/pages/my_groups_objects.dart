@@ -22,7 +22,7 @@ class MyGroupsObjectsPage extends StatefulWidget {
 class _MyGroupsObjectsPageState extends State<MyGroupsObjectsPage> {
    Future<List<Obj>> getOwnInventory() async {
     List<Obj> claims = await widget._group.getClaimsMeToOthers();
-    List<Obj> lends = await widget._group.getRequestsOthersToMe();
+    List<Obj> lends = await widget._group.getLoansMeToOthers();
     List<Obj> objects = (await widget._group.getEntityInventory())['mines'];
     List<Obj> l = new List();
 
@@ -98,7 +98,7 @@ Text textState(object) {
   if (object.objState.state == StateOfObject.DEFAULT)
     return Text( 'Disponible', style: TextStyle(color: Colors.green) );
   else if (object.objState.state == StateOfObject.LENT)
-    return Text( 'Prestado', style: TextStyle(color: Colors.yellow) );
+    return Text( 'Prestado', style: TextStyle(color: Colors.yellow.shade700) );
   else
     return Text( 'Reclamado', style: TextStyle(color: Colors.red) );
 }
@@ -164,7 +164,7 @@ TextStyle stateColor(state) {
   if (state=='Disponible')
     return TextStyle(color: Colors.green);
   else if (state=='Prestado')
-    return TextStyle(color: Colors.red);
+    return TextStyle(color: Colors.orange);
 }
 
 final User propietario = User(UserSingleton().user.idEntity,UserSingleton().user.name);
