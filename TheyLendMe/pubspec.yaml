@@ -13,18 +13,18 @@ dependencies:
   firebase_auth: ^0.6.6
   firebase_core: ^0.2.5+1
   google_sign_in: ^3.2.4
-  dio: ^1.0.6
+  dio: ^1.0.9
   firebase_messaging: ^2.0.2
   shared_preferences: ^0.4.3
-  validate: ^1.4.0
+  validate: ^1.7.0
   path: ^1.6.2
   image_picker: ^0.4.10
-  fluttertoast: ^2.1.1
-  numberpicker: ^0.1.6
+  fluttertoast: ^2.1.5
+  numberpicker: ^0.1.7
   flutter_staggered_grid_view:
   url_launcher:
   font_awesome_flutter: ^8.2.0
-  flutter_image_compress: ^0.2.1
+  flutter_image_compress: ^0.2.2
   path_provider: ^0.4.1
   intl: ^0.15.7
   fab_dialer: ^0.1.3
