@@ -12,6 +12,7 @@ class UserSingleton{
   Notifications notifications;
   String _userImage;
   String token;
+  bool emailVerified = false;
 
   factory UserSingleton({FirebaseUser user}){
     if(_singleton == null){
@@ -22,7 +23,8 @@ class UserSingleton{
   UserSingleton._internal(){
     firebaseUser.then((user) async{
         if(user != null){this._user = new User(user.uid, user.displayName,email: user.email); await refreshUser();}
-        else{ _user = await sharedPrefUser(); await refreshUser();}    
+        else{ _user = await sharedPrefUser(); await refreshUser();
+       }    
     });
   } 
 
@@ -41,9 +43,11 @@ class UserSingleton{
     FirebaseUser firebaseUser = await this.firebaseUser;
     if(firebaseUser == null){this._user = null;}else{
       this.token = await firebaseUser.getIdToken();
+      emailVerified = firebaseUser.isEmailVerified;
       if(_user == null || _user.idEntity == ""){
-         this._user = new User(firebaseUser.uid, firebaseUser.displayName, email: firebaseUser.email);
-          print("Me actualizo");} 
+
+        this._user = new User(firebaseUser.uid, firebaseUser.displayName, email: firebaseUser.email);
+        print("Me actualizo");} 
       try{
         User u = await _user.getEntityInfo();
         _userImage = u.img;
@@ -54,6 +58,11 @@ class UserSingleton{
     ///se guarda en la base de datos.
     
   }
+
+  Future<bool> resendEmail() async{
+    if(!(await firebaseUser).isEmailVerified){(await firebaseUser).sendEmailVerification();}
+  }
+
   set userImage (String img) => _userImage = img;
   String get userImage =>  _userImage;
   set user(user) => _user = user;

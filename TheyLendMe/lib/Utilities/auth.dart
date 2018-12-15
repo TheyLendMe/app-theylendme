@@ -17,7 +17,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:image_picker_saver/image_picker_saver.dart';
 
 ///Responsetype 10:cuenta login, sin verificar email
 //////Responsetye: 11, login true,

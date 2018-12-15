@@ -3,8 +3,8 @@ import 'package:TheyLendMe/pages/create_group.dart';
 import 'package:TheyLendMe/pages/group_details.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'package:TheyLendMe/pages/group_settings_panel.dart';
-import 'package:TheyLendMe/pages/join_group.dart';
+import 'group_settings_panel.dart';
+import 'join_group.dart';
 import 'package:fab_dialer/fab_dialer.dart';
 
 
@@ -48,9 +48,9 @@ class _MyGroupsPageState extends State<MyGroupsPage> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mis Grupos'),
-        //TODO: searchBar
-      ),
+          title: const Text('Mis Grupos'),
+          //TODO: searchBar
+        ),
       body: FutureBuilder<List<Group>>(
         future: UserSingleton().user.getGroupsImMember(),
         builder: (context, snapshot) {
@@ -101,17 +101,14 @@ class GroupItem extends StatelessWidget {
           ? Text(group.info)
           : Text('')),
         trailing: (admin 
-          ? FlatButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0)
-            ),
+          ? MaterialButton(
             onPressed: () {
               Navigator.push(context, new MaterialPageRoute(
                 builder: (BuildContext context) => new GroupSettingsPanel(group)
               ));
             },
             child: new Text('Administrar'),
-            color: Theme.of(context).accentColor,)
+            color: Colors.red,)
           : null
         ),
       ),
