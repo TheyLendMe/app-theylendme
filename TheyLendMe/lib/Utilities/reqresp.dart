@@ -6,6 +6,7 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:image/image.dart' as Image;
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -29,18 +30,11 @@ class RequestPost{
 
   RequestPost(String fun){
     _url = fun;
-
-
     dio.options.baseUrl=endpoint + "app/";
     dio.options.connectTimeout = 10000; //5s
     dio.options.receiveTimeout=3000;  
-
-
     _data = new Map();
-  
   }
-
-
   Future<ResponsePost> doRequest({var context}) async{
 
     ///TODO implementar un manejador de errores si deja de haber conexion
@@ -79,7 +73,10 @@ class RequestPost{
   Map updateValues,
   }){
     this.userInfo = userInfo;
-    if(img != null){ _data['image'] = new UploadFileInfo(img, basename(img.path));}
+    if(img != null){
+      img = getImage(img.path);
+      _data['image'] = new UploadFileInfo(img, basename(img.path))
+    ;}
     if(idUser != null && !userInfo)_data['idGroup'] = idGroup.toString();
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
@@ -90,7 +87,7 @@ class RequestPost{
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
     if(requestMsg != null) _data['request'] = requestMsg;
-    if(updateValues != null && updateValues.length != 0){_data['updateRequest']= json.encode(updateValues);}
+    if(updateValues != null){_data['updateRequest']= json.encode(updateValues);}
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['idOtherUser'] = oUser;
@@ -107,6 +104,12 @@ class RequestPost{
 
     return this;
   }
+
+  File getImage(String path){
+    Image.Image image = Image.decodeImage(new File(path).readAsBytesSync());
+    return new File(path+".png")..writeAsBytesSync(Image.encodePng(image));
+  }
+  
 
   Future<Map<String,String>> authInfo() async{
     FirebaseUser firebaseUser = await UserSingleton().firebaseUser;
@@ -455,7 +458,7 @@ class ResponsePost{
         amount: int.parse(request['amount']),
         msg: request['requestMsg'],
         actual: request['object']['owner'] == null ?  UserSingleton().user : userBuilder(data :request['object']['owner']),
-        next: userBuilder(data : request['requester']),
+        next: request['requester'] == null ? UserSingleton().user : userBuilder(data : request['requester']),
         date: request['date'],
       );
       requestsList.add(objectBuilder(data: request['object'], objState: state));

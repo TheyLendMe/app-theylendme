@@ -46,7 +46,7 @@ class _TheDrawerState extends State<TheDrawer> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: (UserSingleton().login
-              ? (UserSingleton().user.name!='' //TODO: better with UserSingleton().user.getEntityInfo().name
+              ? (UserSingleton().user.name!= null //TODO: better with UserSingleton().user.getEntityInfo().name
                 ? Text(UserSingleton().user.name)
                 : Text("NombreUsuario"))
               : Text("UsuarioSinRegistrar")),

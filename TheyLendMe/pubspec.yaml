@@ -29,6 +29,7 @@ dependencies:
   intl: ^0.15.7
   fab_dialer: ^0.1.3
   http: ^0.12.0
+  image: ^2.0.5
 
 dev_dependencies:
   flutter_test:

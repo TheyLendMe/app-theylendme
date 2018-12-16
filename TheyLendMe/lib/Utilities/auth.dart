@@ -42,17 +42,15 @@ class Auth {
     user = await FirebaseAuth.instance.currentUser();
     ///Second Filter
     if(user != null){
-
-      
-      ///Download profile Image from firebase
-      
-
+    ///Download profile Image from firebase
      // File image= await downloadProfileImage(user.photoUrl);
       UserSingleton(user: user);
-      await UserSingleton().refreshUser();
+      await UserSingleton().refreshUser(first : true);
+      if(name != null) {UserSingleton().user.name = name;}
       if((await new RequestPost('login').dataBuilder(userInfo: true, nickName: name).doRequest()).hasError){
         return false;
       }
+      await UserSingleton().refreshUser();
       if(await _checkFirstLogIn()){print("First Login"); _firstSteps(google :google, pass: pass,facebook: facebook);}
 
       
@@ -89,11 +87,16 @@ class Auth {
   static Future<bool> emailRegister(String email, String pass) async{
     FirebaseAuth _auth= FirebaseAuth.instance;
     try{
-      await _auth.createUserWithEmailAndPassword(email: email,password:pass);
+      FirebaseUser user = await _auth.createUserWithEmailAndPassword(email: email,password:pass);
+      user.sendEmailVerification();
       String name = email.split("@")[0];
       return await login(email: email, pass: pass, name: name);
-    }on PlatformException catch(e){_onError(e); return false;}
-
+    }on PlatformException catch(e){
+      login(email: email, pass: pass).then((e){
+        return true;
+      });
+    }
+    return false;
   }
   static Future signOut() async{
     SharedPreferences sh = await SharedPreferences.getInstance();

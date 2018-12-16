@@ -184,6 +184,7 @@ class GroupObject extends Obj{
     ).doRequest(context : context);
     return res.hasError;
   }
+  ///FIXME se piensa que no soy miembro, como??????
   Future<bool> requestObjAsUser({int amount = 1, String msg, var context}) async{
     if((owner as Group).imMember){
       return requestAsMember(amount: amount, msg: msg);
