@@ -39,7 +39,7 @@ class UserSingleton{
     );
   }
 
-  Future refreshUser() async{
+  Future refreshUser({bool first = false}) async{
     FirebaseUser firebaseUser = await this.firebaseUser;
     if(firebaseUser == null){this._user = null;}else{
       this.token = await firebaseUser.getIdToken();
@@ -49,8 +49,10 @@ class UserSingleton{
         this._user = new User(firebaseUser.uid, firebaseUser.displayName, email: firebaseUser.email);
         print("Me actualizo");} 
       try{
-        User u = await _user.getEntityInfo();
-        _userImage = u.img;
+        if(!first){
+          User u = await _user.getEntityInfo();
+          _userImage = u.img;
+        }
         /*if(u.img == null){_user.updateInfo(img: await Auth.downloadProfileImage(firebaseUser.photoUrl));}*/
       }catch(e){}
     }
