@@ -42,8 +42,8 @@ android {
         applicationId "com.TheyLendMe.tlm"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.04"
+        versionCode 8
+        versionName "1.06"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
