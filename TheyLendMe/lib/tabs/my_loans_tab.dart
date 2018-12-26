@@ -5,7 +5,6 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
-import 'package:TheyLendMe/pages/group_details.dart';
 
 // Pestaña PRESTADOS
 class MyLoansTab extends StatefulWidget {
@@ -67,11 +66,8 @@ class LentItem extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context){
-                    if (lentObject.objState.actual is User) {
-                      return UserDetails(lentObject.objState.actual);
-                    } else if (lentObject.objState.actual is Group) {
-                      return GroupDetails(lentObject.objState.actual);
-                    }
+                    return UserDetails(lentObject.objState.actual);
+
                   }
                 );
               },

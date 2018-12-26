@@ -77,7 +77,7 @@ class ObjectTile extends StatelessWidget {
         );
       },
       staggeredTileBuilder: (i) =>
-          StaggeredTile.count(2, i.isEven ? 2 : 3),
+          StaggeredTile.count(4,4),
       mainAxisSpacing: 8.0,
       crossAxisSpacing: 8.0,
     );

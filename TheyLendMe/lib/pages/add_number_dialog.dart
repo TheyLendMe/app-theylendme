@@ -4,8 +4,6 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-//TODO: TextField, _entity.updateInfo()
-
 class AddNumberDialog extends StatefulWidget {
   final Entity _entity;
 

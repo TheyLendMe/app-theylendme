@@ -42,8 +42,9 @@ android {
         applicationId "com.TheyLendMe.tlm"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 8
+        versionName "1.06"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -64,10 +65,10 @@ android {
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'*/
         }
-
+        /*
         debug{
             signingConfig signingConfigs.debug
-        }
+        }*/
     }
 }
 

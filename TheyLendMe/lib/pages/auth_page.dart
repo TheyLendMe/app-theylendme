@@ -46,15 +46,17 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
 
     if (form.validate()) {
       form.save();
-      Auth.emailRegister(controllerEmail.text,controllerPassword.text);
+      Auth.emailRegister(controllerEmail.text,controllerPassword.text).then((error){
+          Navigator.of(context).pop(null);
+      });
       //TODO: sync-await return Center(child: CircularProgressIndicator()));
-      Navigator.of(context).pop(null);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding : false,
       backgroundColor: Colors.white,
       body: Stack(
         children: [

@@ -6,6 +6,7 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:image/image.dart' as Image;
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -14,7 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:TheyLendMe/Objects/joinRequest.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 
-const String endpoint = "http://52.47.177.107/";
+
+const String endpoint = "https://app.theylend.me/";
 final DateFormat dateFormat = new DateFormat('yyyy-MM-dd');
 
 
@@ -28,18 +30,11 @@ class RequestPost{
 
   RequestPost(String fun){
     _url = fun;
-
-
     dio.options.baseUrl=endpoint + "app/";
     dio.options.connectTimeout = 10000; //5s
     dio.options.receiveTimeout=3000;  
-
-
     _data = new Map();
-  
   }
-
-
   Future<ResponsePost> doRequest({var context}) async{
 
     ///TODO implementar un manejador de errores si deja de haber conexion
@@ -72,13 +67,16 @@ class RequestPost{
 ///This will be the builder that
  RequestPost dataBuilder({String idUser,dynamic idGroup, int idObject, 
   String name, String desc,String info, String email, String tfno,String nickName,
-
   int idLoan, int idRequest, int idClaim, int amount,List fieldname,List fieldValue,
   String oUser, String msg, File img, String claimMsg, String groupName, bool autoLoan,
-  bool private, int idMemeber, String requestMsg, bool userInfo = false, String privateCode//add more fields if they are necessary
+  bool private, int idMemeber, String requestMsg, bool userInfo = false, String privateCode,//add more fields if they are necessary
+  Map updateValues,
   }){
     this.userInfo = userInfo;
-    if(img != null){ _data['image'] = new UploadFileInfo(img, basename(img.path));}
+    if(img != null){
+      img = getImage(img.path);
+      _data['image'] = new UploadFileInfo(img, basename(img.path))
+    ;}
     if(idUser != null && !userInfo)_data['idGroup'] = idGroup.toString();
     if(idGroup != null)_data['idGroup'] = idGroup.toString();
     if(idObject != null)_data['idObject'] = idObject.toString();
@@ -89,16 +87,12 @@ class RequestPost{
     if(idClaim != null) _data['idClaim'] = idClaim.toString();
     if(amount != null) _data['amount'] = amount.toString();
     if(requestMsg != null) _data['request'] = requestMsg;
-    
+    if(updateValues != null){_data['updateRequest']= json.encode(updateValues);}
     if(privateCode != null) _data['privateCode'] = privateCode;
     ///In case we need to pass other user ---> oUser
     if(oUser != null) _data['idOtherUser'] = oUser;
     if(msg != null) _data['msg'] = msg;
     if(claimMsg != null) _data['claimMsg'] = claimMsg;
-    if(fieldname != null) {_data['fieldName'] = [fieldname]; _data ['fieldValue'] = [fieldValue];} else{
-        _data['fieldName'] =['null'];
-        _data['fieldValue'] =['null'];
-    }
     if(nickName != null) _data['nickName'] = nickName.toString();
     if(info != null){_data['info'] = info;}
     if(email != null){_data['email']=email;}
@@ -111,11 +105,17 @@ class RequestPost{
     return this;
   }
 
-  Future<Map<String,dynamic>> authInfo() async{
+  File getImage(String path){
+    Image.Image image = Image.decodeImage(new File(path).readAsBytesSync());
+    return new File(path+".png")..writeAsBytesSync(Image.encodePng(image));
+  }
+  
+
+  Future<Map<String,String>> authInfo() async{
     FirebaseUser firebaseUser = await UserSingleton().firebaseUser;
     if(firebaseUser == null){throw new AuthServer("No estas logeado",id :0);}
     UserSingleton user = await UserSingleton();
-    Map<String,dynamic> m = new Map();
+    Map<String,String> m = new Map();
     m['idUser']= UserSingleton().user.idEntity;
     m['token'] = await firebaseUser.getIdToken();
     if(UserSingleton().user.name != null) m['nickname'] = UserSingleton().user.name;
@@ -124,24 +124,21 @@ class RequestPost{
     return m;
   }
 }
-List<dynamic> fieldNameFieldValue({String nickName,String email, String info, String tfno, int amount, 
+
+Map<String,dynamic> updateRequestBuild({String nickName,String email, String info, String tfno,String desc, int amount, 
 String name, String groupName, bool private, bool autoloan}){
-    List fieldName = new List();
-    List fieldValue = new List();
-    List<dynamic> r = new List();
-    r.add(fieldName);
-    r.add(fieldValue);
-    if(nickName != null){fieldName.add('nickname'); fieldValue.add(nickName);}
-    if(groupName != null){fieldName.add('groupName'); fieldValue.add(groupName);}
-    if(amount != null){fieldName.add('amount'); fieldValue.add(amount);}
-    if(private != null){fieldName.add('private'); fieldValue.add(private);}
-    if(autoloan != null){fieldName.add('autoloan'); fieldValue.add(autoloan);}
-    if(name != null){fieldName.add('name'); fieldValue.add(name);}
-    if(email != null){fieldName.add('email');fieldValue.add(email);}
-    if(info != null){fieldName.add('info');fieldValue.add(info);}
-    if(tfno != null){fieldName.add('tfno');fieldValue.add(tfno);}
-    if(fieldName.length == 0){r.clear(); r.add(null); r.add(null);}
-    return r;
+  Map<String,dynamic> updateRequest = new Map();
+  if(nickName != null){updateRequest['nickname'] = nickName;}
+  if(email != null){updateRequest['email'] = email;}
+  if(info != null){updateRequest['info'] = info;}
+  if(tfno != null){updateRequest['tfno'] = tfno;}
+  if(amount != null){updateRequest['amount'] = amount;}
+  if(name != null){updateRequest['name'] = name;}
+  if(desc != null){updateRequest['desc'] = desc;}
+  if(groupName != null){updateRequest['groupName'] = groupName;}
+  if(private != null){updateRequest['private'] = private;}
+  if(autoloan != null){updateRequest['autoloan'] = autoloan;}
+  return updateRequest;
 }
 class ResponsePost{
   ///Builder that allow the app to create the Respnse object asynchronously, we need this, because byteToString
@@ -357,18 +354,16 @@ class ResponsePost{
           : 
         new GroupObject(
           int.parse(data['idObject']), 
-          group,
+          data['owner'] != null ? groupBuilder(data:data['owner'])  : group ,
           data['name'],
           image : data['imagen'],
           desc: data['descr'],
-          amount: data['amount'] != null ? int.parse(data['amount']) : data['max_amount'],
+          amount: data['amount'] != null ? int.parse(data['amount']) :int.parse(data['max_amount']),
           date: data['creationDate'],
-          actualAmount: data['available_amount'] != null ? int.parse(data['available_amount']) : int.parse(data['amount']) ,
+          actualAmount: data['available_amount'] != null ? data['available_amount'] : int.parse(data['amount']) ,
           objState: objState
         );
-
   } 
-
   List<JoinRequest> joinRequestsBuilder(Group group){
     List<dynamic> list = _data;
     List<JoinRequest> joinRequests = new List();
@@ -409,7 +404,7 @@ class ResponsePost{
       admin: admin);
   }
 
-  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false, int idMember}){
+  Group groupBuilder({Map<String, dynamic> data, bool imAdmin = false, bool imMember = false}){
     data = data == null ? _data['group'] : data;
     return new Group(
       int.parse(data['idGroup']), 
@@ -418,7 +413,7 @@ class ResponsePost{
       tfno: data['tfno'],
       img: data['imagen'],
       info: data['info'],
-      myIDMember: idMember,
+      imMember: imMember,
       autoloan:  "1" == data['autoloan'],
       private: "1" == data['private'],
       imAdmin: imAdmin,
@@ -428,8 +423,8 @@ class ResponsePost{
     List<dynamic> listAdmin = _data['admin'];
     List<dynamic> listMember = _data['member'];
     List<Group> listGroup = new List();
-    listAdmin.forEach((group){listGroup.add(groupBuilder(data : group, imAdmin: true));});
-    listMember.forEach((group){listGroup.add(groupBuilder(data : group));});
+    listAdmin.forEach((group){listGroup.add(groupBuilder(data : group, imAdmin: true, imMember: true));});
+    listMember.forEach((group){listGroup.add(groupBuilder(data : group, imMember: true));});
     return listGroup;
   }
 
@@ -463,7 +458,7 @@ class ResponsePost{
         amount: int.parse(request['amount']),
         msg: request['requestMsg'],
         actual: request['object']['owner'] == null ?  UserSingleton().user : userBuilder(data :request['object']['owner']),
-        next: userBuilder(data : request['requester']),
+        next: request['requester'] == null ? UserSingleton().user : userBuilder(data : request['requester']),
         date: request['date'],
       );
       requestsList.add(objectBuilder(data: request['object'], objState: state));
@@ -483,11 +478,14 @@ class ResponsePost{
     }
     if(mine) {
       list.addAll(_requestsGroupObjectBuilder(_data['intraGroup'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
       list.addAll(_requestsGroupObjectBuilder(_data['toOthersGroups'], group: group));
+
     
     }
     if(!mine) {
-      list.addAll(_requestsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
+      list.addAll(_requestsGroupObjectBuilder(_data['intraGroup'], group: group));
+      //list.addAll(_requestsGroupObjectBuilder(_data['fromOthersGroups'], group: group));
       list.addAll(_requestsGroupObjectBuilder(_data['fromOthersUsers'], group: group, notFromAGroup: true));
     }
     _orderObjeList(list);
@@ -497,8 +495,8 @@ class ResponsePost{
   List<GroupObject> _requestsGroupObjectBuilder(List<dynamic> requests, {Group group, bool notFromAGroup = false}){
     List<GroupObject> requestsList= new List();
     requests.forEach((request){
-      Group groupTarget = groupBuilder(data : request['groupTarget']);
-      Group requesterGroup = groupBuilder(data : request['requesterGroup']);
+      Group groupTarget = request['groupTarget'] != null ?  groupBuilder(data : request['groupTarget']) : group;
+      Group requesterGroup = request['requesterGroup'] != null ? groupBuilder(data : request['requesterGroup']) : group;
       GroupObjState state = new GroupObjState(
         id: int.parse(request['idRequest']),
         state: StateOfObject.REQUESTED,
@@ -511,7 +509,7 @@ class ResponsePost{
         nextUser: userBuilder(data : request['requester_user']),
         notFromAGroup: notFromAGroup
       );
-      requestsList.add(objectBuilder(data: request['object'], objState: state, forUser: false));
+      requestsList.add(objectBuilder(data: request['object'], objState: state, group: group, forUser: false));
     });
     return requestsList;
   }
@@ -560,8 +558,8 @@ class ResponsePost{
     }
     if(mine) {
       list.addAll(_claimsGroupObjectBuilder(_data['intraGroup'], group: group));
-      list.addAll(_claimsGroupObjectBuilder(_data['toOthersGroups'], group: group));
-      list.addAll(_claimsGroupObjectBuilder(_data['toOthersUsers'], group: group, notFromAGroup: true));
+      //list.addAll(_claimsGroupObjectBuilder(_data['toOthersGroups'], group: group));
+      //list.addAll(_claimsGroupObjectBuilder(_data['toOthersUsers'], group: group, notFromAGroup: true));
     
     }
     if(!mine) {
@@ -575,11 +573,12 @@ class ResponsePost{
   List<GroupObject> _claimsGroupObjectBuilder(List<dynamic> claims, {Group group, bool notFromAGroup = false}){
     List<GroupObject> claimsList = new List();
     claims.forEach((claim){
-      Group claimGroup = groupBuilder(data : claim['claimingGroup']);
-      Group keepGroup = groupBuilder(data : claim['keeperGroup']);
+      Group claimGroup =  claim['claimingGroup'] != null ? groupBuilder(data : claim['claimingGroup']) : group;
+      Group keepGroup = claim['keeperGroup'] != null ? groupBuilder(data : claim['keeperGroup']) : group;
       User keepUser = userBuilder(data : claim['targetUser']);
       GroupObjState state = new GroupObjState(
         id: int.parse(claim['idClaim']),
+        amount: int.parse(claim['object']['amount']) ,
         state: StateOfObject.CLAIMED,
        // amount: int.parse(claim['amount']),
         msg: claim['claimMsg'],
@@ -590,7 +589,7 @@ class ResponsePost{
         actualUser: keepUser == null ? userBuilder(data : claim['keeper_user']) : keepUser,
         notFromAGroup: notFromAGroup
       );
-      claimsList.add(objectBuilder(data: claim['object'], objState: state, forUser: false));
+      claimsList.add(objectBuilder(data: claim['object'],group: group, objState: state, forUser: false));
     });
     return claimsList;
   }
@@ -639,7 +638,7 @@ class ResponsePost{
     }
     if(mine) {
       list.addAll(_loansGroupObjectBuilder(_data['intraGroup'], group: group));
-      list.addAll(_loansGroupObjectBuilder(_data['toOthersGroups'], group: group));
+     // list.addAll(_loansGroupObjectBuilder(_data['toOthersGroups'], group: group));
       list.addAll(_loansGroupObjectBuilder(_data['toOthersUsers'], group: group, notFromAGroup: true));
     
     }
@@ -651,25 +650,24 @@ class ResponsePost{
     return list;
   }
 
-  List<GroupObject> _loansGroupObjectBuilder(List<dynamic> claims, {Group group, bool notFromAGroup = false}){
+  List<GroupObject> _loansGroupObjectBuilder(List<dynamic> loans, {Group group, bool notFromAGroup = false}){
     List<GroupObject> loanssList = new List();
-    claims.forEach((loan){
-      Group ownerGroup = groupBuilder(data : loan['ownerGroup']);
-      Group keepGroup = groupBuilder(data : loan['keeperGroup']);
-      User keepUser = userBuilder(data : loan['targetUser']);
+    loans.forEach((loan){
+      Group ownerGroup =  loan['ownerGroup'] != null ? groupBuilder(data : loan['ownerGroup']) : group;
+      Group keepGroup = loan['keeperGroup'] != null ? groupBuilder(data : loan['keeperGroup']) : group;
+      User keepUser =  loan['targetUser']!= null ? userBuilder(data : loan['targetUser']) : userBuilder(data : loan['keeper_user']);
       GroupObjState state = new GroupObjState(
         id: int.parse(loan['idLoan']),
         state: StateOfObject.LENT,
         amount: int.parse(loan['amount']),
-    
         actual: keepGroup != null ? keepGroup  : group,
         next: ownerGroup != null ? ownerGroup  : group,
         date: loan['date'],
         //actualUser:userBuilder(data : loan['user']) ,
-        actualUser: keepUser == null ? userBuilder(data : loan['keeper_user']) : keepUser,
+        actualUser: keepUser,
         notFromAGroup: notFromAGroup
       );
-      loanssList.add(objectBuilder(data: loan['object'], objState: state, forUser: false));
+      loanssList.add(objectBuilder(data: loan['object'], group: group, objState: state, forUser: false));
     });
     return loanssList;
   }
@@ -692,16 +690,16 @@ class ResponsePost{
   }
 
 
-  Map<String,List<GroupObject>> groupInventory(){
+  Map<String,List<GroupObject>> groupInventory(Group group){
     Map<String,List<GroupObject>> map = new Map();
 
     List<GroupObject> mines = new List();
     List<GroupObject> elses = new List();
     _data['our_objs'].forEach((object){
-      if(object != null){mines.add(objectBuilder(data: object, user: UserSingleton().user));}
+      if(object != null){mines.add(objectBuilder(data: object,group: group,forUser: false));}
     });
     _data['elses_objs'].forEach((object){
-      if(object != null){mines.add(objectBuilder(data: object));}
+      if(object != null){elses.add(objectBuilder(data: object, group: group, forUser: false ));}
     });
     map['mines'] = mines;
     map['others'] = elses;
@@ -711,7 +709,7 @@ class ResponsePost{
   Group signInGroupBuilder(){
     int idMember = int.parse(_data['member']['idMember']);
     bool admin = int.parse(_data['member']['idMember']) != 0 ;
-    return groupBuilder(data: _data['member']['group'], imAdmin: admin, idMember: idMember);
+    return groupBuilder(data: _data['member']['group'], imAdmin: admin);
   }
 
 

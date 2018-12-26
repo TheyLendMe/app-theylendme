@@ -3,19 +3,14 @@ import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 
-import 'package:TheyLendMe/pages/my_inventory.dart';
-import 'package:TheyLendMe/pages/my_loans.dart';
-import 'package:TheyLendMe/pages/my_groups.dart';
-import 'package:TheyLendMe/pages/my_settings.dart';
 import 'package:TheyLendMe/pages/me_details.dart';
 
 class TheDrawer extends StatefulWidget {
 
   final drawerItems = [
     DrawerItem("Home",         Icons.home,         "/"),
-    DrawerItem("Mi Inventario",  Icons.folder_open,  "/MyInventoryPage"),
-    DrawerItem("Mis Préstamos",Icons.import_export,"/MyLoansPage"),
-    DrawerItem("Mis Grupos",   Icons.people,       "/MyGroupsPage"),
+    DrawerItem("Mi Ropa",  Icons.folder_open,  "/MyInventoryPage"),
+    DrawerItem("Mis Compras",Icons.import_export,"/MyLoansPage"),
     DrawerItem("Ajustes",      Icons.settings,     "/MySettingsPage")
   ];
 
@@ -28,7 +23,6 @@ class _TheDrawerState extends State<TheDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
     List<Widget> drawerOptions = [];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];
@@ -47,7 +41,7 @@ class _TheDrawerState extends State<TheDrawer> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: (UserSingleton().login
-              ? (UserSingleton().user.name!='' //TODO: better with UserSingleton().user.getEntityInfo().name
+              ? (UserSingleton().user.name!= null //TODO: better with UserSingleton().user.getEntityInfo().name
                 ? Text(UserSingleton().user.name)
                 : Text("NombreUsuario"))
               : Text("UsuarioSinRegistrar")),
@@ -60,7 +54,7 @@ class _TheDrawerState extends State<TheDrawer> {
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
                 backgroundImage: (UserSingleton().login
-                  ? (UserSingleton().user.img!=null ? NetworkImage(UserSingleton().user.img) : AssetImage('images/def_user_pic.png'))
+                  ? (UserSingleton().userImage!=null ? NetworkImage(UserSingleton().userImage) : AssetImage('images/def_user_pic.png'))
                   : null),
                 child: (UserSingleton().login
                   ? null

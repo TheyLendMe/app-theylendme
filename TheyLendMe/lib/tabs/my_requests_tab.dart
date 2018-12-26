@@ -5,9 +5,7 @@ import 'package:TheyLendMe/Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/Objects/entity.dart';
 import 'package:TheyLendMe/pages/object_details.dart';
 import 'package:TheyLendMe/pages/user_details.dart';
-import 'package:TheyLendMe/pages/group_details.dart';
 
-import 'package:fluttertoast/fluttertoast.dart'; //provisional
 
 // Pestaña SOLICITUDES
 class MyRequestsTab extends StatefulWidget {
@@ -70,11 +68,7 @@ class RequestedItem extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context){
-                    if (requestedObject.objState.next is User) {
-                      return UserDetails(requestedObject.objState.next);
-                    } else if (requestedObject.objState.next is Group) {
-                      return GroupDetails(requestedObject.objState.next);
-                    }
+                    return UserDetails(requestedObject.objState.next);
                   }
                 );
               },

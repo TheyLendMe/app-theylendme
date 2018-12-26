@@ -5,7 +5,8 @@ import 'package:TheyLendMe/Objects/obj.dart';
 import 'package:TheyLendMe/Objects/objState.dart';
 import 'package:TheyLendMe/Objects/entity.dart'; // provisional
 import 'package:TheyLendMe/Singletons/UserSingleton.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart'; 
+
 
 // Pestaña PROPIOS
 class OwnInventoryTab extends StatefulWidget {
@@ -15,8 +16,6 @@ class OwnInventoryTab extends StatefulWidget {
 
 // CONTENIDO de la pestaña PROPIOS
 class _OwnInventoryTabState extends State<OwnInventoryTab> {
-
-
   Future<List<Obj>> getOwnInventory() async {
     List<Obj> claims = await UserSingleton().user.getClaimsMeToOthers();
     List<Obj> objects = (await UserSingleton().user.getEntityInventory())['mines'];
@@ -28,7 +27,6 @@ class _OwnInventoryTabState extends State<OwnInventoryTab> {
         l.add(objects[i]);
       }
     }
-
     return l;
   }
 
@@ -132,7 +130,7 @@ Text textState(object) {
   if (object.objState.state == StateOfObject.DEFAULT)
     return Text( 'Disponible', style: TextStyle(color: Colors.green) );
   else if (object.objState.state == StateOfObject.LENT)
-    return Text( 'Prestado', style: TextStyle(color: Colors.yellow) );
+    return Text( 'Prestado', style: TextStyle(color: Colors.yellow.shade700) );
   else
     return Text( 'Reclamado', style: TextStyle(color: Colors.red) );
 }

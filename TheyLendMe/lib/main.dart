@@ -3,7 +3,6 @@ import 'Singletons/UserSingleton.dart';
 import 'package:TheyLendMe/the_home.dart';
 import 'package:TheyLendMe/pages/my_inventory.dart';
 import 'package:TheyLendMe/pages/my_loans.dart';
-import 'package:TheyLendMe/pages/my_groups.dart';
 import 'package:TheyLendMe/pages/my_settings.dart';
 import 'package:TheyLendMe/pages/auth_page.dart';
 
@@ -35,7 +34,6 @@ class TheApp extends StatelessWidget {
       routes: <String, WidgetBuilder> {
         "/MyInventoryPage": (BuildContext context) => new MyInventoryPage(),
         "/MyLoansPage": (BuildContext context) => new MyLoansPage(),
-        "/MyGroupsPage": (BuildContext context) => new MyGroupsPage(),
         "/MySettingsPage": (BuildContext context) => new MySettingsPage(),
 
         "/AuthPage": (BuildContext context) => new AuthPage(),
